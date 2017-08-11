@@ -1,0 +1,106 @@
+package com.globalexpress.web.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class OrderInfo implements Serializable{
+	private static final long serialVersionUID = -2495647866689707966L;
+	
+	private Long id;//记录编号ID
+	
+	private Long shopId;//店铺编号
+
+	private Long orderNum;//订单编号
+	
+	private String carrierId;//物流公司编号或名称
+
+	private Long trackingNum;//物流单号
+
+	private Long consignorId;//发件人名称
+
+	private Long consignorTel;//发件人电话
+
+	private String consignorAddress;//发件地址
+
+	private String consignorSignature;//发件人签名
+
+	private String consigneeId;//收件人名称
+
+	private Long consigneeTel;//收件人电话
+
+	private String consigneeAddress;//收件人地址
+
+	private String consigneeSignature;//收件人签名
+
+	private Integer packageWeight;//包裹重量
+
+	private Integer totalShippingFee;//订单总运费
+
+	private Integer supportValue;//
+
+	private Byte orderType;//订单类型
+
+	private String orderLabel;//订单标签
+
+	private String orderKeyword;//订单关键词
+
+	private String reserved1;//自定义内容
+
+	private String note;//备注
+
+	private Long ownerId;//用户主账户ID
+
+	private Long operatorId;//该记录操作人
+
+	private Boolean authorization;//该记录是否被授权
+
+	private Boolean apply;//该记录是否已被应用或调用
+
+	private Date gmtCreate;//记录创建时间
+
+	private Date gmtModified;//记录修改时间
+
+	private String buyerWord;//买家留言
+	
+	private String sellerWord;//卖家备注
+	
+	private Byte invoiceType;//发票类型
+	
+	private String invoiceTitle;//发票抬头
+	
+	private Long taxpayerId;//机构统一社会信用代码（纳税人识别号）
+	
+	private String invoiceContent;//发票内容
+	
+	private Byte orderPaid;//订单付款标记
+	
+	private Date orderPay;//付款时间
+	
+	private Date refundApply;//申请退款时间
+	
+	private Byte refundCompleted;//已退款标记
+	
+	private Date refundComplete;//退款完成时间
+	
+	private Byte orderClosed;//已关闭标记
+	
+	private Date orderClose;//订单关闭时间
+	
+	private Byte orderDeparted;//订单已发货标记
+	
+	private Date orderDeparture;//发货时间
+	
+	private Byte orderCompleted;//订单已完成标记
+	
+	private Date orderComplete;//订单完成时间
+	
+	private Byte orderCod;//是否货到付款
+	
+	private Date shippingfeeCod;//是否运费到付
+	
+	public OrderInfo() {
+		
+	}
+
+	
+}

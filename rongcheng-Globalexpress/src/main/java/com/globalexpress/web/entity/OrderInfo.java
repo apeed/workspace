@@ -16,7 +16,7 @@ public class OrderInfo implements Serializable{
 
 	private Long trackingNum;//物流单号
 
-	private String consignorId;//发件人名称
+	private Long consignorId;//发件人名称
 
 	private Long consignorTel;//发件人电话
 
@@ -102,7 +102,7 @@ public class OrderInfo implements Serializable{
 		
 	}
 
-	public OrderInfo(Long id, Long shopId, Long orderNum, String carrierId, Long trackingNum, String consignorId,
+	public OrderInfo(Long id, Long shopId, Long orderNum, String carrierId, Long trackingNum, Long consignorId,
 			Long consignorTel, String consignorAddress, String consignorSignature, String consigneeId,
 			Long consigneeTel, String consigneeAddress, String consigneeSignature, Integer packageWeight,
 			Integer totalShippingFee, Integer supportValue, Byte orderType, String orderLabel, String orderKeyword,
@@ -201,11 +201,11 @@ public class OrderInfo implements Serializable{
 		this.trackingNum = trackingNum;
 	}
 
-	public String getConsignorId() {
+	public Long getConsignorId() {
 		return consignorId;
 	}
 
-	public void setConsignorId(String consignorId) {
+	public void setConsignorId(Long consignorId) {
 		this.consignorId = consignorId;
 	}
 
@@ -574,5 +574,6 @@ public class OrderInfo implements Serializable{
 			return false;
 		return true;
 	}
+
 	
 }

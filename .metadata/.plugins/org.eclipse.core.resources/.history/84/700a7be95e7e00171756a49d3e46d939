@@ -1,0 +1,872 @@
+ //0.全局变量 最大页数
+var max_page=1;
+//0.全局变量 当前页数
+var now_page=1;
+$(function(){
+	//加载商品
+	loadItemInfo(1);
+	loadModify();
+	$(".indentPublic_btn").click(modifyBtn);
+	$(".getItemID").click(getItemID);//商品表中添加内容
+	//加载发件人
+	loadAccount();
+	//2.加载类目
+	$(".change_column").click(loadColumn);
+	//3.点击类目
+	$(".change_column_box").on("click", ".suspension li", clickColumn);
+	//加载商品，用作修改商品
+	$(".alert_page").click(modifyItem);
+	//关闭按钮
+	$(".change_column_box").on("click",".change_column_del",function(){
+		$(".change_column_box").css("display","none");
+	});
+	//全选
+	var flag=true;
+	$(".itemInfo_table").on("click","#selAll",function(){
+		  if(flag){
+		      flag=false;
+		      $('tr td').find("input[name='id1']").prop('checked',true);
+		  }else{
+		    flag=true;
+		      $('tr td').find("input[name='id1']").prop('checked',false);	
+		  } 
+	});
+});
+function modifyItem() {
+	var orderNum = getCookie("orderNum");
+	var ids=getCookie("ids");
+	var id2=ids.toString();
+	var id3=id2.split(",");
+//	console.log(ids);
+	$.ajax({   									//通过订单编号查找关联记录
+		url:"/admin/findOrderItemIds.do",
+		type:"post",
+		dataType:"json",
+		data:{"orderId":orderNum},
+		 success:function(result){
+			if(result.state==0){
+				 list=result.data;
+				 for (var j = 0; j < id3.length; j++) {
+					 $(".id2").eq(j).val(1);
+					 for (var i = 0; i < list.length; i++) {
+							var orderItemId=list[i].orderItemId;
+							 var quantity=list[i].quantity;
+							 if(orderItemId==id3[j]){
+									$("input[name='id1']").eq(j).prop("checked", true);//给订单所属商品打勾
+									$(".id2").eq(j).val(quantity);
+								}
+								}
+								}
+							}
+						},
+						error:function(){
+							alert("加载失败！"); 
+						}
+					});
+}
+
+function loadItemInfo(page) {
+	if(page <= 0 || page > max_page){return;}
+	now_page=page;
+	$.ajax({
+		url : "/admin/loadList_itemInfo.do",
+		type : "post",
+		data : {
+			"page" : page
+		},
+		dataType : "json",
+		success : function(result) {
+			max_page = result.message;
+			var list=result.data;
+			reload(list);
+		},
+		error : function() {
+			alert("加载失败!");
+		}
+	});
+	}
+function getItemID() {
+	$(".alert_data-box").css("display","none");
+	var Checkbox=false;
+	 var id1 = new Array();
+	 var id2 = new Array();
+	 $("input[name='id1']").each(function(){
+		 id1.push($(this).val());
+		 if (this.checked==true) {		
+				Checkbox=true;	
+				//商品数量
+				var $tr=$(this).parent().parent();
+				 $tr.find(".id2:first").attr("name","id2");//传值	
+			}
+//		 console.log(id1);
+	 });
+	  if(Checkbox==false){
+			alert("请选择商品内容!");
+		}
+	//商品数量
+
+}
+function changesearch(){
+	var keywords=$("#keywords").val().trim();
+	$.ajax({
+		url : "/admin/findListByItemInfo.do",
+		type : "post",
+		data : {
+			"keyword" : keywords
+		},
+		dataType : "json",
+		success : function(result) {
+			var list=result.data;
+			reload(list);
+		},
+		error : function() {
+			alert("加载失败!!!");
+		}
+	});
+}
+function loadAccount(){
+	var str="";
+	$.ajax({
+		url : "/admin/load_consignorId.do",
+		type : "post",
+		async:false,
+		data : {},
+		dataType : "json",
+		success : function(result) {
+			var list=result.data;
+			for (var i = 0; i < list.length; i++) {
+				 var userName=list[i].userName;
+				 var id=list[i].id;
+//				console.log(accountNum);
+				str+='<option value="'+id+'">'+userName+'</option>';
+			}
+			$("#indentPublic_consignorId").append(str);
+		},
+		error : function() {
+			alert("加载失败!!!");
+		}
+	});
+	//选择发件人
+	$("#indentPublic_consignorId").change(function(){
+		consignorId = $("#indentPublic_consignorId").find("option:selected").val();
+		
+	});
+}
+//商品关联表中批量添加
+function modifyBtn(){
+	for (var i = 0; i < list.length; i++) {
+		var id=list[i].id;
+		$.ajax({//先删掉
+		url : "/admin/delOrderItemLink.do",
+		type : "post",
+		data : {
+			"id" : id
+		},
+		dataType : "json",
+		success : function(result) {
+			if(result.state==0){
+//				console.log(88);
+			}
+		},
+		error : function() {
+			alert("加载失败!");
+		}
+	});
+	}
+	var inputTag = document.createElement('input'); 
+    inputTag.setAttribute("type", "hidden");
+    inputTag.setAttribute("id", "orderId");
+    inputTag.setAttribute("name", "orderId"); 
+    inputTag.setAttribute("value", orderNum); 
+	$("#fm1").append(inputTag);
+	$.ajax({
+		url:"/admin/addOrderItemLink.do",
+		type:"post",
+		async : false, 
+		dataType:"json",
+		data:$('#fm1').serialize(),
+		 success:function(result){
+			if(result.state==0){
+//				alert("成功了！");
+			}
+		},
+		error:function(){
+//			alert("批量保存商品失败！"); 
+		}
+	});
+	var OrderInfoId = getCookie("oid");
+	var indentPublic_consignorId=$("#indentPublic_consignorId").val();
+	var indentPublic_consigneeId=$("#indentPublic_consigneeId").val();
+	var indentPublic_consigneeTel=$("#indentPublic_consigneeTel").val();
+	var indentPublic_consigneeAddress=$("#indentPublic_consigneeAddress").val();
+	var indentPublic_orderKeyword=$("#indentPublic_orderKeyword").val();
+	var indentPublic_supportValue=$("#indentPublic_supportValue").val();
+	var indentPublic_orderLabel=$("#indentPublic_orderLabel").val();
+	var indentPublic_carrierId=$("#indentPublic_carrierId").val();
+	var indentPublic_trackingNum=$("#indentPublic_trackingNum").val();
+	var indentPublic_packageWeight=$("#indentPublic_packageWeight").val();
+	var indentPublic_totalShippingFee=$("#indentPublic_totalShippingFee").val();
+	var indentPublic_note=$("#indentPublic_note").val();
+	var ok=true;
+	var re = /^(0|1)\d{10,11}$/;
+	if(indentPublic_consigneeTel==""){
+		ok=false;
+		$("#indentPublic_consigneeTel_ts").html("收件人电话为空");
+	}else if(!re.test(indentPublic_consigneeTel)){
+		ok=false;
+		$("#indentPublic_consigneeTel_ts").html("请输入正确的格式!");
+	}else{
+		$("#indentPublic_consigneeTel_ts").html("");
+	}
+		if(ok){
+			$.ajax({
+				url:"/admin/modify_orderInfo.do",
+				type:"post",
+				dataType:"json",
+				async : false, 
+				data:{
+					"id":OrderInfoId,
+					"consignorId":indentPublic_consignorId,
+					"consigneeId":indentPublic_consigneeId,
+					"consigneeTel":indentPublic_consigneeTel,
+					"consigneeAddress":indentPublic_consigneeAddress,
+					"orderKeyword":indentPublic_orderKeyword,
+					"supportValue":indentPublic_supportValue,
+					"orderLabel":indentPublic_orderLabel,
+					"carrierId":indentPublic_carrierId,
+					"trackingNum":indentPublic_trackingNum,
+					"packageWeight":indentPublic_packageWeight,
+					"totalShippingFee":indentPublic_totalShippingFee,
+					"note":indentPublic_note
+					},
+				 success:function(result){
+					if(result.state==0){
+						alert("修改成功！"); 	
+						window.location.href ="indent.do";	
+					}
+				},
+				error:function(){
+					alert("修改失败！"); 
+				}
+			});	
+		}
+}
+function loadModify(){
+		var orderInfoId = getCookie("oid");
+		$.ajax({
+			url : "/admin/load_modify_orderInfo.do",
+			type : "post",
+			data : {"id":orderInfoId},
+			dataType : "json",
+			success:function(result){
+				if (result.state == 0) {
+					var OrderInfo = result.data;
+					 orderNum = OrderInfo.orderNum;
+					 var consignorId1 = OrderInfo.consignorId;
+//					console.log(accountNum);
+					 var se = $("#indentPublic_consignorId").find("option");
+					 for (var i = 0; i < se.length; i++) {
+//						 console.log(se[i].text);
+						 if(se[i].text==consignorId1){
+						 se[i].selected = true;  	
+						}
+					}
+					var consigneeId = OrderInfo.consigneeId;
+					var consigneeTel = OrderInfo.consigneeTel;
+					var consigneeAddress = OrderInfo.consigneeAddress;
+					var orderKeyword = OrderInfo.orderKeyword;
+					var supportValue = OrderInfo.supportValue;
+					var orderLabel = OrderInfo.orderLabel;
+					var carrierId = OrderInfo.carrierId;
+					var trackingNum = OrderInfo.trackingNum;
+					var packageWeight = OrderInfo.packageWeight;
+					var totalShippingFee = OrderInfo.totalShippingFee;
+					var note = OrderInfo.note;
+					$("#orderId").html(orderNum);
+//					var indentPublic_consignorId=$("#indentPublic_consignorId").val(consignorId);
+					var indentPublic_consigneeId=$("#indentPublic_consigneeId").val(consigneeId);
+					var indentPublic_consigneeTel=$("#indentPublic_consigneeTel").val(consigneeTel);
+					var indentPublic_consigneeAddress=$("#indentPublic_consigneeAddress").val(consigneeAddress);
+					var indentPublic_orderKeyword=$("#indentPublic_orderKeyword").val(orderKeyword);
+					var indentPublic_supportValue=$("#indentPublic_supportValue").val(supportValue);
+					var indentPublic_orderLabel=$("#indentPublic_orderLabel").val(orderLabel);
+					var indentPublic_carrierId=$("#indentPublic_carrierId").val(carrierId);
+					var indentPublic_trackingNum=$("#indentPublic_trackingNum").val(trackingNum);
+					var indentPublic_packageWeight=$("#indentPublic_packageWeight").val(packageWeight);
+					var indentPublic_totalShippingFee=$("#indentPublic_totalShippingFee").val(totalShippingFee);
+					var indentPublic_note=$("#indentPublic_note").val(note);
+				}
+			},
+			error:function(){
+				alert("加载失败！"); 
+			}
+		});
+}
+function reload(list) {
+	var itemInfoTable = $(".itemInfo_table");
+	itemInfoTable.empty();
+	var sa="";
+	sa+='<tr>';
+	sa+='<th width="120"><input id="selAll" type="checkbox" name=""/>商品编码</th>';
+	sa+='<th>商品名称</th>';
+	sa+='<th>商品品牌</th>';
+	sa+='<th>商品类目</th> ';
+	sa+='<th>商品规格</th>';
+	sa+='<th>商品价格</th>';
+	sa+='<th>商品数量</th>';
+	sa+='</tr>';
+	$(".itemInfo_table").append(sa);
+	var array=new Array();
+	for(var i=0;i<list.length;i++){
+		var ItemInfo = list[i];
+//		console.log(ItemInfo);
+		var id = ItemInfo.id;
+		var itemSku = ItemInfo.itemSku;
+		var itemName = ItemInfo.itemName;
+		var itemBrand = ItemInfo.itemBrand;
+		var categoryId = ItemInfo.categoryId;
+		var itemColor = ItemInfo.itemColor;
+		var itemSize = ItemInfo.itemSize;
+		var normalPrice = ItemInfo.normalPrice;
+		var str="";
+		str+='<tr>';
+		str+='<td><input type="checkbox" name="id1" value="'+id+'"/>'+itemSku+'</td>';
+		str+='<td>'+itemName+'</td>';
+		str+='<td>'+itemBrand+'</td>';
+		str+='<td>'+categoryId+'</td>';
+		str+='<td>'+itemColor+'*'+itemSize+'</td>';
+		str+='<td>￥'+normalPrice+'</td>';
+		str+='<td><input type="text" class="input id2" value="" style="width: 50px;margin: 0 auto;"></td>';
+		str+='</tr>';
+		/*//转jquery对象
+		var $tr=$(str);
+		//把id加到 这条数据上
+		$tr.data("id",id);*/
+		$(".itemInfo_table").append(str);
+		array.push(id);
+	}
+	addCookie("ids", array, 1);
+	/////页码////////////
+	var trs="";
+	trs += '<tr id = "page_tr">';
+	trs += '<td colspan="10"><div class="pagelist"><a class="current" onclick="loadItemInfo(1)" href="javascript:;">首页</a><a class="bookpage" onclick="loadItemInfo('+(now_page-1)+')" href="javascript:;">上一页</a>';
+	if(max_page>5){
+		if(now_page<=3){
+			for(var i=1;i<4;i++){
+				if(i==now_page){
+					trs += '<span class="bookpage" onclick="loadItemInfo('+i+')">'+i+'</span>';
+				}else{
+					trs += '<a class="bookpage" onclick="loadItemInfo('+i+')" href="javascript:;">'+i+'</a>';
+				}
+			}
+			trs += '<a class="bookpage" onclick="loadItemInfo(4)" href="javascript:;">4</a><a class = "bookpage" onclick="loadItemInfo(5)" href="javascript:;">5</a>...';
+		}else if(now_page>=4 && now_page<=max_page-3){
+			trs += '...<a class="bookpage" onclick="loadItemInfo('+(now_page-2)+')" href="javascript:;">'+(now_page-2)+'</a><a class="bookpage" onclick="loadItemInfo('+(now_page-1)+')" href="javascript:;">'+(now_page-1)+'</a>';
+			trs += '<span class="bookpage">'+now_page+'</span>';
+			trs += '<a class = "bookpage" onclick="loadItemInfo('+(now_page+1)+')" href="javascript:;">'+(now_page+1)+'</a><a class = "bookpage" onclick="loadItemInfo('+(now_page+2)+')" href="javascript:;">'+(now_page+2)+'</a>...';
+		}else if(now_page>max_page-3){
+			trs += '...<a class="bookpage" onclick="loadItemInfo('+(max_page-4)+')" href="javascript:;">'+(max_page-4)+'</a><a class="bookpage" onclick="loadItemInfo('+(max_page-3)+')" href="javascript:;">'+(max_page-3)+'</a>';
+			for(var i=max_page-2;i<=max_page;i++){
+				if(i==now_page){
+					trs += '<span class="bookpage" onclick="loadItemInfo('+i+')">'+i+'</span>';
+				}else{
+					trs += '<a class="bookpage" onclick="loadItemInfo('+i+')" href="javascript:;">'+i+'</a>';
+				}
+			}
+		}
+	}else{
+		var i = 1;
+		while (i <= max_page) {
+			if(i==now_page){
+				trs += '<span class="bookpage" onclick="loadItemInfo('+i+')">'+i+'</span>';
+			}else{
+				trs += '<a class = "bookpage" onclick="loadItemInfo('+i+')" href="javascript:;">'+i+'</a>';
+			}
+			i++;
+		}
+	}
+	trs += '<a class="bookpage" onclick="loadItemInfo('+(now_page+1)+')">下一页</a><a class="bookpage" onclick="loadItemInfo('+max_page+')">尾页</a></div></td>';
+	trs += '</tr>';
+	$(".itemInfo_table").append(trs);
+	$(".bookpage:contains('"+now_page+"')").addClass("current");
+	}
+/**
+ * 3.点击类目
+ * @returns
+ * @author 赵滨
+ */
+function clickColumn() {
+	$(".change_column_box").css("display","none");
+	/*console.log($(this).parent().data("blockChannelId"));
+	console.log($(this).parent().data("blockChannelParentId"));*/
+	var columnName=$(this).parent().find(".column_blockTitle").html();
+	$(".change_column").html(columnName);
+	$.ajax({
+		url : "/admin/findListByItemInfo.do",
+		type : "post",
+		data : {
+			"keyword" : columnName
+		},
+		dataType : "json",
+		success : function(result) {
+			var list=result.data;
+			reload(list);
+		},
+		error : function() {
+			alert("加载失败!!!");
+		}
+	});
+}
+
+/**
+ * 2.加载类目
+ * @returns
+ * @author 赵滨
+ */
+function loadColumn() {
+	
+	//绑定
+	var recordType = [4];
+	
+	var authorization = null;
+	var ownerId = null;
+	var operatorId = null;
+	var keywords = null;
+	
+	
+	//发送请求，获取页面内容
+	$.ajax({
+		url : "/admin/column/loadColumn.do",
+		type : "post",
+		traditional : true,
+		data : {
+			"recordType" : recordType,
+			"authorization" : authorization,
+			"ownerId" : ownerId,
+			"operatorId" : operatorId,
+			"keywords" : keywords
+		},
+		dataType : "json",
+		success : function(result) {
+			//接受栏目集合
+			var map = result.data
+			
+			//获取显示行数
+			var rows = map.rows;
+			
+			//获取栏目集合
+			var blockChannelList = map.blockChannelList;
+//			console.log(blockChannelList);
+			//创建栏目
+			createBlockChannelAll(blockChannelList, 1, rows);
+			
+			
+			//监听页码点击事件，在这里监听，省去了调去数据库的请求
+			$(".change_column_box").on("click", ".pagelist a", function(){
+				var aHtml = $(this).html();
+				//判断当前页的值
+				if(aHtml=="首页"){
+					now_page = 1;
+				}else if(aHtml=="上一页"){
+					if(now_page>1){
+						now_page--;
+					}
+				}else if(aHtml=="下一页"){
+					if(now_page<max_page){
+						now_page++;
+					}
+				}else if(aHtml=="尾页"){
+					now_page = parseInt(max_page);
+				}else{
+					now_page = parseInt(aHtml);
+				}
+				//创建栏目
+				createBlockChannelAll(blockChannelList, now_page, rows);
+			});
+		},
+		error : function() {
+			alert("栏目列表加载失败");
+		}
+	});
+}
+
+
+/**
+ * 2.1.创建类目
+ * @param blockChannelList 类目集合
+ * @returns
+ * @author 赵滨
+ */
+function createBlockChannelAll(listBlockChannel, nowPage, rows) {
+	
+	//复制集合，用于删除内容
+	var blockChannelList = listBlockChannel.concat();
+	
+	//清空页面
+	$(".change_column_box").children().remove();
+	
+	//定义拼接字符串
+	var put = "";
+	
+	//第一部分 提示信息
+	put += '<ul class="table-ul" style="padding-left:0px;">';
+	put += '<li class="" style="width:20%;">序号</li>';
+	
+	put += '<li class="" style="width:55%;">类目名称</li>';
+	put += '<li class="" style="width:20%;">类目类型</li>';
+	put += '<div class="re_cha change_column_del" style="width:5%;">×</div>';
+		
+	
+	put += '</ul>';
+	//加入页面
+	$(".change_column_box").append(put);
+	
+	put = "";
+	
+	//定义开始位置
+	var start = (nowPage - 1) * rows;
+	//定义结束位置
+	var end = (nowPage * rows) - 1;
+	//定义当前位置
+	var now = 0;
+	//第二部分 创建栏目
+	for (var i = 0; i < blockChannelList.length; i++) {
+		//创建最上级栏目
+		if (blockChannelList[i].parentId == 0) {
+			put = "";
+			
+			//分页显示 如果在显示范围内
+			if (now >= start && now <= end) {
+				put += '<ul class="table-ul suspension" style="padding-left:0px; cursor: pointer;">';
+			} else {
+				put += '<ul class="table-ul suspension" style="display:none;">';
+			}
+			
+			put += '<li style="background-color: #FDFDFD; width:20%;">';
+			put += '<span class="column_span1">';
+			put += blockChannelList[i].userSequence;	//序号
+			put += '</span></li>';
+			put += '<li style="background-color: #FDFDFD; width:60%;">';
+			put += '<span  class="column_span2"></span><span class="column_blockTitle">';
+			
+			//如果没有内容
+			if (blockChannelList[i].blockTitle == "" || blockChannelList[i].blockTitle == null) {
+				put += '&nbsp;';							//栏目名称
+			} else {
+				put += blockChannelList[i].blockTitle;		//栏目名称
+			}
+			
+			put += '</span></li>';
+			put += '<li style="background-color: #FDFDFD; width:20%;">';
+
+			//栏目类型
+			var recordType = blockChannelList[i].recordType;
+			//根据情况显示内容
+			if (recordType == 1) {
+				put += '导航区';
+			} else if (recordType == 2) {
+				put += '轮播区';
+			} else if (recordType == 3) {
+				put += '视频区';
+			} else if (recordType == 4) {
+				put += '商品页面';
+			}
+					
+			put += '</li>';
+			put += '<div class="table-ul-son">';
+			put += '</div>';
+			put += '</ul>';
+			
+			//转换对象
+			var $put = $(put);
+			
+			//绑定参数
+			$put.data("blockChannelId", blockChannelList[i].id);
+			$put.data("blockChannelParentId", blockChannelList[i].parentId);
+			
+			//加入页面
+			$(".change_column_box").append($put);
+			
+			//删除
+			blockChannelList.splice(i, 1);
+			
+			i--;
+			now++;
+		}
+	}
+
+	//获取最大页数
+	max_page = Math.ceil(now / rows);
+	
+	put = "";
+	
+	//缩进系数
+	var ratio = 1;
+	
+	//省略递归
+	while (blockChannelList.length != 0) {
+		
+		//获取页面已经显示的栏目
+		var webPageBlockChannelList = $(".change_column_box").find("ul");
+		
+		//遍历 需要加载的子栏目
+		for (var i = 0; i < blockChannelList.length; i++) {
+			//获取每条的父类ID
+			var blockChannelParentId = blockChannelList[i].parentId;
+			
+			//遍历 已经显示的栏目
+			for (var j = 0; j < webPageBlockChannelList.length; j++) {
+				//获取每条ID
+				var webPageBlockChannelId = webPageBlockChannelList.eq(j).data("blockChannelId");
+				
+				//判断是否匹配 子类的父类ID 等于 父类的ID
+				if (blockChannelParentId == webPageBlockChannelId) {
+					put = "";
+					
+					put += '<ul>';
+					put += '<li style="width:20%;"><span class="column_span1">';
+					put += blockChannelList[i].userSequence;	//序号
+					put += '</span></li>';
+					put += '<li  style="padding-left: ';
+					put += 25 * ratio;
+					put += 'px; width:60%;">';
+					put += '<span class="column_span2">├─</span><span class="column_blockTitle">';
+					
+					//如果没有内容
+					if (blockChannelList[i].blockTitle == "" || blockChannelList[i].blockTitle == null) {
+						put += '&nbsp;';							//栏目名称
+					} else {
+						put += blockChannelList[i].blockTitle;		//栏目名称
+					}
+					
+					put += '</span></li>';
+					put += '<li style="width:20%;">';
+
+					//栏目类型
+					var recordType = blockChannelList[i].recordType;
+					//根据情况显示内容
+					if (recordType == 1) {
+						put += '导航区';
+					} else if (recordType == 2) {
+						put += '轮播区';
+					} else if (recordType == 3) {
+						put += '视频区';
+					} else if (recordType == 4) {
+						put += '商品页面';
+					}
+							
+					put += '</li>';
+					put += '<div class="table-ul-son">';
+					put += '</div>';
+					put += '</ul>';
+					
+					//转换对象
+					var $put = $(put);
+					
+					//绑定参数
+					$put.data("blockChannelId", blockChannelList[i].id);
+					$put.data("blockChannelParentId", blockChannelList[i].parentId);
+					
+					//加入页面
+					webPageBlockChannelList.eq(j).find(".table-ul-son:first").append($put);
+					
+					//删除
+					blockChannelList.splice(i, 1);
+					
+					//删除后，取消i自增
+					i--;
+					
+					break;
+				}
+			}
+		}
+		
+		//系数自增
+		ratio++;
+	}
+	
+	//获取页面栏目
+	var webPageBlockChannel = $(".change_column_box").find("ul:not(:first)");
+	
+	//是否重复数组
+	var isepeat = [];
+	
+	//遍历页面栏目	把结尾├─改成└─
+	for (var i = 0; i < webPageBlockChannel.length; i++) {
+		//获取每条父类id
+		var blockChannelParentId = webPageBlockChannel.eq(i).data("blockChannelParentId");
+		
+		//如果这条栏目的父类ID是第一次使用
+		if ($.inArray(blockChannelParentId, isepeat) == -1) {
+			//加入数组
+			isepeat.push(blockChannelParentId);
+
+			//定义同类，存储序号最大值
+			var identical = null;
+			
+			//定义需要修改的ID
+			var blockChannelId = null;
+			
+			//查找当前父类ID的最大一条栏目
+			for (var j = 0; j < webPageBlockChannel.length; j++) {
+				
+				//如果父类ID相同
+				if (webPageBlockChannel.eq(j).data("blockChannelParentId") == blockChannelParentId) {
+					
+					//获取序号
+					var webPageBlockChannelUserSequence = webPageBlockChannel.eq(j).find(".column_span1:first").html();
+					
+					//如果同类为空
+					if (identical == null) {
+						//同类赋值
+						identical = webPageBlockChannelUserSequence;
+						//ID赋值
+						blockChannelId = webPageBlockChannel.eq(j).data("blockChannelId");
+					}
+					//如果当前序号大于同类序号
+					if (webPageBlockChannelUserSequence > identical) {
+						//同类赋值
+						identical = webPageBlockChannelUserSequence;
+						//ID赋值
+						blockChannelId = webPageBlockChannel.eq(j).data("blockChannelId");
+					}
+					//如果当前序号等于同类序号
+					if (webPageBlockChannelUserSequence == identical) {
+						
+						//如果当前ID大于修改ID
+						if (webPageBlockChannel.eq(j).data("blockChannelId") > blockChannelId) {
+							//ID赋值
+							blockChannelId = webPageBlockChannel.eq(j).data("blockChannelId");
+						}
+					}
+					//类型转换,方式String类型的不准确
+					identical = parseInt(identical);
+					blockChannelId = parseInt(blockChannelId);
+				}
+			}
+			
+			//改变最大一条栏目的样式
+			for (var k = 0; k < webPageBlockChannel.length; k++) {
+				//如果找到需要更改的ID
+				if (blockChannelId == webPageBlockChannel.eq(k).data("blockChannelId")) {
+					
+					//如果这个内容是├─
+					if (webPageBlockChannel.eq(k).find(".column_span2:first").html() == "├─") {
+						//更改
+						webPageBlockChannel.eq(k).find(".column_span2:first").html("└─");
+					}
+				}
+			}
+		}
+	}
+	
+	put = "";
+	
+	//第三部分 创建页码
+
+	//开始部分
+    put += '<div class="pagelist"><a href="javascript:void(0)">首页</a><a href="javascript:void(0)">上一页</a> ';
+    //中间部分
+    if (max_page > 5) {
+        //如果是页码前两个
+        if (now_page <= 3) {
+            //循环前三页码
+            for (var i = 1; i < 4; i++) {
+                
+                //如果选中当前页码，则变成蓝色背景
+                if(i==now_page){
+                    put += '<span class="current" style="cursor:default">';
+                    put += i;
+                    put += '</span>';
+                    
+                //否则页码为白色背景
+                }else{
+                    put += '<a href="javascript:void(0)">';
+                    put += i;
+                    put += '</a>';
+                }
+            }
+            //写出最后两个
+            put += '<a href="javascript:void(0)">';
+            put += 4;
+            put += '</a>';
+            put += '<a href="javascript:void(0)">';
+            put += 5;
+            put += '</a>……';
+            
+        //如果是页码最中间
+        } else if (now_page >= 4 && now_page <= max_page - 3) {
+            //页码前两个
+            put += '……<a href="javascript:void(0)">';
+            put += now_page - 2;
+            put += '</a>';
+            put += '<a href="javascript:void(0)">';
+            put += now_page - 1;
+            put += '</a>';
+            
+            //页码中间选中的
+            put += '<span class="current" style="cursor:default">';
+            put += now_page;
+            put += '</span>';
+            
+            //页码后两个
+            put += '<a href="javascript:void(0)">';
+            put += now_page + 1;
+            put += '</a>';
+            put += '<a href="javascript:void(0)">';
+            put += now_page + 2;
+            put += '</a>……';
+        //如果是页码后两个
+        } else if (now_page > max_page - 3) {
+            //页码前两个
+            put += '……<a href="javascript:void(0)">';
+            put += max_page - 4;
+            put += '</a>';
+            put += '<a href="javascript:void(0)">';
+            put += max_page - 3;
+            put += '</a>';
+            
+            //循环后三页
+            for (var i = max_page - 2; i <= max_page; i++) {
+                //如果选中当前页码，则变成蓝色背景
+                if(i==now_page){
+                    put += '<span class="current" style="cursor:default">';
+                    put += i;
+                    put += '</span>';
+                    
+                //否则页码为白色背景
+                }else{
+                    put += '<a href="javascript:void(0)">';
+                    put += i;
+                    put += '</a>';
+                }
+            }
+        }
+    
+    //否则页数小于5页
+    } else {
+        var i = 1;
+        //循环页码
+        while (i <= max_page) {
+            //如果选中当前页码，则变成蓝色背景
+            if(i==now_page){
+                put += '<span class="current" href="javascript:void(0)" style="cursor:default">';
+                put += i;
+                put += '</span>';
+                
+            //否则页码为白色背景
+            }else{
+                put += '<a href="javascript:void(0)">';
+                put += i;
+                put += '</a>';
+            }
+            i++;
+        }
+    }
+
+    //结束部分
+    put += '<a href="javascript:void(0)">下一页</a><a href="javascript:void(0)">尾页</a></div>';
+
+    //加入页面
+    $(".change_column_box").append(put);
+}

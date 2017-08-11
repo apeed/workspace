@@ -2,6 +2,7 @@
 var max_page=1;
 //0.全局变量 当前页数
 var now_page=1;
+var consignorId;
 $(function(){
 	//加载商品
 	loadItemInfo(1);
@@ -31,6 +32,11 @@ $(function(){
 		      $('tr td').find("input[name='id1']").prop('checked',false);	
 		  } 
 	});
+	//选择发件人
+	$("#indentPublic_consignorId").change(function(){
+		consignorId = $("#indentPublic_consignorId").find("option:selected").val();
+		
+	});
 });
 function modifyItem() {
 	var orderNum = getCookie("orderNum");
@@ -38,7 +44,7 @@ function modifyItem() {
 	var id2=ids.toString();
 	var id3=id2.split(",");
 //	console.log(ids);
-	$.ajax({
+	$.ajax({   									//通过订单编号查找关联记录
 		url:"/admin/findOrderItemIds.do",
 		type:"post",
 		dataType:"json",
@@ -52,7 +58,6 @@ function modifyItem() {
 							var orderItemId=list[i].orderItemId;
 							 var quantity=list[i].quantity;
 							 if(orderItemId==id3[j]){
-								 console.log(7);
 									$("input[name='id1']").eq(j).prop("checked", true);//给订单所属商品打勾
 									$(".id2").eq(j).val(quantity);
 								}
@@ -136,9 +141,10 @@ function loadAccount(){
 		success : function(result) {
 			var list=result.data;
 			for (var i = 0; i < list.length; i++) {
-				 var accountNum=list[i].accountNum;
-//				console.log(accountNum);
-				str+='<option value="'+accountNum+'">'+accountNum+'</option>';
+				 var userName=list[i].userName;
+				 var id=list[i].id;
+//				console.log(userName);
+				str+='<option value="'+id+'">'+userName+'</option>';
 			}
 			$("#indentPublic_consignorId").append(str);
 		},
@@ -146,21 +152,17 @@ function loadAccount(){
 			alert("加载失败!!!");
 		}
 	});
-	//选择发件人
-	$("#indentPublic_consignorId").change(function(){
-		consignorId = $("#indentPublic_consignorId").find("option:selected").val();
-		
-	});
+	
 }
 //商品关联表中批量添加
 function modifyBtn(){
 	for (var i = 0; i < list.length; i++) {
-		var orderItemId=list[i].orderItemId;
+		var id=list[i].id;
 		$.ajax({//先删掉
 		url : "/admin/delOrderItemLink.do",
 		type : "post",
 		data : {
-			"orderItemId" : orderItemId
+			"id" : id
 		},
 		dataType : "json",
 		success : function(result) {
@@ -263,14 +265,31 @@ function loadModify(){
 					var OrderInfo = result.data;
 					 orderNum = OrderInfo.orderNum;
 					 var consignorId1 = OrderInfo.consignorId;
-//					console.log(accountNum);
-					 var se = $("#indentPublic_consignorId").find("option");
-					 for (var i = 0; i < se.length; i++) {
-//						 console.log(se[i].text);
-						 if(se[i].text==consignorId1){
-						 se[i].selected = true;  	
+					$.ajax({
+						url : "/admin/findByConsignorId.do",
+						type : "post",
+						data : {
+							"id" : consignorId1
+						},
+						dataType : "json",
+						success : function(result) {
+							if(result.state==0){
+								var UserInfo=result.data;	
+								var userName = UserInfo.userName;
+								var se = $("#indentPublic_consignorId").find("option");
+								 for (var i = 0; i < se.length; i++) {
+									 console.log(se[i].text);
+									 if(se[i].text==userName){
+									 se[i].selected = true;  	
+									}
+								}
+							}
+						},
+						error : function() {
+							alert("加载失败!!!");
 						}
-					}
+					});
+					 
 					var consigneeId = OrderInfo.consigneeId;
 					var consigneeTel = OrderInfo.consigneeTel;
 					var consigneeAddress = OrderInfo.consigneeAddress;

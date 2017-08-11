@@ -13,13 +13,13 @@ public interface OrderInfoService {
 	 List<OrderInfo> findOrderInfoByPage(int start,int rows,Long ownerId);
 	 String findOrderInfoCount(Long ownerId);//增加页面使用商品
 	//添加,修改,删除方法
-	 int addOrderInfo(Long ownerId,Date gmtCreate,Long operatorId,Long orderNum,String consignorId,String consigneeId,Long consigneeTel,String consigneeAddress,String orderLabel,String carrierId,Long trackingNum,Integer packageWeight,Integer totalShippingFee,String orderKeyword,Integer supportValue,String note,Byte orderType);
+	 int addOrderInfo(Long ownerId,Date gmtCreate,Long operatorId,Long orderNum,Long consignorId,String consigneeId,Long consigneeTel,String consigneeAddress,String orderLabel,String carrierId,Long trackingNum,Integer packageWeight,Integer totalShippingFee,String orderKeyword,Integer supportValue,String note,Byte orderType);
 	 void addOrderItemLink(Long ownerId,Date gmtCreate,Long operatorId,Long orderId,Long[] orderItemId,Byte authorized,Integer[] quantity);
-	 int updateOrderInfo(Long id,Long ownerId,Long operatorId,Date gmtModified,String consignorId,String consigneeId,Long consigneeTel,String consigneeAddress,String orderLabel,String carrierId,Long trackingNum,Integer packageWeight,Integer totalShippingFee,String note,String orderKeyword,Integer supportValue);
+	 int updateOrderInfo(Long id,Long ownerId,Long operatorId,Date gmtModified,Long consignorId,String consigneeId,Long consigneeTel,String consigneeAddress,String orderLabel,String carrierId,Long trackingNum,Integer packageWeight,Integer totalShippingFee,String note,String orderKeyword,Integer supportValue);
 	 OrderInfo findByOrderInfoId(Long id,Long ownerId);
 	 void delOrderInfo(Long id,Long ownerId);
 	 void delOrderInfoList(Long[] id,Long ownerId);
-	 int delOrderItemLink(Long orderItemId,Long ownerId);
+	 int delOrderItemLink(Long id,Long ownerId);
 	//模糊查询
 	 List<OrderInfo> findListByOrderInfo(String keyword,Long ownerId);
 //	 List<OrderInfo> findListByOrderInfo1(String keyword,Long ownerId);
@@ -46,4 +46,6 @@ public interface OrderInfoService {
 	ItemInfo findByItemInfoId(Long id,Long ownerId);
 	//查找所有的订单编号
 	List<OrderInfo> findOrderNums(Long ownerId);
+	//通过consignorId查找发件人
+	UserInfo findByConsignorId(Long id,Long ownerId);
 }

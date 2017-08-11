@@ -28,7 +28,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 		return s;
 	}
 	//添加内容
-	public int addOrderInfo(Long ownerId, Date gmtCreate, Long operatorId, Long orderNum, String consignorId,
+	public int addOrderInfo(Long ownerId, Date gmtCreate, Long operatorId, Long orderNum, Long consignorId,
 			String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel, String carrierId,
 			Long trackingNum, Integer packageWeight, Integer totalShippingFee,String orderKeyword,Integer supportValue, String note,Byte orderType) {
 		OrderInfo oi = new OrderInfo();
@@ -53,7 +53,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 	}
 	//修改方法
 	public int updateOrderInfo(Long id, Long ownerId, Long operatorId, Date gmtModified, 
-			String consignorId, String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel,
+			Long consignorId, String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel,
 			String carrierId, Long trackingNum, Integer packageWeight, Integer totalShippingFee, String note,String orderKeyword,Integer supportValue) {
 		OrderInfo oi =dao.findByOrderInfoId(id, ownerId);
 		oi.setOperatorId(operatorId);
@@ -173,14 +173,19 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 		return n;
 	}
 	//删除商品关联记录
-	public int delOrderItemLink(Long orderItemId, Long ownerId) {
-		int n=dao.delOrderItemLink(orderItemId, ownerId);
+	public int delOrderItemLink(Long id, Long ownerId) {
+		int n=dao.delOrderItemLink(id, ownerId);
 		return n;
 	}
 	//查找所有的订单编号
 	public List<OrderInfo> findOrderNums(Long ownerId) {
 		List<OrderInfo> list=dao.findOrderNums(ownerId);
 		return list;
+	}
+	//查找发件人
+	public UserInfo findByConsignorId(Long id, Long ownerId) {
+		UserInfo ui=dao.findByConsignorId(id, ownerId);
+		return ui;
 	}
 	
 }

@@ -17,7 +17,7 @@ public interface OrderInfoDao {
 	 void addOrderItemLink(OrderItemLink oil);
 	 int updateOrderInfo(OrderInfo oi);
 	 int delOrderInfo(Long id,Long ownerId);
-	 int delOrderItemLink(Long orderItemId,Long ownerId);
+	 int delOrderItemLink(Long id,Long ownerId);
 	//模糊查询
 	 List<OrderInfo> findListByOrderInfo(String keyword,Long ownerId);
 //		 List<OrderInfo> findListByOrderInfo1(String keyword,Long ownerId);
@@ -39,4 +39,6 @@ public interface OrderInfoDao {
 	 List<OrderItemLink> findOrderItemIds(Long orderId,Long ownerId);
 	 //查找所有的订单编号
 	 List<OrderInfo> findOrderNums(Long ownerId);
+	 //通过consignorId查找发件人
+	 UserInfo findByConsignorId(Long id,Long ownerId);
 }

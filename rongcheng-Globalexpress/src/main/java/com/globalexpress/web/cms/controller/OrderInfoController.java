@@ -56,7 +56,7 @@ public class OrderInfoController {
 		//添加内容(订单)
 		@RequestMapping("/add_orderInfo.do")
 		@ResponseBody
-		public JsonResult addOrderInfo(HttpSession session,Long orderNum, String consignorId,
+		public JsonResult addOrderInfo(HttpSession session,Long orderNum, Long consignorId,
 				String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel, String carrierId,
 				Long trackingNum, Integer packageWeight, Integer totalShippingFee,String orderKeyword,Integer supportValue, String note,Byte orderType){
 			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
@@ -69,7 +69,7 @@ public class OrderInfoController {
 		@RequestMapping("/modify_orderInfo.do")
 		@ResponseBody
 		public JsonResult updateOrderInfo(HttpSession session,Long id, Long operatorId,
-				String consignorId, String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel,
+				Long consignorId, String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel,
 				String carrierId, Long trackingNum, Integer packageWeight, Integer totalShippingFee, String note,String orderKeyword,Integer supportValue){
 			Long operatorId1 = ((UserInfo)(session.getAttribute("user"))).getId();
 			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
@@ -97,9 +97,9 @@ public class OrderInfoController {
 		//删除商品关联表
 		@RequestMapping("/delOrderItemLink.do")
 		@ResponseBody
-		public JsonResult  delOrderItemLink(HttpSession session,Long orderItemId) {
+		public JsonResult  delOrderItemLink(HttpSession session,Long id) {
 			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
-			int n=service.delOrderItemLink(orderItemId, ownerId);
+			int n=service.delOrderItemLink(id, ownerId);
 			return new JsonResult(n);
 		}
 		//批量删除
@@ -259,5 +259,12 @@ public class OrderInfoController {
 			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
 			List<OrderInfo> list=service.findOrderNums(ownerId);
 			return new JsonResult(list);
+		}
+		@RequestMapping("/findByConsignorId.do")
+		@ResponseBody
+		public JsonResult  findByConsignorId(HttpSession session,Long id) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			UserInfo ui=service.findByConsignorId(id, ownerId);
+			return new JsonResult(ui);
 		}
 }

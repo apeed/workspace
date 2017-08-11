@@ -5,6 +5,7 @@ var now_page=1;
 //0.全局变量 id数组
 var id1;
 var id2;
+var consignorId;
 $(function(){
 	loadItemInfo(1);
 	$(".indent_add_btn").click(addIndentBtn);
@@ -31,6 +32,10 @@ $(function(){
 		    flag=true;
 		      $('tr td').find("input[name='id1']").prop('checked',false);	
 		  } 
+	});
+	//选择发件人
+	$("#indentAdd_consignorId").change(function(){
+		consignorId = $("#indentAdd_consignorId").find("option:selected").val();
 	});
 		
 });
@@ -70,9 +75,10 @@ function loadAccount(){
 		success : function(result) {
 			var list=result.data;
 			for (var i = 0; i < list.length; i++) {
-				var accountNum=list[i].accountNum;
-//				console.log(accountNum);
-				str+='<option value="'+accountNum+'">'+accountNum+'</option>';
+				var userName=list[i].userName;
+				var id=list[i].id;
+//				console.log(id);
+				str+='<option value="'+id+'">'+userName+'</option>';
 			}
 			$("#indentAdd_consignorId").append(str);
 		},
@@ -80,11 +86,7 @@ function loadAccount(){
 			alert("加载失败!!!");
 		}
 	});
-	//选择发件人
-	$("#indentAdd_consignorId").change(function(){
-		consignorId = $("#indentAdd_consignorId").find("option:selected").val();
-		
-	});
+	
 }
 /**
  * 3.点击类目
@@ -586,7 +588,7 @@ function getItemID() {
 }
 function addIndentBtn(){
 	var indentAdd_orderNum=$("#orderId").val();
-	
+	console.log(consignorId);
 	$.ajax({
 		url:"/admin/addOrderItemLink.do",
 		type:"post",
@@ -626,9 +628,10 @@ function addIndentBtn(){
 	}else{
 		$("#indentAdd_consigneeTel_ts").html("");
 	}
-	if(consignorId==undefined){
+	/*if(consignorId==undefined){
 		var consignorId = null;
-	}
+	}*/
+	
 	if(ok){
 		$.ajax({
 			url : "/admin/add_orderInfo.do",
