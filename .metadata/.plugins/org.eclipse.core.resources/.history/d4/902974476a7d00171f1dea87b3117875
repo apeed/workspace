@@ -1,0 +1,173 @@
+$(function(){
+	$(".clientele_add_btn").click(addClienteleBtn);
+});
+
+function addClienteleBtn(){
+	var clientele_accountNum=$("#clientele_accountNum").val();
+	var clientele_password=$("#clientele_password").val();
+	var clientele_repassword=$("#clientele_repassword").val();
+	var clientele_accountEmail=$("#clientele_accountEmail").val();
+	var clientele_userNickname=$("#clientele_userNickname").val();
+	var clientele_userName=$("#clientele_userName").val();
+	var clientele_userTelephone=$("#clientele_userTelephone").val();
+	var clientele_userMobile=$("#clientele_userMobile").val();
+	var clientele_userAddress=$("#clientele_userAddress").val();
+	var clientele_accountStatus=$("input[name='qt']:checked").val();
+	var clientele_userQuestion1=$("#clientele_userQuestion1").val();
+	var clientele_userAnswer1=$("#clientele_userAnswer1").val();
+	var clientele_userQuestion2=$("#clientele_userQuestion2").val();
+	var clientele_userAnswer2=$("#clientele_userAnswer2").val();
+	var clientele_userQuestion3=$("#clientele_userQuestion3").val();
+	var clientele_userAnswer3=$("#clientele_userAnswer3").val();
+	var clientele_note=$("#clientele_note").val();
+	var ok=true;
+	if(clientele_accountNum==""){
+		ok=false;
+		$("#clientele_accountNum_ts").html("客户账户为空");
+	}else{
+		$("#clientele_accountNum_ts").html("");
+	}
+	if(clientele_password==""){
+		ok=false;
+		$("#clientele_password_ts").html("账户密码为空");
+	}else{
+		$("#clientele_password_ts").html("");
+	}
+	if(clientele_repassword==""){
+		ok=false;
+		$("#clientele_repassword_ts").html("确认账户密码为空");
+	}else{
+		$("#clientele_repassword_ts").html("");
+	}
+	if(clientele_accountEmail==""){
+		ok=false;
+		$("#clientele_accountEmail_ts").html("账户邮箱为空");
+	}else if(!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(clientele_accountEmail)){
+		ok=false;
+		$("#clientele_accountEmail_ts").html("请输入正确账户邮箱格式！");
+	}else{
+		$("#clientele_accountEmail_ts").html("");
+	}
+	/*if(clientele_userNickname==""){
+		ok=false;
+		$("#clientele_userNickname_ts").html("客户昵称为空");
+	}else{
+		$("#clientele_userNickname_ts").html("");
+	}
+	if(clientele_userName==""){
+		ok=false;
+		$("#clientele_userName_ts").html("客户姓名为空");
+	}else{
+		$("#clientele_userName_ts").html("");
+	}*/
+	 var re = /^(0\d{11}|1\d{10})$/;
+//	var re = /^0\d{10,11}$/;
+	if(clientele_userTelephone==""){
+		ok=false;
+		$("#clientele_userTelephone_ts").html("客户电话为空");
+	}else if(!re.test(clientele_userTelephone)){
+		ok=false;
+		$("#clientele_userTelephone_ts").html("请输入0开头的 11或12位数字!");
+	}else{
+		$("#clientele_userTelephone_ts").html("");
+	}
+//	 var re = /^1\d{10}$/;
+	 var re = /^(0\d{10,11}|1\d{10})$/;
+	if(clientele_userMobile==""){
+		ok=false;
+		$("#clientele_userMobile_ts").html("客户手机为空");
+	}else if(!re.test(clientele_userMobile)){
+		ok=false;
+		$("#clientele_userMobile_ts").html("请输入正确的格式!");
+	}else{
+		$("#clientele_userMobile_ts").html("");
+	}
+	/*if(clientele_userAddress==""){
+		ok=false;
+		$("#clientele_userAddress_ts").html("客户地址为空");
+	}else{
+		$("#clientele_userAddress_ts").html("");
+	}
+	if(clientele_userQuestion1==""){
+		ok=false;
+		$("#clientele_userQuestion1_ts").html("密码找回问题1为空");
+	}else{
+		$("#clientele_userQuestion1_ts").html("");
+	}
+	if(clientele_userAnswer1==""){
+		ok=false;
+		$("#clientele_userAnswer1_ts").html("密码找回问题1为空");
+	}else{
+		$("#clientele_userAnswer1_ts").html("");
+	}
+	if(clientele_userQuestion2==""){
+		ok=false;
+		$("#clientele_userQuestion2_ts").html("密码找回问题2为空");
+	}else{
+		$("#clientele_userQuestion2_ts").html("");
+	}
+	if(clientele_userAnswer2==""){
+		ok=false;
+		$("#clientele_userAnswer2_ts").html("密码找回答案2为空");
+	}else{
+		$("#clientele_userAnswer2_ts").html("");
+	}
+	if(clientele_userQuestion3==""){
+		ok=false;
+		$("#clientele_userQuestion3_ts").html("密码找回问题3为空");
+	}else{
+		$("#clientele_userQuestion3_ts").html("");
+	}
+	if(clientele_userAnswer3==""){
+		ok=false;
+		$("#clientele_userAnswer3_ts").html("密码找回答案3为空");
+	}else{
+		$("#clientele_userAnswer3_ts").html("");
+	}
+	if(clientele_note==""){
+		ok=false;
+		$("#clientele_note_ts").html("备注为空");
+	}else{
+		$("#clientele_note_ts").html("");
+	}*/
+	if(clientele_accountStatus==null){
+		ok=false;
+		$("#clientele_accountStatus_ts").html("账户状态为空");
+	}else{
+		$("#clientele_accountStatus_ts").html("");
+	}
+	if(ok){
+			$.ajax({
+				url : "/admin/add_userInfo.do",
+				type : "post",
+				data : {
+					"accountNum":clientele_accountNum,
+					"userPassword":clientele_password,
+					"accountEmail":clientele_accountEmail,
+					"userNickname":clientele_userNickname,
+					"userName":clientele_userName,
+					"userTelephone":clientele_userTelephone,
+					"userMobile":clientele_userMobile,
+					"userAddress":clientele_userAddress,
+					"accountStatus":clientele_accountStatus,
+					"userQuestion1":clientele_userQuestion1,
+					"userAnswer1":clientele_userAnswer1,
+					"userQuestion2":clientele_userQuestion2,
+					"userAnswer2":clientele_userAnswer2,
+					"userQuestion3":clientele_userQuestion3,
+					"userAnswer3":clientele_userAnswer3,
+					"note":clientele_note
+					},
+				dataType : "json",
+				success : function(result) {
+					if(result.state==0){
+						alert("添加客户成功！");
+							window.location.href ="clientele.do";	
+					}
+				},
+				error : function() {
+					alert("添加失败!!!");
+				}
+			});
+		}
+}

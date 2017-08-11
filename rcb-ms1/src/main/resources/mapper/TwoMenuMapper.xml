@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.TwoMenuDAO">
+	<select id="getTitleById" parameterType="int" resultType="java.lang.String">
+		SELECT
+			title
+		FROM 
+			two_menu
+		where
+			id=#{id}
+	</select>
+	<select id="listTwoMenuDisplayByOneMenuId" parameterType="int" resultType="com.rongcheng.rcb.entity.TwoMenu">
+		SELECT
+			id, 
+			one_menu_id oneMenuId, 
+			title, 
+			icon_url	iconUrl, 
+			link, 
+			profile, 
+			keyword, 
+			is_display	display, 
+			seq, 
+			remark
+		FROM 
+			two_menu
+		where
+			one_menu_id=#{oneMenuId} and is_display=1
+		order by
+			seq
+	</select>
+	
+	
+	<!-- //////zb//////////////// -->
+		<select id="listTwoMenuAll" 
+			resultType="Map">
+			  
+			  
+			select
+			  id,
+			  one_menu_id as oneMenuId,
+			  title,
+			  icon_url as iconUrl,
+			  link,
+			  profile,
+			  keyword,
+			  is_display as display,
+			  seq,
+			  remark
+			from 
+			  two_menu
+			order by
+				seq
+	</select>
+	
+	<insert id="insertTwoMenu" 
+			parameterType="com.rongcheng.rcb.entity.TwoMenu">
+			  
+		insert into two_menu 
+		(  
+		  one_menu_id,
+		  title,
+		  icon_url,
+		  link,
+		  profile,
+		  keyword,
+		  is_display,
+		  seq,
+		  remark 
+		)			
+		values 
+		(
+		    #{oneMenuId},
+	  	    #{title},
+			#{iconUrl},
+			#{link},
+			#{profile},
+			#{keyword},
+			#{display},
+			#{seq},
+			#{remark}
+		) 
+		
+	</insert>
+	
+	<select id="getTwoMenuById" 
+			parameterType="Integer"
+			resultType="com.rongcheng.rcb.entity.TwoMenu">
+			  
+		select  
+			  id,
+			  one_menu_id as oneMenuId,
+			  title,
+			  icon_url as iconUrl,
+			  link,
+			  profile,
+			  keyword,
+			  is_display as display,
+			  seq,
+			  remark			
+		from 
+			  two_menu 
+		where id=#{id}
+		
+	</select>
+	
+	<update id="updateTwoMenu" 
+			parameterType="com.rongcheng.rcb.entity.TwoMenu">
+		   
+		update two_menu set
+			one_menu_id=#{oneMenuId},
+			title=#{title},
+			icon_url=#{iconUrl},
+			link=#{link},
+			profile=#{profile},
+			keyword=#{keyword},
+			is_display=#{display},
+			seq=#{seq},
+			remark=#{remark}
+		where id=#{id}
+		
+	</update>
+	
+	<delete id="deleteTwoMenuById"
+			parameterType="Integer">
+		delete from two_menu 
+		where id=#{id}
+	</delete>
+	
+	<select id="listTwoMenuByOneMenuId" 
+			parameterType="Integer"
+			resultType="Map">
+			  
+		select  
+			  id,
+			  one_menu_id as oneMenuId,
+			  title,
+			  icon_url as iconUrl,
+			  link,
+			  profile,
+			  keyword,
+			  is_display as display,
+			  seq,
+			  remark 			
+		from 
+			two_menu 
+		where one_menu_id=#{oneMenuID}
+		
+	</select>
+	<!-- //////zb//////////////// -->
+</mapper>

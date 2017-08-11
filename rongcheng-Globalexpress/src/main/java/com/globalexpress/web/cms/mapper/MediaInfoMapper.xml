@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globalexpress.web.cms.dao.MediaInfoDAO">
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.MediaInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="media_name" jdbcType="VARCHAR" property="mediaName" />
+    <result column="interface_name" jdbcType="VARCHAR" property="interfaceName" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+    <result column="icon_direct_link" jdbcType="VARCHAR" property="iconDirectLink" />
+    <result column="media_label" jdbcType="VARCHAR" property="mediaLabel" />
+    <result column="media_keyword" jdbcType="VARCHAR" property="mediaKeyword" />
+    <result column="media_url" jdbcType="VARCHAR" property="mediaUrl" />
+    <result column="word_design" jdbcType="VARCHAR" property="wordDesign" />
+    <result column="media_direct_link" jdbcType="VARCHAR" property="mediaDirectLink" />
+    <result column="media_type" jdbcType="BIT" property="mediaType" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="user_sequence" jdbcType="INTEGER" property="userSequence" />
+    <result column="is_show" jdbcType="BIT" property="show" />
+    <result column="click" jdbcType="INTEGER" property="click" />
+    <result column="reserved1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="owner_id" jdbcType="BIGINT" property="ownerId" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="is_authorization" jdbcType="BIT" property="authorization" />
+    <result column="is_apply" jdbcType="BIT" property="apply" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, media_name, interface_name, icon_url, icon_direct_link, media_label, media_keyword, 
+    media_url, word_design, media_direct_link, media_type, parent_id, user_sequence, 
+    is_show, click, reserved1, note, owner_id, operator_id, is_authorization, is_apply, 
+    gmt_create, gmt_modified
+  </sql>
+  
+  <select id="countByBlockIdAndKeyword" resultType="int">
+    select 
+    	count(*)
+    from media_info
+    where owner_id = #{0,jdbcType=BIGINT}
+    <if test="param2!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where block_id = #{1 } and owner_id = #{0} and content_type = 23)
+    </if>
+    <if test="param3!=null">
+	    and (
+	    	media_name like CONCAT('%',#{2},'%') or
+	    	interface_name like CONCAT('%',#{2},'%') or
+	    	media_keyword like CONCAT('%',#{2},'%') or
+	    	media_label like CONCAT('%',#{2},'%') or
+	    	note like CONCAT('%',#{2},'%') or
+	    	word_design like CONCAT('%',#{2},'%')
+	    )
+    </if>
+  </select>
+  <select id="limitByBlockIdAndKeyword" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from media_info
+    where owner_id = #{ownerId,jdbcType=BIGINT}
+    <if test="blockChannelId!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where block_id = #{blockChannelId } and owner_id = #{ownerId} and content_type = 23)
+    </if>
+    <if test="keyword!=null">
+	    and (
+	    	media_name like CONCAT('%',#{keyword},'%') or
+	    	interface_name like CONCAT('%',#{keyword},'%') or
+	    	media_keyword like CONCAT('%',#{keyword},'%') or
+	    	media_label like CONCAT('%',#{keyword},'%') or
+	    	note like CONCAT('%',#{keyword},'%') or
+	    	word_design like CONCAT('%',#{keyword},'%')
+	    )
+    </if>
+    order by id desc
+    limit #{start},#{rows}
+  </select>
+  
+  <select id="getSelective" parameterType="com.globalexpress.web.entity.DerivedContentPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from media_info
+    where owner_id = #{ownerId,jdbcType=BIGINT}
+    and id=#{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByOwnerIdAndIdArray">
+    delete from media_info
+    where owner_id = #{param1,jdbcType=BIGINT} and id in
+    												<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+								                    	#{item}  
+				               						</foreach>
+  </delete>
+  <insert id="insertSelective" parameterType="com.globalexpress.web.entity.MediaInfo">
+    insert into media_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mediaName != null">
+        media_name,
+      </if>
+      <if test="interfaceName != null">
+        interface_name,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
+      </if>
+      <if test="iconDirectLink != null">
+        icon_direct_link,
+      </if>
+      <if test="mediaLabel != null">
+        media_label,
+      </if>
+      <if test="mediaKeyword != null">
+        media_keyword,
+      </if>
+      <if test="mediaUrl != null">
+        media_url,
+      </if>
+      <if test="wordDesign != null">
+        word_design,
+      </if>
+      <if test="mediaDirectLink != null">
+        media_direct_link,
+      </if>
+      <if test="mediaType != null">
+        media_type,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+        user_sequence,
+      <if test="show != null">
+        is_show,
+      </if>
+      <if test="click != null">
+        click,
+      </if>
+      <if test="reserved1 != null">
+        reserved1,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="ownerId != null">
+        owner_id,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="authorization != null">
+        is_authorization,
+      </if>
+      <if test="apply != null">
+        is_apply,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="mediaName != null">
+        #{mediaName,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null">
+        #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="iconDirectLink != null">
+        #{iconDirectLink,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaLabel != null">
+        #{mediaLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaKeyword != null">
+        #{mediaKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaUrl != null">
+        #{mediaUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wordDesign != null">
+        #{wordDesign,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaDirectLink != null">
+        #{mediaDirectLink,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaType != null">
+        #{mediaType,jdbcType=BIT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+        (SELECT
+			MAX(IFNULL(user_sequence,0))+1
+		FROM
+			media_info m
+		WHERE owner_id=#{ownerId,jdbcType=BIGINT}),
+      <if test="show != null">
+        #{show,jdbcType=BIT},
+      </if>
+      <if test="click != null">
+        #{click,jdbcType=INTEGER},
+      </if>
+      <if test="reserved1 != null">
+        #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="authorization != null">
+        #{authorization,jdbcType=BIT},
+      </if>
+      <if test="apply != null">
+        #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateSelective" parameterType="com.globalexpress.web.entity.MediaInfo">
+    update media_info
+    <set>
+      <if test="mediaName != null">
+        media_name = #{mediaName,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null">
+        interface_name = #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null">
+        icon_url = #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="iconDirectLink != null">
+        icon_direct_link = #{iconDirectLink,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaLabel != null">
+        media_label = #{mediaLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaKeyword != null">
+        media_keyword = #{mediaKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaUrl != null">
+        media_url = #{mediaUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wordDesign != null">
+        word_design = #{wordDesign,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaDirectLink != null">
+        media_direct_link = #{mediaDirectLink,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaType != null">
+        media_type = #{mediaType,jdbcType=BIT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="userSequence != null">
+        user_sequence = #{userSequence,jdbcType=INTEGER},
+      </if>
+      <if test="show != null">
+        is_show = #{show,jdbcType=BIT},
+      </if>
+      <if test="click != null">
+        click = #{click,jdbcType=INTEGER},
+      </if>
+      <if test="reserved1 != null">
+        reserved1 = #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="authorization != null">
+        is_authorization = #{authorization,jdbcType=BIT},
+      </if>
+      <if test="apply != null">
+        is_apply = #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+    and owner_id = #{ownerId,jdbcType=BIGINT}
+  </update>
+</mapper>

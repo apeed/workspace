@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.AlternateImgDao">
+	
+	<select id="findAlternateImgById" parameterType="int" resultType="com.rongcheng.rcb.entity.AlternateImg">
+	select 
+	id,
+	module_id as moduleId,
+	title,
+	img_url as imgUrl,
+	profile,
+	link,
+	keyword,
+	is_display as display,
+	seq,
+	remark
+	from 
+	alternate_img  
+	where id=#{id}
+	</select>	
+	
+	 <select id="findAlternateImgAll" resultType="Map">
+	select
+		id,
+		module_id as moduleId,
+		title,
+		img_url as imgUrl,
+		profile,
+		link,
+		keyword,
+		is_display as display,
+		seq,
+		remark
+		from
+	 	alternate_img  
+	 	order by seq asc
+	</select>
+	
+	 <insert id="addAlternateImg" parameterType="com.rongcheng.rcb.entity.AlternateImg">
+	insert into 
+	alternate_img 
+	(
+		id,
+		module_id,
+		title,
+		img_url,
+		profile,
+		link,
+		keyword,
+		is_display,
+		seq,
+		remark
+	)
+	values
+	(
+		#{id},
+		#{moduleId},
+		#{title},
+		#{imgUrl},
+		#{profile},
+		#{link},
+		#{keyword},
+		#{display},
+		#{seq},
+		#{remark}
+	)
+	</insert>  
+	
+	 <delete id="delAlternateImgById" parameterType="int">
+	 	delete  from alternate_img where id=#{id}
+	 </delete>
+	 <delete id="delAlternateImgByModuleId" parameterType="int">
+	 	delete  from alternate_img where module_id=#{moduleId}
+	 </delete>
+	  <update id="modifyAlternateImg" parameterType="com.rongcheng.rcb.entity.AlternateImg">
+	 update alternate_img set
+	 	id=#{id},
+		module_id=#{moduleId},
+		title=#{title},
+		img_url=#{imgUrl},
+		profile=#{profile},
+		link=#{link},
+		keyword=#{keyword},
+		is_display=#{display},
+		seq=#{seq},
+		remark=#{remark}
+		where id=#{id}
+	 </update>  
+	 <!-- //////////jxb/////////// -->
+	 	<select id="listAlternateImgByModuleIdAndDisplayNumber" parameterType="int" resultType="com.rongcheng.rcb.entity.AlternateImg">
+		SELECT
+			id, 
+			module_id	moduleId, 
+			title, 
+			img_url		imgUrl, 
+			profile, 
+			link, 
+			keyword, 
+			is_display	display, 
+			seq, 
+			remark
+		FROM 
+			alternate_img
+		where
+			module_id=#{0} and is_display=1
+		limit
+			0,#{1}
+	</select>
+	 <!-- //////////jxb/////////// -->
+	 
+</mapper>
+
+
+
+
+
+
+
+

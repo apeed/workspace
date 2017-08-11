@@ -1,0 +1,67 @@
+1497411686547	Delete elements
+1497411766015	Delete element
+1497411990637	Delete elements
+1497412192621	Rename resource 'storeMessage.html'
+1497414395803	Delete elements
+1497414399981	Delete elements
+1497414406269	Delete element
+1497414420615	Delete elements
+1497415475000	Delete element
+1497415502321	Rename package 'test.AlternateImg'
+1497415518305	Rename package 'ItemCommonInfo'
+1497415536905	Rename type 'TestAlternateImgDao'
+1497415550640	Delete elements
+1497415558829	Rename resource 'UserMapper.xml'
+1497416622123	Rename type 'TestAlternateImgService'
+1497417576539	Delete elements
+1497417610656	Rename resource 'storeMessage.html'
+1497417656449	Delete element
+1497417661568	Delete elements
+1497417755609	Delete elements
+1497417805086	Rename package 'com.rongcheng.rcb.service.tn'
+1497417840822	Delete elements
+1497417842879	Delete element
+1497417871766	Delete element
+1497422469400	Copy compilation unit
+1497422483782	Rename type 'ItemCommonInfoDao'
+1497422528300	Copy compilation unit
+1497423226688	Rename compilation unit 'UserController.java'
+1497425622451	Rename type 'ShopInfo'
+1497425664903	Rename type 'PlatformInfo'
+1497430933776	Rename package 'com.rongcheng.rcb'
+1497430983829	Copy package
+1497430993037	Delete element
+1497430997801	Copy package
+1497431046277	Rename package 'com.rongcheng.rcb.controller'
+1497431058114	Delete element
+1497431081467	Rename package 'com.rongcheng.rcb.dao'
+1497431091673	Rename package 'com.rongcheng.rcb.entity'
+1497431099200	Rename package 'com.rongcheng.rcb.exception'
+1497431113268	Delete element
+1497431128854	Delete elements
+1497431132870	Delete element
+1497431153064	Rename package 'com.rongcheng.rcb.interceptor'
+1497431159131	Rename package 'com.rongcheng.rcb.service'
+1497431170022	Rename package 'com.rongcheng.rcb.service.ItemCommonInfo'
+1497431181257	Delete element
+1497431188757	Rename package 'com.rongcheng.rcb.utils'
+1497433858508	Move file
+1497435184639	Rename resource 'settings.html'
+1497435266835	Move file
+1497491396094	Delete elements
+1497491484024	Delete element
+1497491501001	Delete element
+1497509171499	Move file
+1497509780915	Rename resource 'storeInformation.html'
+1497509937305	Copy file
+1497510419985	Copy package
+1497510442466	Rename package 'test.ItemCommonInfo.copy'
+1497510452584	Rename package 'test.ItemCommonInfo.ShopInfo'
+1497510476382	Rename type 'TestItemCommonInfoDao'
+1497510490963	Rename type 'TestItemCommonInfoService'
+1497511242121	Copy package
+1497511275048	Rename package 'com.rongcheng.print.service.a'
+1497511293744	Rename package 'com.rongcheng.print.service.ShopInfoService'
+1497512743880	Move folder
+1497519756112	Move folder
+1497519877163	Delete element

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.globalexpress.web.foreground.dao.ForegroundStatementNoticeDao" >
+  <resultMap id="AllResultMap" type="com.globalexpress.web.entity.StatementNotice" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="statement_title" property="statementTitle" jdbcType="VARCHAR" />
+    <result column="statement" property="statement" jdbcType="LONGVARCHAR" />
+    <result column="notice" property="notice" jdbcType="LONGVARCHAR" />
+    <result column="reserved1" property="reserved1" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="BIGINT" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="is_apply" property="apply" jdbcType="BIT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="All_Column_List" >
+    id, statement_title, statement, notice, reserved1, note, owner_id, operator_id, is_apply, gmt_create, gmt_modified
+  </sql>
+  <select id="getSelective" resultMap="AllResultMap" parameterType="com.globalexpress.web.entity.StatementNotice" >
+    select 
+    <include refid="All_Column_List" />
+    from statement_notice
+    where 
+  			owner_id = #{ownerId,jdbcType=BIGINT}
+  		<if test="id != null" >
+	   		and id = #{id,jdbcType=BIGINT})
+	   	</if>
+	    <if test="statementTitle != null" >
+	        and statement_title = #{statementTitle,jdbcType=VARCHAR}
+	    </if>
+	  	<if test="statement != null" >
+	        and statement = #{statement,jdbcType=LONGVARCHAR}
+	    </if>
+	  	<if test="notice != null" >
+	        and notice = #{notice,jdbcType=LONGVARCHAR}
+	    </if>
+	    <if test="reserved1 != null" >
+	        and reserved1 = #{reserved1,jdbcType=VARCHAR}
+	    </if>
+	    <if test="note != null" >
+	        and note = #{note,jdbcType=VARCHAR}
+	    </if>
+	    <if test="operatorId != null" >
+	        and operator_id = #{operatorId,jdbcType=BIGINT}
+	    </if>
+	    <if test="apply != null" >
+	        and is_apply = #{apply,jdbcType=BIT}
+	    </if>
+	    <if test="gmtCreate != null" >
+	        and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="gmtModified != null" >
+	        and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+	    </if>
+  </select>
+</mapper>

@@ -1,0 +1,68 @@
+.transfer_company{
+	width: 50%;
+	height: 42px;
+	padding: 10px 0;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	position: relative;
+}
+.transfer_company .transfer_btn{
+	width: 100%;
+	height: 40px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	line-height: 40px;
+	padding-left: 10px;
+}
+.transfer_company .transfer_list{
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 840px;
+	height: 300px;
+	overflow: auto;
+	background: #fff;
+	z-index: 99;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	display: none;
+}
+.transfer_company .transfer_list .transfer_left{
+	float: left;
+	width: 60px;
+	padding: 10px 0;
+	text-align: center;
+}
+.transfer_company .transfer_list .transfer_left>li{
+	height: 30px;
+	line-height: 30px;
+	border-bottom: 1px solid #ddd;
+}
+.transfer_company .transfer_list .transfer_left>li:first-child{
+	height: 60px;
+}
+.transfer_company .transfer_list .transfer_left>li:last-child{
+	border-bottom: 0;
+}
+.transfer_company .transfer_list .transfer_right{
+	float: left;
+	width: 770px;
+	padding: 10px;
+}
+.transfer_company .transfer_list .transfer_right>ul{
+	padding: 0;
+}
+.transfer_company .transfer_list .transfer_right>ul:after{
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+}
+.transfer_company .transfer_list .transfer_right li{
+	float: left;
+	padding: 0 10px;
+	height: 30px;
+	line-height: 30px;
+	cursor: pointer;
+}

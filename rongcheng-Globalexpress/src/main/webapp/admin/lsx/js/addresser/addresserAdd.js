@@ -1,0 +1,51 @@
+$(function(){
+	$(".addresser_addBtn").click(addresserAddBtn);
+});
+
+function addresserAddBtn(){
+	var addresser_userName=$("#addresser_userName").val();
+	var addresser_userTelephone=$("#addresser_userTelephone").val().trim();
+	var addresser_userAddress=$("#addresser_userAddress").val();
+	var addresser_note=$("#addresser_note").val();
+	var ok=true;
+	if(addresser_userName==""){
+		ok=false;
+		$("#addresser_userName_ts").html("发件人姓名为空");
+	}
+	 var re = /^(0\d{11}|1\d{10})$/;
+	if(addresser_userTelephone==""){
+		ok=false;
+		$("#addresser_userTelephone_ts").html("发件人电话为空");
+	}else if(!re.test(addresser_userTelephone)){
+		ok=false;
+		$("#addresser_userTelephone_ts").html("请输入正确的格式!");
+	}else{
+		$("#addresser_userTelephone_ts").html("");
+	}
+	if(addresser_userAddress==""){
+		ok=false;
+		$("#addresser_userAddress_ts").html("发件地址为空");
+	}
+	if(ok){
+			$.ajax({
+				url : "/admin/addUserInfo1.do",
+				type : "post",
+				data : {
+					"userName":addresser_userName,
+					"userTelephone":addresser_userTelephone,
+					"userAddress":addresser_userAddress,
+					"note":addresser_note
+					},
+				dataType : "json",
+				success : function(result) {
+					if(result.state==0){
+						alert("添加客户成功！");
+							window.location.href ="addresser.do";	
+					}
+				},
+				error : function() {
+					alert("添加失败!!!");
+				}
+			});
+		}
+}

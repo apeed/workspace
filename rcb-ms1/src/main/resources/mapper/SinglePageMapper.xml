@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.SinglePageDAO">
+	<update id="updateSinglePageClick">
+		update single_page set click=click+1 where id=#{id}
+	</update>
+	<select id="countSinglePageByOneTwoMenuId" parameterType="int" resultType="int">
+		select
+			count(*)
+		FROM 
+			single_page
+		where
+			one_menu_id=#{0} and two_menu_id=#{1} and is_display=#{2}
+	</select>
+	<select id="getSinglePageById" parameterType="int" resultType="com.rongcheng.rcb.entity.SinglePage">
+		SELECT 	
+			id, 
+			one_menu_id oneMenuId, 
+			two_menu_id twoMenuId, 
+			title, 
+			short_title shortTitle, 
+			author, 
+			img_url 	imgUrl, 
+			keyword, 
+			profile, 
+			content1, 
+			content2, 
+			content3, 
+			create_time createTime, 
+			modify_time modifyTime, 
+			is_display		display, 
+			seq, 
+			click, 
+			remark
+		FROM 
+			single_page
+		where
+			id=#{id}
+	</select>
+
+	<select id="listSinglePageByOneTwoMenuIdAndDisplay" parameterType="int" resultType="com.rongcheng.rcb.entity.SinglePage">
+		SELECT 	
+			id, 
+			one_menu_id oneMenuId, 
+			two_menu_id twoMenuId, 
+			title, 
+			short_title shortTitle, 
+			author, 
+			img_url 	imgUrl, 
+			keyword, 
+			profile, 
+			create_time createTime, 
+			modify_time modifyTime, 
+			is_display		display, 
+			seq, 
+			click, 
+			remark
+		FROM 
+			single_page
+		where
+			one_menu_id=#{2} and two_menu_id=#{3} and is_display=#{4}
+		order by
+			seq
+		limit #{0},#{1}
+	</select>
+	
+	<select id="listSinglePageByOneMenuIdAndFrontRow" parameterType="int" resultType="com.rongcheng.rcb.entity.SinglePage">
+		SELECT 	
+			sp.id, 
+			oneMenuId, 
+			twoMenuId, 
+			sp.title, 
+			shortTitle, 
+			author, 
+			imgUrl, 
+			sp.keyword, 
+			sp.profile, 
+			createTime, 
+			modifyTime, 
+			display, 
+			sp.seq, 
+			sp.click, 
+			sp.remark
+		FROM
+			(SELECT 	
+				id, 			
+				one_menu_id oneMenuId, 
+				two_menu_id twoMenuId, 
+				title, 
+				short_title shortTitle, 
+				author, 
+				img_url 	imgUrl, 
+				keyword, 
+				profile, 
+				content1, 
+				content2, 
+				content3, 
+				create_time createTime, 
+				modify_time modifyTime, 
+				is_display		display, 
+				seq, 
+				click, 
+				remark
+			FROM 
+				single_page
+			WHERE
+				one_menu_id=#{0} AND is_display=1
+			LIMIT #{1}
+			)sp
+		JOIN
+			(SELECT
+				id
+			FROM
+				two_menu
+			WHERE
+				is_display=1
+				)tm
+		ON
+			sp.twoMenuId = tm.id
+		ORDER BY
+			sp.seq
+	</select>
+	<select id="listSinglePageByOneTwoMenuIdAndFrontRow" parameterType="int" resultType="com.rongcheng.rcb.entity.SinglePage">
+		SELECT 	
+			id, 
+			one_menu_id oneMenuId, 
+			two_menu_id twoMenuId, 
+			title, 
+			short_title shortTitle, 
+			author, 
+			img_url 	imgUrl, 
+			keyword, 
+			profile, 
+			create_time createTime, 
+			modify_time modifyTime, 
+			is_display		display, 
+			seq, 
+			click, 
+			remark
+		FROM 
+			single_page
+		where
+			one_menu_id=#{0} and two_menu_id=#{1} and is_display=1
+		limit #{2},#{3}
+	</select>
+	<select id="listSinglePageByKeyword" parameterType="String" resultType="com.rongcheng.rcb.entity.SinglePage">
+		select
+			id, 
+			oneMenuId, 
+			twoMenuId, 
+			title, 
+			shortTitle, 
+			author, 
+			imgUrl, 
+			keyword, 
+			profile, 
+			createTime, 
+			modifyTime, 
+			display, 
+			seq, 
+			click, 
+			remark	
+		from(
+			select  
+				id, 
+				one_menu_id oneMenuId, 
+				two_menu_id twoMenuId, 
+				title, 
+				short_title shortTitle, 
+				author, 
+				img_url 	imgUrl, 
+				keyword, 
+				profile, 
+				content1, 
+				content2, 
+				content3,
+				create_time createTime, 
+				modify_time modifyTime, 
+				is_display		display, 
+				seq, 
+				click, 
+				remark	
+			from 
+				single_page  
+			where 	
+				is_display=1)dis 
+		where
+			title like CONCAT('%',#{keyWord},'%') or
+			shortTitle like CONCAT('%',#{keyWord},'%') or
+	 		keyword like CONCAT('%',#{keyWord},'%') or 
+	 		profile like CONCAT('%',#{keyWord},'%') or 
+	 		content1 like CONCAT('%',#{keyWord},'%') or
+	 		content2 like CONCAT('%',#{keyWord},'%') or
+	 		content3 like CONCAT('%',#{keyWord},'%') or
+	 		author like CONCAT('%',#{keyWord},'%') or
+	 		remark like CONCAT('%',#{keyWord},'%') or
+	 		oneMenuId IN(
+	 			SELECT o.id FROM one_menu o
+	 				WHERE o.title LIKE CONCAT('%',#{keyWord},'%')) OR 
+			twoMenuId IN(
+				SELECT t.id FROM two_menu t
+					WHERE t.title LIKE CONCAT('%',#{keyWord},'%'))
+	</select>
+	
+	<!-- /////zb////// -->
+	<!--   分页查询：
+		page:从第几条内容开始
+		pageSize：，每页的条目数
+		start :(page-1)*pageSize+1
+		end: pageSize*page 
+		
+	 -->
+	 <select id="listSinglePageByPage" 
+			parameterType="int"
+			resultType="com.rongcheng.rcb.entity.SinglePage">
+		select  
+			id,
+			one_menu_id as oneMenuId,
+			two_menu_id as twoMenuId,
+			title,
+			short_title as shortTitle,
+			author,
+			img_url as imgUrl,
+			keyword,
+			profile,
+			content1,
+			content2,
+			content3,
+			create_time as createTime,
+			modify_time as modifyTime,
+			is_display as display,
+			seq,
+			click,
+			remark
+		from 
+			single_page
+		order by 
+			seq asc
+		limit #{0},#{1}
+	</select>
+	
+	<!-- 	//分页查找SinglePage，根据起始行start，查询的行数rows,oneMenuId和twoMenuId
+	 -->
+	<select id="listSinglePageByPageMenuId" 
+			parameterType="int"
+			resultType="com.rongcheng.rcb.entity.SinglePage">
+		select  
+			id,
+			one_menu_id as oneMenuId,
+			two_menu_id as twoMenuId,
+			title,
+			short_title as shortTitle,
+			author,
+			img_url as imgUrl,
+			keyword,
+			profile,
+			content1,
+			content2,
+			content3,
+			create_time as createTime,
+			modify_time as modifyTime,
+			is_display as display,
+			seq,
+			click,
+			remark
+		from 
+			single_page
+		where
+			one_menu_id=#{2}
+			and
+			two_menu_id=#{3}
+		order by 
+			seq asc
+		limit #{0},#{1}
+	</select>
+	
+	
+	<!-- 	//分页查找SinglePage，根据起始行start，查询的行数rows，模糊查询
+	 -->
+	<select id="listSinglePageByPageLike" 
+			resultType="com.rongcheng.rcb.entity.SinglePage">
+		select  
+			id,
+			one_menu_id as oneMenuId,
+			two_menu_id as twoMenuId,
+			title,
+			short_title as shortTitle,
+			author,
+			img_url as imgUrl,
+			keyword,
+			profile,
+			content1,
+			content2,
+			content3,
+			create_time as createTime,
+			modify_time as modifyTime,
+			is_display as display,
+			seq,
+			click,
+			remark
+		from 
+			single_page 
+		where
+			title Like CONCAT('%',#{2},'%') 
+			or
+			short_title Like CONCAT('%',#{2},'%') 
+			or
+			content1 Like CONCAT('%',#{2},'%') 
+			or
+			content2 Like CONCAT('%',#{2},'%') 
+			or
+			content3 Like CONCAT('%',#{2},'%') 
+			or
+			keyword Like CONCAT('%',#{2},'%') 
+		order by 
+			seq asc 
+		limit #{0},#{1}
+	</select>
+	
+	<select id="listSinglePageByPageOneMenuId" 
+			parameterType="int"
+			resultType="com.rongcheng.rcb.entity.SinglePage">
+		select  
+			id,
+			one_menu_id as oneMenuId,
+			two_menu_id as twoMenuId,
+			title,
+			short_title as shortTitle,
+			author,
+			img_url as imgUrl,
+			keyword,
+			profile,
+			content1,
+			content2,
+			content3,
+			create_time as createTime,
+			modify_time as modifyTime,
+			is_display as display,
+			seq,
+			click,
+			remark
+		from 
+			single_page
+		where
+			one_menu_id=#{2}
+		order by 
+			seq asc
+		limit #{0},#{1}
+	</select>
+	
+	<select id="countSinglePage" resultType="int">
+		 select 
+		 	count(id) 
+		 from 
+		 	single_page
+	</select>
+	
+	<select id="countSinglePageByPageMenuId" parameterType="int" resultType="int">
+		 select 
+		 	count(id) 
+		 from 
+		 	single_page 
+		 where 
+		 	one_menu_id=#{0} 
+		 and 
+		 	two_menu_id=#{1} 
+	</select>
+	
+	<select id="countSinglePageByPageLike"  resultType="int">
+		 select 
+		 	count(id) 
+		 from 
+		 	single_page 
+		 where 
+		 	title Like CONCAT('%',#{0},'%')
+			or
+			short_title Like CONCAT('%',#{0},'%')
+			or
+			content1 Like CONCAT('%',#{0},'%') 
+			or
+			content2 Like CONCAT('%',#{0},'%') 
+			or
+			content3 Like CONCAT('%',#{0},'%') 
+			or
+			keyword Like CONCAT('%',#{0},'%')
+	</select>
+	
+	<select id="countSinglePageByPageOneMenuId" parameterType="int" resultType="int">
+		 select 
+		 	count(id) 
+		 from 
+		 	single_page 
+		 where 
+		 	one_menu_id=#{0} 
+	</select>
+	
+	<insert id="insertSinglePage" 
+			parameterType="com.rongcheng.rcb.entity.SinglePage">
+		insert into single_page 
+		(  
+			one_menu_id,
+			two_menu_id,
+			title,
+			short_title,
+			author,
+			img_url,
+			keyword,
+			profile,
+			content1,
+			content2,
+			content3,
+			create_time,
+			modify_time,
+			is_display,
+			seq,
+			click,
+			remark
+		)			
+		values 
+		(
+			#{oneMenuId},
+			#{twoMenuId},
+			#{title},
+			#{shortTitle},
+			#{author},
+			#{imgUrl},
+			#{keyword},
+			#{profile},
+			#{content1},
+			#{content2},
+			#{content3},
+			#{createTime},
+			#{modifyTime},
+			#{display},
+			#{seq},
+			#{click},
+			#{remark}
+		) 
+	</insert>
+	
+	<!-- <select id="getSinglePageById" 
+			parameterType="Integer"
+			resultType="com.rongcheng.rcb.entity.SinglePage">
+			  
+		select  
+			id,
+			one_menu_id as oneMenuId,
+			two_menu_id as twoMenuId,
+			title,
+			short_title as shortTitle,
+			author,
+			img_url as imgUrl,
+			keyword,
+			profile,
+			content1,
+			content2,
+			content3,
+			create_time as createTime,
+			modify_time as modifyTime,
+			is_display as display,
+			seq,
+			click,
+			remark			
+		from 
+			single_page  
+		where id=#{id}
+		
+	</select> -->
+	
+	<update id="updateSinglePage" 
+			parameterType="com.rongcheng.rcb.entity.SinglePage">
+		   
+		update single_page set
+			one_menu_id=#{oneMenuId},
+			two_menu_id=#{twoMenuId},
+			title=#{title},
+			short_title=#{shortTitle},
+			author=#{author},
+			img_url=#{imgUrl},
+			keyword=#{keyword},
+			profile=#{profile},
+			content1=#{content1},
+			content2=#{content2},
+			content3=#{content3},
+			create_time=#{createTime},
+			modify_time=#{modifyTime},
+			is_display=#{display},
+			seq=#{seq},
+			click=#{click},
+			remark=#{remark}
+		where id=#{id}
+		
+	</update>
+	
+	
+	<delete id="deleteSinglePageById"
+			parameterType="Integer">
+		delete from single_page
+		where id=#{id}
+	</delete>
+	<!-- /////zb////// -->
+</mapper>

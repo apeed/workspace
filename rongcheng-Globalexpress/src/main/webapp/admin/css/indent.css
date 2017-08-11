@@ -1,0 +1,76 @@
+.indent_ol{
+	border-bottom: 1px solid #ddd;
+	height: 50px;
+	line-height: 50px;
+	min-width: 1000px;
+}
+.indent_ol>li{
+	float: left;
+	width: 9%;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+.indent_ol>li:first-child{
+	width: 5%;
+}
+.indent_ol>li:nth-child(5){
+	width: 15%;
+}
+.indent_ol>li:last-child{
+	width: 25%;
+	overflow: visible;
+}
+.indent_ol:after{
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+}
+.erzi{
+	width: 100%;
+	display: none;
+}
+.indent_son_ol{
+	border-bottom: 1px solid #ddd;
+	height: 40px;
+	line-height: 40px;
+	min-width: 1000px;
+}
+.indent_son_ol>li{
+	float: left;
+	width: 20%;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+
+
+.indent_fh_div{
+	position: relative;
+	float: left;
+}
+.indent_fh_box{
+	width: 500px;
+	background: #fff;
+	position: absolute;
+	border-radius: 3px;
+	right: 0;
+	top: 100%;
+	z-index: 99;
+	display: none;
+}
+.indent_bz_div{
+	position: relative;
+	float: left;
+}
+.indent_bz_box{
+	width: 500px;
+	background: #fff;
+	position: absolute;
+	border-radius: 3px;
+	right: 0;
+	top: 100%;
+	z-index: 99;
+	display: none;
+}

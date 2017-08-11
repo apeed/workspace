@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globalexpress.web.foreground.dao.ForegroundBlockContentLinkDao">
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.BlockContentLink">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="block_type" jdbcType="BIT" property="blockType" />
+    <result column="block_id" jdbcType="BIGINT" property="blockId" />
+    <result column="content_type" jdbcType="BIT" property="contentType" />
+    <result column="content_id" jdbcType="BIGINT" property="contentId" />
+    <result column="reserved1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="owner_id" jdbcType="BIGINT" property="ownerId" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="is_authorization" jdbcType="BIT" property="authorization" />
+    <result column="is_apply" jdbcType="BIT" property="apply" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, block_type, block_id, content_type, content_id, reserved1, note, owner_id, operator_id, is_authorization, 
+    is_apply, gmt_create, gmt_modified
+  </sql>
+  <select id="listContentIdSelective" parameterType="com.globalexpress.web.entity.BlockContentLink" resultType="java.lang.Long">
+    select 
+    	content_id
+    from block_content_link
+    where
+    	owner_id = #{ownerId,jdbcType=BIGINT}
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="blockType != null">
+        and block_type = #{blockType,jdbcType=BIT}
+      </if>
+      <if test="blockId != null">
+        and block_id = #{blockId,jdbcType=CHAR}
+      </if>
+      <if test="contentType != null">
+        and content_type = #{contentType,jdbcType=BIT}
+      </if>
+      <if test="contentId != null">
+        and content_id = #{contentId,jdbcType=CHAR}
+      </if>
+      <if test="reserved1 != null">
+        and reserved1 = #{reserved1,jdbcType=VARCHAR}
+      </if>
+      <if test="note != null">
+        and note = #{note,jdbcType=VARCHAR}
+      </if>
+      <if test="operatorId != null">
+        and operator_id = #{operatorId,jdbcType=BIGINT}
+      </if>
+      <if test="authorization != null">
+        and is_authorization = #{authorization,jdbcType=BIT}
+      </if>
+      <if test="apply != null">
+        and is_apply = #{apply,jdbcType=BIT}
+      </if>
+      <if test="gmtCreate != null">
+        and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="gmtModified != null">
+        and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+      </if>
+      order by id desc
+  </select>
+  <select id="listMapContentIdSelective" resultType="map">
+    select 
+    	content_type,content_id
+    from block_content_link
+    where
+    	owner_id = #{1,jdbcType=BIGINT}
+        and block_id = #{0,jdbcType=CHAR}
+    group by content_type
+  </select>
+  <select id="listSelective" parameterType="com.globalexpress.web.entity.BlockContentLink" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from block_content_link
+    where
+    	owner_id = #{ownerId,jdbcType=BIGINT}
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="blockType != null">
+        and block_type = #{blockType,jdbcType=BIT}
+      </if>
+      <if test="blockId != null">
+        and block_id = #{blockId,jdbcType=CHAR}
+      </if>
+      <if test="contentType != null">
+        and content_type = #{contentType,jdbcType=BIT}
+      </if>
+      <if test="contentId != null">
+        and content_id = #{contentId,jdbcType=CHAR}
+      </if>
+      <if test="reserved1 != null">
+        and reserved1 = #{reserved1,jdbcType=VARCHAR}
+      </if>
+      <if test="note != null">
+        and note = #{note,jdbcType=VARCHAR}
+      </if>
+      <if test="operatorId != null">
+        and operator_id = #{operatorId,jdbcType=BIGINT}
+      </if>
+      <if test="authorization != null">
+        and is_authorization = #{authorization,jdbcType=BIT}
+      </if>
+      <if test="apply != null">
+        and is_apply = #{apply,jdbcType=BIT}
+      </if>
+      <if test="gmtCreate != null">
+        and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="gmtModified != null">
+        and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+      </if>
+  </select>
+  <select id="countSelective" resultType="int">
+  	select count(*)
+  	from block_content_link
+    where
+    	owner_id = #{param1.ownerId,jdbcType=BIGINT}
+      <if test="param1.blockId != null">
+        and block_id = #{param1.blockId,jdbcType=CHAR}
+      </if>
+      <if test="param2 != null">
+      	and content_type in
+	      <foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+			#{item}  
+		  </foreach>
+      </if>
+  </select>
+  <select id="limitSelective" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from block_content_link
+    where
+    	owner_id = #{param1.ownerId,jdbcType=BIGINT}
+      <if test="param1.blockId != null">
+        and block_id = #{param1.blockId,jdbcType=CHAR}
+      </if>
+      <if test="param2 != null">
+      	and content_type in
+	      <foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+			#{item}  
+		  </foreach>
+      </if>
+    order by id desc
+    limit #{param3}, #{param4}
+  </select>
+</mapper>

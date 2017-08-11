@@ -1,0 +1,293 @@
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="/admin/css/pintuer.css">
+<link rel="stylesheet" href="/admin/css/admin.css">
+<link rel="stylesheet" href="/admin/css/logistics.css">
+  <style>
+    textarea {
+      display: block;
+    }
+  </style>
+  <link rel="stylesheet" href="/editor/themes/default/default.css" />
+  <script charset="utf-8" src="/editor/kindeditor-min.js"></script>
+  <script charset="utf-8" src="/editor/lang/zh_CN.js"></script>
+<script src="/admin/js/jquery.js"></script>
+<script src="/admin/js/pintuer.js"></script>
+<script src="/admin/js/logistics.js"></script>
+<link rel="stylesheet" href="/data/jquery.datetimepicker.css">
+<script src="/data/build/jquery.datetimepicker.full.js"></script>  
+<script src="/admin/lsx/js/cookie_util.js"></script> 
+<script src="/admin/lsx/js/logistics/logisticsAdd.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>增加物流</strong></div>
+  <div class="body-content">
+    <div class="form-x">  
+      <div class="form-group">
+        <div class="label">
+          <label>电商平台：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" value="" id="logisticsAdd_platformId"/>
+          <div class="tips" id="logisticsAdd_platformId_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>店铺名称：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" value="" id="logisticsAdd_shopId"/>
+          <div class="tips" id="logisticsAdd_shopId_ts" style="color:red"></div>
+        </div>
+      </div> 
+      <div class="form-group">
+        <div class="label">
+          <label>订单编号：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" value="" name="title" id="logisticsAdd_orderId" style="position: relative;"/>
+          <div class="tips" id="logisticsAdd_orderId_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>物流公司名称：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" value="" id="logisticsAdd_carrierId" name="title"/>
+          <div class="tips" id="logisticsAdd_carrierId_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>物流公司网址：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" value="" id="logisticsAdd_carrierUrl" name="title"/>
+          <div class="tips" id="logisticsAdd_carrierUrl_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>物流单号：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" value="" id="logisticsAdd_trackingNum" name="title"/>
+          <div class="tips" id="logisticsAdd_trackingNum_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>自定义物流记录 ：</label>
+        </div>
+        <div class="field">
+          <textarea id="logisticsAdd_userTrackingInfo" name="content" class="input" style="padding: 0;"></textarea> 
+          <div class="tips" id="logisticsAdd_userTrackingInfo_ts" style="color:red"></div> 
+        </div>
+      </div>
+      <div class="form-group outer clearfix">
+        <div class="label">
+          <label>发生时间：</label>
+        </div>
+        <div class="field">
+          <input  id="some_class_1" type="text" class="input some_class"/>
+          <div class="tips" id="logisticsAdd_happenTime_ts"  style="color:red"></div> 
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>订单当前位置：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input"  id="logisticsAdd_currentAddress" name="s_keywords" value=""/>
+          <div class="tips" id="logisticsAdd_currentAddress_ts" style="color:red"></div> 
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>订单所在站点：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" id="logisticsAdd_terminalId" name="sort" value=""/>
+          <div class="tips" id="logisticsAdd_terminalId_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>操作人：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" id="logisticsAdd_staffId" name="authour" value=""  />
+          <div class="tips" id="logisticsAdd_staffId_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>操作人电话：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input"  id="logisticsAdd_operatorTel" name="views" value=""  placeholder="0或1开头的11,12位手机号"/>
+          <div class="tips" id="logisticsAdd_operatorTel_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>物流状态：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input"  id="logisticsAdd_cargoStatus" name="views" value="" />
+          <div class="tips" id="logisticsAdd_cargoStatus_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>运输工具编号：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" id="logisticsAdd_facilityId" name="views" />
+          <div class="tips" id="logisticsAdd_facilityId_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>物流是否完成：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input"  id="logisticsAdd_complete" name="views" placeholder="1：完成   0：没完成" />
+          <div class="tips" id="logisticsAdd_complete_ts"  style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>下一站地理位置：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" id="logisticsAdd_nextAddress" name="views" />
+          <div class="tips" id="logisticsAdd_nextAddress_ts"  style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>下一站点名称：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input"  id="logisticsAdd_nextTerminal" name="views" />
+          <div class="tips" id="logisticsAdd_nextTerminal_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>转运公司名称：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" id="logisticsAdd_transferCarrierId"  name="views" style="display: none;"/>
+          <div class="transfer_company">
+            <div class="transfer_btn"></div>
+            <div class="transfer_list">
+              <ul class="transfer_left">
+                <li>常用</li>
+                <li>A-C</li>
+                <li>C-F</li>
+                <li>F-H</li>
+                <li>H-J</li>
+                <li>J-M</li>
+                <li>N-S</li>
+                <li>S-T</li>
+                <li>U-Y</li>
+                <li>Y-Z</li>
+                <li>Z</li>
+              </ul>
+              <div class="transfer_right">
+                <ul id="often_use_express">
+                	<!-- loadOftenUseExpress() -->
+                </ul>
+                <ul id="all_express">
+                	<!-- loadAllExpress() -->
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="tips" id="logisticsAdd_transferCarrierId_ts" style="color:red"></div>
+          </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>转运公司网址：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input"  id="logisticsAdd_transferCarrierUrl" name="views" />
+          <div class="tips" id="logisticsAdd_transferCarrierUrl_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>转运物流单号：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input"  id="logisticsAdd_transferTrackingNum" name="views" />
+          <div class="tips" id="logisticsAdd_transferTrackingNum_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>备注：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" id="logisticsAdd_note" name="views" />
+          <div class="tips" id="logisticsAdd_note_ts" style="color:red"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>显示：</label>
+        </div>
+        <div class="field">
+          <div class="button-group radio">
+            <input  value="1" type="radio" name="qt">是          
+            <input  value="0"  type="radio" name="qt">否
+            <span id="logisticsAdd_show_ts" style="color:red"></span> 
+          </div> 
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o logisticsAdd_btn"> 提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script>
+  /* var editor;
+  KindEditor.ready(function(K) {
+    editor = K.create('textarea[name="content"]', {
+      allowFileManager : true
+    });
+    editor.sync();
+    $('textarea[name="content"]').change(function(){
+      alert(editor.text());
+    })
+  }); */ 
+    $('.some_class').datetimepicker();
+    var some_class=$(".some_class");
+    some_class.change(function(){
+    	var num=some_class.val();
+    	var newnum=num.split('/');
+    	var zhnum=newnum.join('-');
+    	some_class.val(zhnum)
+    })
+    </script>
+</body>
+</html>

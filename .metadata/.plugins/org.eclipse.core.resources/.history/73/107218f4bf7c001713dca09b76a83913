@@ -1,0 +1,22 @@
+package com.globalexpress.web.cms.dao;
+import java.util.List;
+
+import com.globalexpress.web.entity.StatementNotice;
+
+public interface StatementNoticeDao {
+	//分页
+	 List<StatementNotice> findStatementNoticeByPage(int start,int rows,Long ownerId);
+	 String findStatementNoticeCount(Long ownerId);
+	 StatementNotice findByStatementNoticeId(Long id,Long ownerId);
+	//修改，添加,删除方法
+	 int modifyStatementNotice(StatementNotice sn);
+	 int modifyStatementNotice1(StatementNotice sn);
+	 int addStatementNotice(StatementNotice sn);
+	 void delStatementNotice(Long id,Long ownerId);
+	 //模糊查询
+	 List<StatementNotice> findListByStatementNotice(String keyword,Long ownerId);
+	 //其他不启用
+	 List<StatementNotice> findListByApply(Long id,Long ownerId);
+	 //查找作者
+	 findByOperatorId(Long id,Long ownerId);
+}

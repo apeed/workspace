@@ -1,0 +1,38 @@
+<!DOCTYPE div PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<script type="text/javascript">
+var cb = function(start, end, label) {  
+    $('#scheduledEndTime span').html(start.format('YYYY-MM-DD HH:mm:ss'));  
+ };  
+
+var optionSet1 = {  
+  startDate: moment(),  
+   
+  showDropdowns: false,  
+  showWeekNumbers: false,  
+  timePicker: true,  
+  timePickerIncrement: 1,  
+  singleDatePicker: true,  
+  timePicker24Hour: true,  
+  locale: {  
+        format: 'YYYY-MM-DD HH:mm:ss',  
+         daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],  
+        monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],  
+        },  
+ 
+  opens: 'left',  
+  buttonClasses: ['btn btn-default'],  
+  applyClass: 'btn-small btn-primary',  
+  cancelClass: 'btn-small',  
+  format: 'YYYY-MM-DD HH:mm:ss',  
+      
+};  
+   
+$('#scheduledEndTime').daterangepicker(optionSet1, cb);  
+
+</script>
+<div class="form-group">  
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">计划结束时间  </label>  
+                         <div class="col-md-6 col-sm-6 col-xs-12">  
+                          <input id="scheduledEndTime" name="scheduledEndTime" class="date-picker form-control col-md-7 col-xs-12" type="text">  
+                        </div>  
+                      </div>  

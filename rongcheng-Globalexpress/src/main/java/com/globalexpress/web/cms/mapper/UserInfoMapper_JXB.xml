@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globalexpress.web.cms.dao.UserInfoDAO_JXB">
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.UserInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_portrait" jdbcType="VARCHAR" property="userPortrait" />
+    <result column="account_num" jdbcType="CHAR" property="accountNum" />
+    <result column="user_password" jdbcType="CHAR" property="userPassword" />
+    <result column="digital_certificate" jdbcType="CHAR" property="digitalCertificate" />
+    <result column="account_email" jdbcType="VARCHAR" property="accountEmail" />
+    <result column="user_type" jdbcType="BIT" property="userType" />
+    <result column="user_nickname" jdbcType="VARCHAR" property="userNickname" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_telephone" jdbcType="VARCHAR" property="userTelephone" />
+    <result column="user_mobile" jdbcType="VARCHAR" property="userMobile" />
+    <result column="user_address" jdbcType="BIGINT" property="userAddress" />
+    <result column="account_status" jdbcType="BIT" property="accountStatus" />
+    <result column="user_question1" jdbcType="VARCHAR" property="userQuestion1" />
+    <result column="user_answer1" jdbcType="VARCHAR" property="userAnswer1" />
+    <result column="user_question2" jdbcType="VARCHAR" property="userQuestion2" />
+    <result column="user_answer2" jdbcType="VARCHAR" property="userAnswer2" />
+    <result column="user_question3" jdbcType="VARCHAR" property="userQuestion3" />
+    <result column="user_answer3" jdbcType="VARCHAR" property="userAnswer3" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="authority_id" jdbcType="INTEGER" property="authorityId" />
+    <result column="reserved1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="owner_id" jdbcType="BIGINT" property="ownerId" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="is_admin" jdbcType="BIT" property="admin" />
+    <result column="is_root_account" jdbcType="BIT" property="rootAccount" />
+    <result column="is_apply" jdbcType="BIT" property="apply" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_portrait, account_num, user_password, digital_certificate, account_email, user_type,
+    user_nickname, user_name, user_telephone, user_mobile, user_address, account_status, 
+    user_question1, user_answer1, user_question2, user_answer2, user_question3, user_answer3, 
+    role_id, authority_id, reserved1, note, owner_id, operator_id, is_admin, is_root_account, 
+    is_apply, gmt_create, gmt_modified
+  </sql>
+  <sql id="Base_Column_List2">
+    id, user_portrait, account_num, digital_certificate, account_email,  user_type,
+    user_nickname, user_name, user_telephone, user_mobile, user_address, account_status, 
+    user_question1, user_answer1, user_question2, user_answer2, user_question3, user_answer3, 
+    role_id, authority_id, reserved1, note, owner_id, operator_id, is_admin, is_root_account, 
+    is_apply, gmt_create, gmt_modified
+  </sql>
+  
+  <select id="getById" parameterType="Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List2" />
+    from user_info
+    where id = #{1,jdbcType=BIGINT} and owner_id = #{0,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getByOwnerIdAndAccountNum" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where owner_id = #{0,jdbcType=BIGINT} and account_num = #{1,jdbcType=CHAR}
+  </select>
+  <select id="getByAccountNum" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where account_num = #{accountNum,jdbcType=CHAR}
+  </select>
+  
+  <select id="countByOwnerId" parameterType="Long" resultType="int">
+    select 
+    count(*)
+    from user_info
+    where owner_id = #{param1,jdbcType=BIGINT} and is_root_account = 0
+    	and user_type in
+    		<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+				#{item}  
+			</foreach>
+  </select>
+  <select id="listByOwnerIdAndUserTypeLimit" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List2" />
+    from user_info
+    where owner_id = #{param1,jdbcType=BIGINT} and is_root_account = 0
+    	and user_type in
+    		<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+				#{item}  
+			</foreach>
+    limit #{param3},#{param4}
+  </select>
+  
+  <delete id="deleteByOwnerIdAndIds" >
+    delete from user_info
+    where owner_id = #{param1,jdbcType=BIGINT} and id in
+    												<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+								                    	#{item}  
+				               						</foreach>
+  </delete>
+  
+  <insert id="insertSelective" parameterType="com.globalexpress.web.entity.UserInfo">
+    insert into user_info
+    	(owner_id,
+        account_num,
+        user_password,
+    <trim prefix="" suffix=")" suffixOverrides=",">
+      <if test="userPortrait != null">
+        user_portrait,
+      </if>
+      <if test="digitalCertificate != null">
+        digital_certificate,
+      </if>
+      <if test="accountEmail != null">
+        account_email,
+      </if>
+      <if test="userType != null">
+        user_type,
+      </if>
+      <if test="userNickname != null">
+        user_nickname,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userTelephone != null">
+        user_telephone,
+      </if>
+      <if test="userMobile != null">
+        user_mobile,
+      </if>
+      <if test="userAddress != null">
+        user_address,
+      </if>
+      <if test="accountStatus != null">
+        account_status,
+      </if>
+      <if test="userQuestion1 != null">
+        user_question1,
+      </if>
+      <if test="userAnswer1 != null">
+        user_answer1,
+      </if>
+      <if test="userQuestion2 != null">
+        user_question2,
+      </if>
+      <if test="userAnswer2 != null">
+        user_answer2,
+      </if>
+      <if test="userQuestion3 != null">
+        user_question3,
+      </if>
+      <if test="userAnswer3 != null">
+        user_answer3,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="authorityId != null">
+        authority_id,
+      </if>
+      <if test="reserved1 != null">
+        reserved1,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="admin != null">
+        is_admin,
+      </if>
+      <if test="rootAccount != null">
+        is_root_account,
+      </if>
+      <if test="apply != null">
+        is_apply,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    values(
+    	#{ownerId,jdbcType=BIGINT},
+        #{accountNum,jdbcType=CHAR},
+        #{userPassword,jdbcType=CHAR},
+    <trim prefix="" suffix=")" suffixOverrides=",">
+      <if test="userPortrait != null">
+        #{userPortrait,jdbcType=VARCHAR},
+      </if>
+      <if test="digitalCertificate != null">
+        #{digitalCertificate,jdbcType=CHAR},
+      </if>
+      <if test="accountEmail != null">
+        #{accountEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=BIT},
+      </if>
+      <if test="userNickname != null">
+        #{userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userTelephone != null">
+        #{userTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userMobile != null">
+        #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userAddress != null">
+        #{userAddress,jdbcType=BIGINT},
+      </if>
+      <if test="accountStatus != null">
+        #{accountStatus,jdbcType=BIT},
+      </if>
+      <if test="userQuestion1 != null">
+        #{userQuestion1,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer1 != null">
+        #{userAnswer1,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestion2 != null">
+        #{userQuestion2,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer2 != null">
+        #{userAnswer2,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestion3 != null">
+        #{userQuestion3,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer3 != null">
+        #{userAnswer3,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="authorityId != null">
+        #{authorityId,jdbcType=INTEGER},
+      </if>
+      <if test="reserved1 != null">
+        #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="admin != null">
+        #{admin,jdbcType=BIT},
+      </if>
+      <if test="rootAccount != null">
+        #{rootAccount,jdbcType=BIT},
+      </if>
+      <if test="apply != null">
+        #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateNowUserSelective" parameterType="com.globalexpress.web.entity.UserInfo">
+    update user_info
+    <set>
+      <if test="userNewPassword != null">
+        user_password = #{userNewPassword,jdbcType=CHAR},
+      </if>
+      <if test="accountEmail != null">
+        account_email = #{accountEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userNickname != null">
+        user_nickname = #{userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userTelephone != null">
+        user_telephone = #{userTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userMobile != null">
+        user_mobile = #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userAddress != null">
+        user_address = #{userAddress,jdbcType=BIGINT},
+      </if>
+      <if test="userQuestion1 != null">
+        user_question1 = #{userQuestion1,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer1 != null">
+        user_answer1 = #{userAnswer1,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestion2 != null">
+        user_question2 = #{userQuestion2,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer2 != null">
+        user_answer2 = #{userAnswer2,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestion3 != null">
+        user_question3 = #{userQuestion3,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer3 != null">
+        user_answer3 = #{userAnswer3,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where 
+    	id = #{id,jdbcType=BIGINT}
+        and user_password = #{userPassword,jdbcType=CHAR}
+  </update>
+  <update id="updateSelective" parameterType="com.globalexpress.web.entity.UserInfo">
+    update user_info
+    <set>
+      <if test="userPortrait != null">
+        user_portrait = #{userPortrait,jdbcType=VARCHAR},
+      </if>
+      <if test="userNewPassword != null">
+        user_password = #{userNewPassword,jdbcType=CHAR},
+      </if>
+      <if test="digitalCertificate != null">
+        digital_certificate = #{digitalCertificate,jdbcType=CHAR},
+      </if>
+      <if test="accountEmail != null">
+        account_email = #{accountEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        user_type = #{userType,jdbcType=BIT},
+      </if>
+      <if test="userNickname != null">
+        user_nickname = #{userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userTelephone != null">
+        user_telephone = #{userTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userMobile != null">
+        user_mobile = #{userMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userAddress != null">
+        user_address = #{userAddress,jdbcType=BIGINT},
+      </if>
+      <if test="accountStatus != null">
+        account_status = #{accountStatus,jdbcType=BIT},
+      </if>
+      <if test="userQuestion1 != null">
+        user_question1 = #{userQuestion1,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer1 != null">
+        user_answer1 = #{userAnswer1,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestion2 != null">
+        user_question2 = #{userQuestion2,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer2 != null">
+        user_answer2 = #{userAnswer2,jdbcType=VARCHAR},
+      </if>
+      <if test="userQuestion3 != null">
+        user_question3 = #{userQuestion3,jdbcType=VARCHAR},
+      </if>
+      <if test="userAnswer3 != null">
+        user_answer3 = #{userAnswer3,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="authorityId != null">
+        authority_id = #{authorityId,jdbcType=INTEGER},
+      </if>
+      <if test="reserved1 != null">
+        reserved1 = #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="admin != null">
+        is_admin = #{admin,jdbcType=BIT},
+      </if>
+      <if test="rootAccount != null">
+        is_root_account = #{rootAccount,jdbcType=BIT},
+      </if>
+      <if test="apply != null">
+        is_apply = #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where 
+    	id = #{id,jdbcType=BIGINT}
+        and owner_id = #{ownerId,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

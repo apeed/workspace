@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.globalexpress.web.cms.dao.OrderInfoDao" >
+
+   <select id="findOrderInfoByPage" resultType="com.globalexpress.web.entity.OrderInfo">
+	select 
+		id,
+		owner_id as ownerId,
+		order_num as orderNum,
+		consignee_id as consigneeId,
+		consignee_tel as consigneeTel,
+		consignee_address as consigneeAddress,
+		note,
+		carrier_id as carrierId,
+		tracking_num as trackingNum,
+		total_shipping_fee as totalShippingFee,
+		refund_apply as refundApply,
+		is_order_closed as orderClosed
+		from order_info
+	where owner_id=#{2} 
+	order by gmt_create DESC
+	limit #{0},#{1}
+	</select>
+   <select id="findOrderNums" resultType="com.globalexpress.web.entity.OrderInfo">
+	select 
+		id,
+		order_num as orderNum
+		from order_info
+	where owner_id=#{ownerId}
+	</select>
+	<select id="findListByOrderType" resultType="com.globalexpress.web.entity.OrderInfo">
+	select 
+		id,
+		owner_id as ownerId,
+		order_num as orderNum,
+		consignee_id as consigneeId,
+		consignee_tel as consigneeTel,
+		consignee_address as consigneeAddress,
+		note,
+		carrier_id as carrierId,
+		tracking_num as trackingNum
+		from order_info
+	where owner_id=#{0} and order_type=#{1}
+	</select>
+	<select id="findOrderInfoCount" resultType="String">select count(id) from order_info where owner_id=#{ownerId}</select>		
+	<select id="findByOrderInfoId" 
+			  parameterType="java.lang.Long"
+			  resultType="com.globalexpress.web.entity.OrderInfo">
+		select 
+			id,
+		owner_id as ownerId,
+		order_num as orderNum,
+		consignor_id as consignorId,
+		consignee_id as consigneeId,
+		consignee_tel as consigneeTel,
+		consignee_address as consigneeAddress,
+		note,
+		carrier_id as carrierId,
+		tracking_num as trackingNum,
+		order_label as orderLabel,
+		order_keyword as orderKeyword,
+		package_weight as packageWeight,
+    	total_shipping_fee as totalShippingFee,
+    	support_value as supportValue
+		from order_info
+		where id=#{0} and owner_id=#{1}
+	</select>  
+  	<insert id="addOrderInfo" parameterType="com.globalexpress.web.entity.OrderInfo">
+    	insert into order_info 
+    	(
+    	owner_id,
+		gmt_create,
+		operator_id,
+    	order_num,
+    	consignor_id,
+    	consignee_id,
+    	consignee_tel,
+    	consignee_address,
+    	order_label,
+    	carrier_id,
+    	tracking_num,
+    	package_weight,
+    	total_shipping_fee,
+    	order_keyword,
+    	support_value,
+    	note,
+    	order_type
+    	)
+    	 values 
+    	 (
+    	 #{ownerId},
+		 #{gmtCreate},
+		 #{operatorId},
+    	 #{orderNum},
+    	 #{consignorId},
+    	 #{consigneeId},
+    	 #{consigneeTel},
+    	 #{consigneeAddress},
+    	 #{orderLabel},
+    	 #{carrierId},
+    	 #{trackingNum},
+    	 #{packageWeight},
+    	 #{totalShippingFee},
+    	 #{orderKeyword},
+    	 #{supportValue},
+    	 #{note},
+    	 #{orderType}
+    	 )
+  	</insert>
+  <update id="updateOrderInfo" parameterType="com.globalexpress.web.entity.OrderInfo" >
+	update order_info 
+			set 
+			id=#{id},
+	    	consignor_id=#{consignorId},
+	    	consignee_id=#{consigneeId},
+	    	consignee_tel=#{consigneeTel},
+	    	consignee_address=#{consigneeAddress},
+	    	order_label=#{orderLabel},
+	    	carrier_id=#{carrierId},
+	    	tracking_num=#{trackingNum},
+	    	package_weight=#{packageWeight},
+	    	total_shipping_fee=#{totalShippingFee},
+	    	note=#{note},
+	    	operator_id=#{operatorId},
+			gmt_modified=#{gmtModified},
+			order_keyword=#{orderKeyword},
+    		support_value=#{supportValue},
+    		is_refund_completed=#{refundCompleted},
+    		refund_complete=#{refundComplete},
+    		order_type=#{orderType}
+	where id=#{id} and owner_id=#{ownerId}
+  </update>
+  <delete id="delOrderInfo" parameterType="java.lang.Long">
+	 	delete from order_info where id=#{0} and owner_id=#{1}
+  </delete>
+  <delete id="delOrderItemLink" parameterType="java.lang.Long">
+	 	delete from order_item_link where order_item_id=#{0} and owner_id=#{1}
+  </delete>
+  <select id="findListByOrderInfo" 
+			  resultType="Map">
+		select 
+			id,
+			owner_id as ownerId,
+			order_num as orderNum,
+			consignee_id as consigneeId,
+			consignee_tel as consigneeTel,
+			consignee_address as consigneeAddress,
+			note,
+			carrier_id as carrierId,
+			tracking_num as trackingNum
+		from order_info
+		where owner_id=#{1} 
+		and CONCAT(IFNULL(order_num,''),
+		IFNULL(consignee_id,''),
+		IFNULL(consignee_tel,''),
+		IFNULL(consignee_address,''),
+		IFNULL(carrier_id,''),
+		IFNULL(tracking_num,''),
+		IFNULL(order_label,''),
+		IFNULL(note,'')) 
+		like CONCAT('%',#{0},'%')
+	</select>  
+	<!-- <select id="findListByOrderInfo" 
+			  resultType="Map">
+		select 
+			o.id,
+			o.owner_id as ownerId,
+			o.order_num as orderNum,
+			o.consignee_id as consigneeId,
+			o.consignee_tel as consigneeTel,
+			o.consignee_address as consigneeAddress,
+			o.note,
+			o.carrier_id as carrierId,
+			o.tracking_num as trackingNum
+		from order_info as o, order_item_link as o1,item_info as i
+		where o1.order_item_id=i.id
+		and o1.order_id=o.order_num
+		and o.owner_id=#{1} 
+		and o1.owner_id=#{1} 
+		and i.owner_id=#{1} 
+		and CONCAT(IFNULL(i.item_name,''),
+		IFNULL(o.order_num,''),
+		IFNULL(o.consignee_id,''),
+		IFNULL(o.consignee_tel,''),
+		IFNULL(o.consignee_address,''),
+		IFNULL(o.carrier_id,''),
+		IFNULL(o.tracking_num,''),
+		IFNULL(o.order_label,''),
+		IFNULL(o.note,'')) 
+		like CONCAT('%',#{0},'%')
+	</select> -->
+	
+  	<select id="findListByItemInfo" 
+			  resultType="Map">
+		select 
+			id,
+			owner_id as ownerId,
+			item_sku as itemSku,
+			item_name as itemName,
+			item_brand as itemBrand,
+			category_id as categoryId,
+			item_color as itemColor, 
+			item_size as itemSize,  
+			normal_price as normalPrice
+		from item_info
+		where owner_id=#{1} 
+		and CONCAT(IFNULL(item_sku,''),
+		IFNULL(item_name,''),
+		IFNULL(item_color,''),
+		IFNULL(item_size,''),
+		IFNULL(category_id,''))
+		like CONCAT('%',#{0},'%')
+	</select>  
+	<select id="findItemInfoCount" resultType="String">
+	select 
+	count(id) 
+	from item_info
+	where owner_id=#{ownerId}
+	</select>
+	<!-- <select id="findItemInfoCount1" resultType="String">废用
+	select 
+	count(i.id) 
+	from item_info as i, order_item_link as o1
+	where i.owner_id=#{0}
+	and  o1.owner_id=#{0}
+	and o1.order_item_id=i.id 
+	</select> -->
+	<select id="findItemInfoByPage" resultType="com.globalexpress.web.entity.ItemInfo">
+	select 
+		id,
+		owner_id as ownerId,
+		item_sku as itemSku,
+		item_name as itemName,
+		item_brand as itemBrand,
+		category_id as categoryId,
+		item_color as itemColor, 
+		item_size as itemSize, 
+		normal_price as normalPrice
+		from item_info
+	where owner_id=#{2}
+	limit #{0},#{1}
+	</select>	
+  	<select id="findItemInfoByPage1" resultType="Map">
+	select 
+		i.id,
+		o1.quantity,
+		i.owner_id as ownerId,
+		i.item_sku as itemSku,
+		i.item_name as itemName,
+		i.item_brand as itemBrand,
+		i.category_id as categoryId,
+		i.item_color as itemColor, 
+		i.item_size as itemSize, 
+		i.normal_price as normalPrice
+		from item_info as i, order_item_link as o1
+	where i.owner_id=#{2}
+	and  o1.owner_id=#{2}
+	<!-- and o1.order_item_id=i.id -->
+	limit #{0},#{1}
+	</select>
+  <select id="findUserInfoList" resultType="com.globalexpress.web.entity.UserInfo">
+		select 
+			id,
+			owner_id as ownerId,
+			account_num as accountNum
+		from
+			user_info
+		where owner_id=#{ownerId} and user_type=5
+	</select>  
+   <insert id="addOrderItemLink" parameterType="com.globalexpress.web.entity.OrderItemLink">
+    	insert into order_item_link 
+    	(
+    	owner_id,
+		gmt_create,
+		operator_id,
+		order_id,
+		order_item_id,
+		is_authorized,
+		quantity
+    	)
+    	 values 
+    	 (
+    	 #{ownerId},
+		 #{gmtCreate},
+		 #{operatorId},
+    	 #{orderId},
+    	 #{orderItemId},
+    	 #{authorized},
+    	 #{quantity}
+    	 )
+  	</insert>
+  	<select id="findOrderItemIds" 
+			  resultType="com.globalexpress.web.entity.OrderItemLink">
+		select 
+			order_item_id  as orderItemId,
+			quantity
+		from
+		order_item_link 
+		where 
+			order_id=#{0} and owner_id=#{1}
+	</select>
+  	<select id="findByItemInfoId"  resultType="com.globalexpress.web.entity.ItemInfo">
+	select id,
+	item_sku as itemSku,
+	icon_url as iconUrl,
+	item_name as itemName,
+	normal_price as normalPrice,
+	sale_quantity as saleQuantity
+	from item_info where id=#{0} and owner_id=#{1}
+	</select> 
+  
+  
+  
+  
+  
+  
+</mapper>

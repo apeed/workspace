@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.globalexpress.web.cms.dao.UserRemarkDao">
+ 
+	  <select id="findByUserRemarkId" 
+			  resultType="com.globalexpress.web.entity.UserRemark">
+		select 
+			id,
+			content_id as contentId,
+			content_type as contentType,
+			user_account as userAccount,
+			user_name as userName,
+			user_tel as userTel,
+			user_email  as userEmail,
+			user_word  as userWord,
+			user_word_time  as userWordTime,
+			admin_reply  as adminReply,
+			reply_time  as replyTime,
+			user_sequence as userSequence,
+			remark_type as remarkType,
+			is_show as 'show',
+			reserved1,
+			note,
+			owner_id as ownerId,
+			operator_id as operatorId,
+			is_authorization as isAuthorization,
+			gmt_create as gmtCreate,
+			gmt_modified as gmtModified
+		from
+			user_remark
+		where id=#{0}  and owner_id=#{1}
+	</select>  
+	<select id="findByUserRemarkAccount" 
+			  resultType="com.globalexpress.web.entity.UserRemark">
+		select 
+			u.id,
+			u.user_word  as userWord,
+			u.user_word_time  as userWordTime,
+			u.admin_reply  as adminReply,
+			u.reply_time  as replyTime,
+			u.owner_id as ownerId,
+			u.operator_id as operatorId,
+			i.item_sku as itemSku
+		from
+			user_remark as u,item_info as i,user_info as u1    
+			where i.id=u.content_id 
+			and u1.id=u.user_id
+		<!-- <if test="param != null"> 
+        </if>  -->
+			<!--and u.operator_id=u1.id  -->
+			and u1.account_num=#{0}
+			and u.owner_id=#{1} 
+			and i.owner_id=#{1}
+			and u1.owner_id=#{1}  
+			and i.item_sku=#{2}
+			order by u.gmt_create
+		
+	</select>  
+	<select id="getByOperatorId" 
+			  resultType="com.globalexpress.web.entity.UserInfo">
+		select 
+			owner_id as ownerId,
+			account_num as accountNum
+		from user_info where id=#{0} and owner_id=#{1} 
+	</select>  
+	<select id="findByItemInfoId"  resultType="com.globalexpress.web.entity.ItemInfo">
+	select id,item_sku as itemSku from item_info where id=#{0} and owner_id=#{1}
+	</select>
+	<insert id="addItemInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.globalexpress.web.entity.ItemInfo">
+	insert into item_info 
+	(
+		owner_id,
+		item_sku,
+		gmt_create,
+		operator_id
+	)
+	values
+	(
+		#{ownerId},
+		#{itemSku},
+		#{gmtCreate},
+		#{operatorId}
+	)
+	</insert> 
+<select id="findUserRemarkByPage1" resultType="Map">
+	select 
+			i.item_sku as itemSku,
+			u.id,
+			i.id,
+			u.content_id as contentId,
+			u.content_type as contentType,
+			u.user_id as userId,
+			u.user_account as userAccount,
+			u1.account_num as accountNum,
+			u.user_name as userName,
+			u.user_tel as userTel,
+			u.user_email  as userEmail,
+			u.user_word  as userWord,
+			u.user_word_time  as userWordTime,
+			u.admin_reply  as adminReply,
+			u.reply_time  as replyTime,
+			u.user_sequence as userSequence,
+			u.remark_type as remarkType,
+			u.is_show as 'show',
+			u.reserved1,
+			u.note,
+			u.owner_id as ownerId,
+			u.operator_id as operatorId,
+			u.is_authorization as isAuthorization,
+			u.gmt_create as gmtCreate,
+			u.gmt_modified as gmtModified,
+			is_reply as reply
+			from
+		user_remark as u,item_info as i, user_info as u1  
+		where 
+			i.id=u.content_id
+		and u.user_id=u1.id	
+		and u.owner_id=#{2} 
+		and i.owner_id=#{2} 
+		and u.is_reply IS NULL
+		and u.admin_reply IS NULL
+		order by u.user_sequence DESC
+		limit #{0},#{1}
+	</select>
+	<select id="findUserRemarkByPage" resultType="com.globalexpress.web.entity.UserRemark">
+	select 
+			id,
+			content_id as contentId,
+			content_type as contentType,
+			user_account as userAccount,
+			user_name as userName,
+			user_tel as userTel,
+			user_email  as userEmail,
+			user_word  as userWord,
+			user_word_time  as userWordTime,
+			admin_reply  as adminReply,
+			reply_time  as replyTime,
+			user_sequence as userSequence,
+			remark_type as remarkType,
+			is_show as 'show',
+			reserved1,
+			note,
+			owner_id as ownerId,
+			operator_id as operatorId,
+			is_authorization as isAuthorization,
+			gmt_create as gmtCreate,
+			gmt_modified as gmtModified
+			from
+		user_remark
+		where
+	    owner_id=#{2} and
+		content_type in (1,2,3)
+		order by user_sequence DESC
+		limit #{0},#{1}
+	</select>
+	<select id="findUserRemarkCount" resultType="String">
+		select count(id)
+		from user_remark
+		where owner_id=#{ownerId} and content_type in (1,2,3)
+	</select>	
+	<select id="findUserRemarkCount1" resultType="String">
+		select count(id)
+		from user_remark
+		where owner_id=#{ownerId}
+			and is_reply IS NULL
+			and admin_reply IS NULL
+	</select>	
+	 <delete id="delUserRemark" >
+	 	delete  from user_remark where id=#{0}  and owner_id=#{1}
+	 </delete>
+	 <update id="modifyUserRemark" parameterType="com.globalexpress.web.entity.UserRemark">
+		update user_remark 
+			set 
+				admin_reply=#{adminReply},
+				reply_time=#{replyTime},
+				note=#{note},
+				is_show=#{show},
+				is_reply=#{reply},
+				user_sequence=#{userSequence},
+				operator_id=#{operatorId},
+				gmt_modified=#{gmtModified}
+				where id=#{id} and owner_id=#{ownerId}
+	</update>  
+	 <insert id="addUserRemark" parameterType="com.globalexpress.web.entity.UserRemark">
+	insert into user_remark 
+	(
+		owner_id,
+		gmt_create,
+		operator_id,
+		user_account,
+		user_id,
+		user_word,
+		user_word_time,
+		user_sequence,
+		remark_type,
+		is_show,
+		note,
+		content_type,
+		content_id
+	)
+	values
+	(
+		#{ownerId},
+		#{gmtCreate},
+		#{operatorId},
+		#{userAccount},
+		#{userId},
+		#{userWord},
+		#{userWordTime},
+		#{userSequence},
+		#{remarkType},
+		#{show},
+		#{note},
+		#{contentType},
+		#{contentId}
+	)
+	</insert> 
+	<select id="findListByUserRemark" 
+			  resultType="Map">
+		select 
+			u.id,
+			u.content_id as contentId,
+			u.content_type as contentType,
+			u.user_account as userAccount,
+			u.user_word  as userWord,
+			u.remark_type as remarkType,
+			u.user_word_time  as userWordTime,
+			u.is_show as 'show',
+			i.item_sku as itemSku,
+			u.note
+		from
+		user_remark as u,item_info as i  
+		where 
+			i.id=u.content_id
+		and i.owner_id=#{1} 
+		and u.owner_id=#{1} 
+		and CONCAT(IFNULL(i.item_sku,''),
+		IFNULL(u.user_account,''),
+		IFNULL(u.user_name,''),
+		IFNULL(u.user_tel,''),
+		IFNULL(u.user_email,''),
+		IFNULL(u.user_word,''),
+		IFNULL(u.note,'')) 
+		like CONCAT('%',#{0},'%')
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+

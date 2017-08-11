@@ -1,0 +1,181 @@
+package com.globalexpress.web.cms.service.OrderInfo;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.globalexpress.web.cms.dao.OrderInfoDao;
+import com.globalexpress.web.entity.ItemInfo;
+import com.globalexpress.web.entity.OrderInfo;
+import com.globalexpress.web.entity.OrderItemLink;
+import com.globalexpress.web.entity.UserInfo;
+
+
+@Service("orderInfoService")
+public class OrderInfoServiceImpl implements OrderInfoService {
+	@Resource
+	private OrderInfoDao dao;
+	//分页查询
+	public List<OrderInfo> findOrderInfoByPage(int start, int rows, Long ownerId) {
+		List<OrderInfo> list=dao.findOrderInfoByPage(start, rows, ownerId);
+		return list;
+	}
+	public String findOrderInfoCount(Long ownerId) {
+		String s=dao.findOrderInfoCount(ownerId);
+		return s;
+	}
+	//添加内容
+	public int addOrderInfo(Long ownerId, Date gmtCreate, Long operatorId, Long orderNum, String consignorId,
+			String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel, String carrierId,
+			Long trackingNum, Integer packageWeight, Integer totalShippingFee,String orderKeyword,Integer supportValue, String note,Byte orderType) {
+		OrderInfo oi = new OrderInfo();
+		oi.setOwnerId(ownerId);
+		oi.setGmtCreate(gmtCreate);
+		oi.setOrderNum(orderNum);
+		oi.setConsignorId(consignorId);
+		oi.setConsigneeId(consigneeId);
+		oi.setConsigneeTel(consigneeTel);
+		oi.setConsigneeAddress(consigneeAddress);
+		oi.setOrderLabel(orderLabel);
+		oi.setCarrierId(carrierId);
+		oi.setTrackingNum(trackingNum);
+		oi.setPackageWeight(packageWeight);
+		oi.setTotalShippingFee(totalShippingFee);
+		oi.setOrderKeyword(orderKeyword);
+		oi.setSupportValue(supportValue);
+		oi.setNote(note);
+		oi.setOrderType(new Byte("1"));
+		int n=dao.addOrderInfo(oi);
+		return n;
+	}
+	//修改方法
+	public int updateOrderInfo(Long id, Long ownerId, Long operatorId, Date gmtModified, 
+			String consignorId, String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel,
+			String carrierId, Long trackingNum, Integer packageWeight, Integer totalShippingFee, String note,String orderKeyword,Integer supportValue) {
+		OrderInfo oi =dao.findByOrderInfoId(id, ownerId);
+		oi.setOperatorId(operatorId);
+		oi.setGmtModified(gmtModified);
+		oi.setConsignorId(consignorId);
+		oi.setConsigneeId(consigneeId);
+		oi.setConsigneeTel(consigneeTel);
+		oi.setConsigneeAddress(consigneeAddress);
+		oi.setOrderLabel(orderLabel);
+		oi.setCarrierId(carrierId);
+		oi.setTrackingNum(trackingNum);
+		oi.setPackageWeight(packageWeight);
+		oi.setTotalShippingFee(totalShippingFee);
+		oi.setNote(note);
+		oi.setOrderKeyword(orderKeyword);
+		oi.setSupportValue(supportValue);
+		int n=dao.updateOrderInfo(oi);
+		return n;
+	}
+	//通过id查找对象
+	public OrderInfo findByOrderInfoId(Long id, Long ownerId) {
+		OrderInfo oi=dao.findByOrderInfoId(id, ownerId);
+		return oi;
+	}
+	//删除方法
+	public void delOrderInfo(Long id, Long ownerId) {
+	dao.delOrderInfo(id, ownerId);
+	}
+	public void delOrderInfoList(Long[] id, Long ownerId) {
+		for(int i=0;i<id.length;i++){
+			dao.delOrderInfo(id[i], ownerId);
+		}
+	}
+	//模糊查询订单
+	public List<OrderInfo> findListByOrderInfo(String keyword, Long ownerId) {
+		List<OrderInfo> list=dao.findListByOrderInfo(keyword, ownerId);
+		return list;
+	}
+	//分页查询商品
+	public List<ItemInfo> findItemInfoByPage(int start, int rows, Long ownerId) {
+		List<ItemInfo> list = dao.findItemInfoByPage(start, rows, ownerId);
+		return list;
+	}
+	public String findItemInfoCount(Long ownerId) {
+	String s = dao.findItemInfoCount(ownerId);
+		return s;
+	}
+	//模糊查询商品
+	public List<ItemInfo> findListByItemInfo(String keyword, Long ownerId) {
+		List<ItemInfo> list=dao.findListByItemInfo(keyword, ownerId);
+		return list;
+	}
+	//查找发件人
+	public List<UserInfo> findUserInfoList(Long ownerId) {
+		 List<UserInfo> list=dao.findUserInfoList(ownerId);
+		return list;
+	}
+	//批量添加
+	public void addOrderItemLink(Long ownerId, Date gmtCreate, Long operatorId, Long orderId, Long[] orderItemId,Byte authorized,Integer[] quantity) {
+		for(int i=0;i<orderItemId.length;i++){
+		OrderItemLink oil = new OrderItemLink();
+		oil.setOwnerId(ownerId);
+		oil.setGmtCreate(gmtCreate);
+		oil.setOperatorId(operatorId);
+		oil.setOrderId(orderId);
+		oil.setOrderItemId(orderItemId[i]);
+		oil.setAuthorized(authorized);
+		for (int j = 0; j < quantity.length; j++) {
+			oil.setQuantity(quantity[j]);
+		}
+		dao.addOrderItemLink(oil);
+		}
+	}
+	//根据订单状态查询
+	public List<OrderInfo> findListByOrderType(Long ownerId, Byte orderType) {
+		List<OrderInfo> list=dao.findListByOrderType(ownerId, orderType);
+		return list;
+	}
+	public int updateOrderInfo(Long id, Long ownerId, Long operatorId, Date gmtModified, String note) {
+		OrderInfo oi=dao.findByOrderInfoId(id, ownerId);
+		oi.setOperatorId(operatorId);
+		oi.setGmtModified(gmtModified);
+		oi.setNote(note);
+		int n=dao.updateOrderInfo(oi);
+		return n;
+	}
+	public int updateOrderInfo(Long id, Long ownerId, Long operatorId, Date gmtModified, String carrierId,
+			Long trackingNum) {
+		OrderInfo oi=dao.findByOrderInfoId(id, ownerId);
+		oi.setOperatorId(operatorId);
+		oi.setGmtModified(gmtModified);
+		oi.setCarrierId(carrierId);
+		oi.setTrackingNum(trackingNum);
+		int n=dao.updateOrderInfo(oi);
+		return n;
+	}
+	//通过订单编号查询
+	public List<OrderItemLink> findOrderItemIds(Long orderId, Long ownerId) {
+		List<OrderItemLink> oil  =	dao.findOrderItemIds(orderId, ownerId);
+		return oil;
+	}
+	//通过id查找对象信息
+	public ItemInfo findByItemInfoId(Long id, Long ownerId) {
+		ItemInfo i=dao.findByItemInfoId(id, ownerId);
+		return i;
+	}
+	//修改退款
+	public int updateOrderInfo(Long id, Long ownerId, Long operatorId, Date gmtModified, Byte refundCompleted,
+			Date refundComplete,Byte orderType) {
+		OrderInfo oi =dao.findByOrderInfoId(id, ownerId);
+		oi.setOperatorId(operatorId);
+		oi.setGmtModified(gmtModified);
+		oi.setRefundCompleted(refundCompleted);
+		oi.setRefundComplete(refundComplete);
+		oi.setOrderType(orderType);
+		int n=dao.updateOrderInfo(oi);
+		return n;
+	}
+	//删除商品关联记录
+	public int delOrderItemLink(Long orderItemId, Long ownerId) {
+		int n=dao.delOrderItemLink(orderItemId, ownerId);
+		return n;
+	}
+	
+}

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.globalexpress.web.cms.dao.UserInfoDao">
+
+	<select id="getAccountNum" resultType="Map">
+  	SELECT id,account_num as accountNum 
+  	FROM user_info 
+  	where owner_id=#{1}
+  	and user_type=4
+  	and CONCAT(
+		IFNULL(account_num,''),
+		IFNULL(user_name,'')) 
+		like CONCAT('%',#{0},'%')
+    </select>
+ 	
+ 	<select id="findUserInfoByPage" resultType="com.globalexpress.web.entity.UserInfo">
+	select 
+		id,
+		owner_id as ownerId,
+		account_num as accountNum,
+		user_name as userName,
+		user_telephone as userTelephone,
+		user_mobile as userMobile,
+		user_address as userAddress,
+		account_status as accountStatus,
+		note
+		from user_info
+	where owner_id=#{2} and user_type=4
+	order by user_sequence DESC
+	limit #{0},#{1}
+	</select>
+ 	<select id="findUserInfoByPage1" resultType="com.globalexpress.web.entity.UserInfo">
+	select 
+		id,
+		owner_id as ownerId,
+		account_num as accountNum,
+		user_name as userName,
+		user_telephone as userTelephone,
+		user_mobile as userMobile,
+		user_address as userAddress,
+		account_status as accountStatus,
+		note
+		from user_info
+	where owner_id=#{2} and user_type=5
+	limit #{0},#{1}
+	</select>
+	 <select id="findUserInfoCount" resultType="String">select count(id) from user_info where owner_id=#{ownerId} and user_type=4</select>		
+	 <select id="findUserInfoCount1" resultType="String">select count(id) from user_info where owner_id=#{ownerId} and user_type=5</select>		
+	 
+	  <select id="findByUserInfoId" 
+			  parameterType="java.lang.Long"
+			  resultType="com.globalexpress.web.entity.UserInfo">
+		select 
+			id,
+			owner_id as ownerId,
+			account_num as accountNum,
+			user_password as userPassword,
+			account_email as accountEmail,
+			user_nickname as userNickname,
+			user_name as userName,
+			user_telephone as userTelephone,
+			user_mobile as userMobile,
+			user_address as userAddress,
+			account_status as accountStatus,
+			user_question1 as userQuestion1,
+			user_answer1 as userAnswer1,
+			user_question2 as userQuestion2,
+			user_answer2 as userAnswer2,
+			user_question3 as userQuestion3,
+			user_answer3 as userAnswer3,
+			operator_id as operatorId,
+			gmt_modified as gmtModified,
+			note 
+		from
+			user_info
+		where id=#{0} and owner_id=#{1}
+	</select>  
+	
+	 <update id="modifyUserInfo" parameterType="com.globalexpress.web.entity.UserInfo">
+		update user_info 
+			set 
+				id=#{id},
+				user_password = #{userPassword},
+				account_email = #{accountEmail},
+				user_nickname = #{userNickname},
+				user_name = #{userName},
+				user_telephone = #{userTelephone},
+				user_mobile = #{userMobile},
+				user_address = #{userAddress},
+				account_status = #{accountStatus},
+				user_question1 = #{userQuestion1},
+				user_answer1 = #{userAnswer1},
+				user_question2 = #{userQuestion2},
+				user_answer2 = #{userAnswer2},
+				user_question3 = #{userQuestion3},
+				user_answer3 = #{userAnswer3},
+				operator_id=#{operatorId},
+				gmt_modified=#{gmtModified},
+				note = #{note}
+			where id=#{id} and owner_id=#{ownerId}
+	</update>  
+	<insert id="addUserInfo" parameterType="com.globalexpress.web.entity.UserInfo">
+	insert into user_info 
+	(
+		owner_id,
+		gmt_create,
+		operator_id,
+		account_num,
+		user_password,
+		account_email,
+		user_nickname,
+		user_name,
+		user_telephone,
+		user_mobile,
+		user_address,
+		account_status,
+		user_question1,
+		user_answer1,
+		user_question2,
+		user_answer2,
+		user_question3,
+		user_answer3,
+		note,
+		user_type,
+		is_admin,
+		is_root_account
+	)
+	values
+	(
+		#{ownerId},
+		#{gmtCreate},
+		#{operatorId},
+		#{accountNum},
+		#{userPassword},
+		#{accountEmail},
+		#{userNickname},
+		#{userName},
+		#{userTelephone},
+		#{userMobile},
+		#{userAddress},
+		#{accountStatus},
+		#{userQuestion1},
+		#{userAnswer1},
+		#{userQuestion2},
+		#{userAnswer2},
+		#{userQuestion3},
+		#{userAnswer3},
+		#{note},
+		#{userType},
+		0,
+		0
+	)
+	</insert>
+	<select id="findListByUserInfo" 
+			  resultType="Map">
+		select 
+			id,
+			account_num as accountNum,
+			user_name as userName,
+			user_telephone as userTelephone,
+			user_mobile as userMobile,
+			user_address as userAddress,
+			account_status as accountStatus,
+			note
+		from
+		user_info
+		where owner_id=#{1}
+		and user_type=4 
+		and CONCAT(IFNULL(account_num,''),
+		IFNULL(user_nickname,''),
+		IFNULL(user_name,''),
+		IFNULL(user_telephone,''),
+		IFNULL(user_mobile,''),
+		IFNULL(user_address,''),
+		IFNULL(note,'')) 
+		like CONCAT('%',#{0},'%')
+	</select>  
+	<select id="findListsByUserInfo" 
+			  resultType="Map">
+		select 
+			id,
+			user_name as userName,
+			user_telephone as userTelephone,
+			user_address as userAddress,
+			note
+		from
+		user_info
+		where owner_id=#{1} 
+		and CONCAT(
+		IFNULL(user_name,''),
+		IFNULL(user_telephone,''),
+		IFNULL(user_address,''),
+		IFNULL(note,'')) 
+		like CONCAT('%',#{0},'%')
+	</select> 
+	<delete id="delUserInfo" parameterType="java.lang.Long">
+	 	delete  from user_info where id=#{0} and owner_id=#{1}
+	</delete>
+	 <select id="findByAccountNum" resultType="com.globalexpress.web.entity.UserInfo">
+	 select 
+	 user_name as userName,
+	 user_telephone as userTelephone,
+	 account_email as accountEmail
+	  from user_info 
+	 where account_num=#{0} and owner_id=#{1} and user_type=4
+	 </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+

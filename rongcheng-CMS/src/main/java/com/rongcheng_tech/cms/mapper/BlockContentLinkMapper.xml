@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongcheng_tech.cms.dao.BlockContentLinkDAO">
+  <resultMap id="BaseResultMap" type="com.rongcheng_tech.cms.entity.BlockContentLink">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="block_type" jdbcType="BIT" property="blockType" />
+    <result column="block_id" jdbcType="CHAR" property="blockId" />
+    <result column="content_type" jdbcType="BIT" property="contentType" />
+    <result column="content_id" jdbcType="CHAR" property="contentId" />
+    <result column="reserved1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="owner_id" jdbcType="BIGINT" property="ownerId" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="is_authorization" jdbcType="BIT" property="authorization" />
+    <result column="is_apply" jdbcType="BIT" property="apply" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, block_id, content_id, reserved1, note, owner_id, operator_id, is_authorization, 
+    is_apply, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from block_content_link
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from block_content_link
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="java.util.List">
+    insert into block_content_link
+      ( 
+      	block_id,
+        content_type,
+        content_id,
+        owner_id,
+        operator_id,
+        gmt_create
+       )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.blockId,jdbcType=CHAR},
+        #{item.contentType,jdbcType=BIT},
+        #{item.contentId,jdbcType=CHAR},
+        #{item.ownerId,jdbcType=BIGINT},
+        #{item.operatorId,jdbcType=BIGINT},
+        #{item.gmtCreate,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rongcheng_tech.cms.entity.BlockContentLink">
+    update block_content_link
+    <set>
+      <if test="blockType != null">
+        block_type = #{blockType,jdbcType=BIT},
+      </if>
+      <if test="blockId != null">
+        block_id = #{blockId,jdbcType=CHAR},
+      </if>
+      <if test="contentType != null">
+        content_type = #{contentType,jdbcType=BIT},
+      </if>
+      <if test="contentId != null">
+        content_id = #{contentId,jdbcType=CHAR},
+      </if>
+      <if test="reserved1 != null">
+        reserved1 = #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        owner_id = #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="authorization != null">
+        is_authorization = #{authorization,jdbcType=BIT},
+      </if>
+      <if test="apply != null">
+        is_apply = #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

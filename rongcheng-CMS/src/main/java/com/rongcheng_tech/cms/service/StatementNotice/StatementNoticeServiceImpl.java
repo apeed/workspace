@@ -1,0 +1,98 @@
+package com.rongcheng_tech.cms.service.StatementNotice;
+
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import com.rongcheng_tech.cms.dao.StatementNoticeDao;
+import com.rongcheng_tech.cms.entity.StatementNotice;
+import com.rongcheng_tech.cms.entity.UserInfo;
+@Service("statementNoticeService")
+public class StatementNoticeServiceImpl implements StatementNoticeService {
+	@Resource
+	private StatementNoticeDao dao;//分页查询
+	public List<StatementNotice> findStatementNoticeByPage(int start, int rows,Long ownerId) {
+		List<StatementNotice> d1=dao.findStatementNoticeByPage(start, rows,ownerId);
+		return d1;
+	}
+	//查询总条数
+	public String findStatementNoticeCount(Long ownerId) {
+		String c1=dao.findStatementNoticeCount(ownerId);
+		return c1;
+	}
+	//通过id查询对象
+	public StatementNotice findByStatementNoticeId(Long id,Long ownerId) {
+		StatementNotice sn=dao.findByStatementNoticeId(id,ownerId);
+		return sn;
+	}
+	//修改内容
+	public int modifyStatementNotice(Long id,Long ownerId,String statementTitle, String statement, String notice,String note,Long operatorId,Timestamp gmtModified) {
+		StatementNotice sn=dao.findByStatementNoticeId(id, ownerId);
+		sn.setStatementTitle(statementTitle);
+		sn.setStatement(statement);
+		sn.setNotice(notice);
+		sn.setNote(note);
+		sn.setOperatorId(operatorId);
+		sn.setGmtModified(gmtModified);
+		int n = dao.modifyStatementNotice(sn);
+		return n;
+	}
+	//添加内容
+	public int addStatementNotice(Long ownerId, Timestamp gmtCreate, String statementTitle, String statement,
+			String notice,String note,Long operatorId) {
+		StatementNotice sn=new StatementNotice();
+		sn.setOwnerId(ownerId);
+		sn.setGmtCreate(gmtCreate);
+		sn.setStatementTitle(statementTitle);
+		sn.setStatement(statement);
+		sn.setNotice(notice);
+		sn.setNote(note);
+		sn.setOperatorId(operatorId);
+		int n=dao.addStatementNotice(sn);
+		return n;
+	}
+	//删除单条
+	public void delStatementNotice(Long id,Long ownerId) {
+		dao.delStatementNotice(id, ownerId);
+	}
+	//模糊查询
+	public List<StatementNotice> findListByStatementNotice(String keyword,Long ownerId) {
+		List<StatementNotice> list=dao.findListByStatementNotice(keyword, ownerId);
+		return list;
+	}
+	//批量删除
+	public void delStatementNoticeList(Long[] id, Long ownerId) {
+		for(int i=0;i<id.length;i++){
+			dao.delStatementNotice(id[i], ownerId);
+			}
+	}
+	//启用
+	public int updateStatementNotice(Long id, Long ownerId, Long operatorId, Timestamp gmtModified, String reserved1) {
+		StatementNotice sn=dao.findByStatementNoticeId(id, ownerId);
+		sn.setOperatorId(operatorId);
+		sn.setGmtModified(gmtModified);
+		sn.setReserved1(reserved1);
+		int n = dao.modifyStatementNotice1(sn);
+		return n;
+	}
+	//其他不启用
+	/*public List<StatementNotice> findListByReserved1(Long id,Long ownerId) {
+		List<StatementNotice> list = dao.findListByReserved1(id,ownerId);
+		return list;
+	}*/
+	public void updateStatementNotice1(Long id,Long ownerId, Long operatorId, Timestamp gmtModified, String reserved1) {
+		List<StatementNotice> list = dao.findListByReserved1(id,ownerId);
+		System.out.println(list);
+		for (int i = 0; i < list.size(); i++) {
+			StatementNotice s=list.get(i);
+			s.setOperatorId(operatorId);
+			s.setGmtModified(gmtModified);
+			s.setReserved1(reserved1);
+			int n = dao.modifyStatementNotice1(s);
+		}
+	}
+
+}

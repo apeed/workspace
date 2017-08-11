@@ -1,0 +1,179 @@
+package com.globalexpress.web.cms.controller;
+
+import java.sql.Date;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.globalexpress.web.entity.UserInfo;
+import com.globalexpress.web.util.JsonResult;
+import com.globalexpress.web.cms.service.UserInfo.UserInfoService;
+
+@Controller
+@RequestMapping("/admin")
+public class UserInfoController {
+	private int rows=20;
+//	@Value("#{config['ownerId']}")
+//	private Long ownerId;
+	@Resource
+	private UserInfoService userService;
+	Date tamp = new Date(System.currentTimeMillis());
+	
+	@RequestMapping("/clientele.do")
+	public String toClientele(){
+		return "admin/clientele/clientele";
+	}
+	@RequestMapping("/clienteleAdd.do")
+	public String clienteleAdd(){
+		return "admin/clientele/clienteleAdd";
+	}
+	@RequestMapping("/clientelePublic.do")
+	public String clientelePublic(){
+		return "admin/clientele/clientelePublic";
+	}
+	@RequestMapping("/addresser.do")
+	public String toAddresser(){
+		return "admin/addresser/addresser";
+	}
+	@RequestMapping("/addresserAdd.do")
+	public String addresserAdd(){
+		return "admin/addresser/addresserAdd";
+	}
+	@RequestMapping("/addresserPublic.do")
+	public String addresserPublic(){
+		return "admin/addresser/addresserPublic";
+	}
+	//根据页码检索用户信息(客户)
+	@RequestMapping("/loadList_clientele.do")
+	@ResponseBody
+	public JsonResult loadUserInfo(String page, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		return loadUserInfos(page, ownerId);
+	}
+	//根据页码检索
+	public JsonResult loadUserInfos(String page, Long ownerId) {
+		int max_page = (int) Math.ceil(new Double(userService.findUserInfoCount(ownerId))/rows);
+		if(max_page == 0){
+			return new JsonResult();
+		}
+		List<UserInfo> UserInfo=userService.findUserInfoByPage(new Integer(page)*rows-rows,rows,ownerId);
+		JsonResult jr = new JsonResult(UserInfo);
+		jr.setMessage(max_page+"");
+		return jr;
+	}
+	//发件人分页
+	@RequestMapping("/loadList_addresser.do")
+	@ResponseBody
+	public JsonResult loadUserInfo1(String page, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		return loadUserInfos1(page, ownerId);
+	}
+	public JsonResult loadUserInfos1(String page, Long ownerId) {
+		int max_page = (int) Math.ceil(new Double(userService.findUserInfoCount1(ownerId))/rows);
+		if(max_page == 0){
+			return new JsonResult();
+		}
+		List<UserInfo> UserInfo=userService.findUserInfoByPage1(new Integer(page)*rows-rows,rows,ownerId);
+		JsonResult jr = new JsonResult(UserInfo);
+		jr.setMessage(max_page+"");
+		return jr;
+	}
+	//加载修改内容
+	@RequestMapping("/load_modify_userInfo.do")
+	@ResponseBody
+	public JsonResult findByUserInfoId(Long id, HttpSession session){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		UserInfo sn=userService.findByUserInfoId(id, ownerId);
+		return new JsonResult(sn);
+	}
+	//修改内容
+	@RequestMapping("/modify_userInfo.do")
+	@ResponseBody
+	public JsonResult modifyUserInfo(Long id,String userPassword,String accountEmail,String userNickname,String userName,String userTelephone,
+			String userMobile,String userAddress,Byte accountStatus,String userQuestion1,String userAnswer1,String userQuestion2,String userAnswer2,String userQuestion3,String userAnswer3,
+			String note,HttpSession session){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+		int n=userService.modifyUserInfo(id, ownerId,  userPassword, accountEmail, userNickname, userName, userTelephone, userMobile, userAddress, accountStatus, userQuestion1, userAnswer1, userQuestion2, userAnswer2, userQuestion3, userAnswer3, operatorId, tamp, note);
+		return new JsonResult(n);
+	}
+	//添加内容
+	@RequestMapping("/add_userInfo.do")
+	@ResponseBody
+	public JsonResult addUserInfo(HttpSession session,String accountNum,String userPassword,String accountEmail,String userNickname,
+			String userName,String userTelephone,String userMobile,String userAddress,Byte accountStatus,String userQuestion1,String userAnswer1,String userQuestion2,String userAnswer2,String userQuestion3,String userAnswer3,String note){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+		int n=userService.addUserInfo(ownerId, tamp, operatorId, accountNum, userPassword, accountEmail, userNickname, userName, userTelephone, userMobile, userAddress, accountStatus, userQuestion1, userAnswer1, userQuestion2, userAnswer2, userQuestion3, userAnswer3, note, new Byte("4"));
+	return new JsonResult(n);
+	}
+	//模糊查询
+	@RequestMapping("/findListByUserInfo.do")
+	@ResponseBody
+	public JsonResult findListByUserInfo(String keyword, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		List<UserInfo> list=userService.findListByUserInfo(keyword, ownerId);
+		return new JsonResult(list);
+	}
+	@RequestMapping("/findListsByUserInfo.do")
+	@ResponseBody
+	public JsonResult findListsByUserInfo(String keyword, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		List<UserInfo> list=userService.findListsByUserInfo(keyword, ownerId);
+		return new JsonResult(list);
+	}
+	//删除单条
+	@RequestMapping("/delUserInfo.do")
+	@ResponseBody
+	public JsonResult  delUserInfo(Long id, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		int n=userService.delUserInfo(id, ownerId);
+		return new JsonResult(n);
+	}
+	@RequestMapping("/modifyUserInfo1.do")
+	@ResponseBody
+	public JsonResult  modifyUserInfo1(Long id,String userName, String userTelephone,
+			String userAddress,HttpSession session,Date gmtModified, String note) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+		int n=userService.modifyUserInfo1(id, ownerId, userName, userTelephone, userAddress,operatorId, tamp, note);
+		return new JsonResult(n);
+	}
+	@RequestMapping("/addUserInfo1.do")
+	@ResponseBody
+	public JsonResult  addUserInfo1(HttpSession session, String userName,
+			String userTelephone, String userAddress, String note) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+		int n =userService.addUserInfo1(ownerId, tamp, operatorId, userName, userTelephone, userAddress, note,new Byte("5"));
+		return new JsonResult(n);
+	}
+	//批量删除
+	@RequestMapping("/delUserInfoList.do")
+	@ResponseBody
+	public JsonResult  delUserInfoList(Long[] id1, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		userService.delUserInfoList(id1, ownerId);
+		return new JsonResult();
+	}
+	//查询用户账户信息
+	@RequestMapping("/getAccountNum.do")
+	@ResponseBody
+	public JsonResult  getAccountNum(String keyword, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		List<UserInfo> list=userService.getAccountNum(keyword,ownerId);
+		return new JsonResult(list);
+	}
+	//通过用户账号查找
+	@RequestMapping("/findByAccountNum.do")
+	@ResponseBody
+	public JsonResult  findByAccountNum(String accountNum, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		UserInfo ui=userService.findByAccountNum(accountNum,ownerId);
+		return new JsonResult(ui);
+	}
+}

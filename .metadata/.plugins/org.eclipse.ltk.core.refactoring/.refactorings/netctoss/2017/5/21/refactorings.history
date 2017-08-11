@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;ImageUtil.java&apos; to &apos;rcb-ms/src/main/java/com.rcb.utils&apos;&#x0D;&#x0A;- Original project: &apos;netctoss&apos;&#x0D;&#x0A;- Destination element: &apos;rcb-ms/src/main/java/com.rcb.utils&apos;&#x0D;&#x0A;- Original element: &apos;util.ImageUtil.java&apos;" description="Copy compilation unit" destination="=rcb-ms/src\/main\/java&lt;com.rcb.utils" element1="/src\/main\/java&lt;util{ImageUtil.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1495442369635" units="1" version="1.0"/>
+</session>

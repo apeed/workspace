@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.AlternateImgModuleDao">
+	
+	 <select id="findAlternateImgModuleById" parameterType="int" resultType="com.rongcheng.rcb.entity.AlternateImgModule">
+	select 
+	id,
+	module_name as moduleName,
+	is_display as display,
+	remark
+	from 
+	alternate_img_module  
+	where id=#{id}
+	</select>	 
+	<insert id="addAlternateImgModule" parameterType="com.rongcheng.rcb.entity.AlternateImgModule">
+	insert into 
+	alternate_img_module 
+	(
+	id,
+	module_name,
+	is_display,
+	remark
+	)
+	values
+	(
+		#{id},
+		#{moduleName},
+		#{display},
+		#{remark}
+	)
+	</insert>  
+	 
+	 <select id="findAlternateImgModuleAll" resultType="Map">
+	select
+		id,
+		module_name as moduleName,
+		is_display as display,
+		remark
+		from
+	 	alternate_img_module  
+	</select>
+	
+	
+	 <delete id="delAlternateImgModuleById" parameterType="int">
+	 delete  from alternate_img_module where id=#{id}
+	 </delete>
+	  <update id="modifyAlternateImgModule" parameterType="com.rongcheng.rcb.entity.AlternateImgModule">
+	 update alternate_img_module set
+	 	id=#{id},
+		module_name=#{moduleName},
+		is_display=#{display},
+		remark=#{remark}
+		where id=#{id}
+	 </update> 
+	 <!-- //////////jxb/////////// -->
+	 <select id="listAlternateImgModuleByFrontRow" parameterType="int" resultType="com.rongcheng.rcb.entity.AlternateImgModule">
+		SELECT
+			id, 
+			module_name	moduleName, 
+			is_display	display, 
+			remark
+		FROM 
+			alternate_img_module
+		where
+			is_display=1
+		order by
+			id
+		limit
+			0,#{num}
+	</select>
+	<!-- //////////jxb/////////// -->
+</mapper>
+
+
+
+
+
+
+
+

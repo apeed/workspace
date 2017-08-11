@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globalexpress.web.foreground.dao.ForegroundDerivedContentPageDao">
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.DerivedContentPage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="content_title" jdbcType="VARCHAR" property="contentTitle" />
+    <result column="content_subtitle" jdbcType="VARCHAR" property="contentSubtitle" />
+    <result column="content_en_title" jdbcType="VARCHAR" property="contentEnTitle" />
+    <result column="interface_name" jdbcType="VARCHAR" property="interfaceName" />
+    <result column="content_profile" jdbcType="VARCHAR" property="contentProfile" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="click" jdbcType="INTEGER" property="click" />
+    <result column="content_label" jdbcType="VARCHAR" property="contentLabel" />
+    <result column="content_keyword" jdbcType="VARCHAR" property="contentKeyword" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+    <result column="icon_direct_link" jdbcType="VARCHAR" property="iconDirectLink" />
+    <result column="user_sequence" jdbcType="INTEGER" property="userSequence" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="is_show" jdbcType="BIT" property="show" />
+    <result column="reserved1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="owner_id" jdbcType="BIGINT" property="ownerId" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="is_authorization" jdbcType="BIT" property="authorization" />
+    <result column="is_apply" jdbcType="BIT" property="apply" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.globalexpress.web.entity.DerivedContentPage">
+    <result column="content1" jdbcType="LONGVARCHAR" property="content1" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, content_title, content_subtitle, content_en_title, interface_name, content_profile, 
+    author, click, content_label, content_keyword, icon_url, icon_direct_link, user_sequence, 
+    parent_id, is_show, reserved1, note, owner_id, operator_id, is_authorization, is_apply, 
+    gmt_create, gmt_modified
+  </sql>
+  <sql id="Blob_Column_List">
+    content1
+  </sql>
+  <select id="countByBlockIdAndKeyword" resultType="int">
+    select 
+    	count(*)
+    from derived_content_page
+	    where owner_id = #{0,jdbcType=BIGINT}
+	    and is_show = 1
+    <if test="param2!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where owner_id = #{0} and block_id = #{1 } and content_type = 1)
+    </if>
+    <if test="param3!=null">
+	    and (
+	    	content_title like CONCAT('%',#{2},'%') or
+	    	content_subtitle like CONCAT('%',#{2},'%') or
+	    	author like CONCAT('%',#{2},'%') or
+	    	content1 like CONCAT('%',#{2},'%') or
+	    	content_profile like CONCAT('%',#{2},'%') or
+	    	content_label like CONCAT('%',#{2},'%') or
+	    	note like CONCAT('%',#{2},'%') or
+	    	content_keyword like CONCAT('%',#{2},'%')
+	    )
+    </if>
+  </select>
+  <select id="limitByBlockIdAndKeyword" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from derived_content_page
+    where owner_id = #{ownerId,jdbcType=BIGINT}
+    	and is_show = 1
+    <if test="blockId!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where block_id = #{blockId } and owner_id = #{ownerId} and content_type = 1)
+    </if>
+    <if test="keyword!=null">
+	    and (
+	    	content_title like CONCAT('%',#{keyword},'%') or
+	    	content_subtitle like CONCAT('%',#{keyword},'%') or
+	    	author like CONCAT('%',#{keyword},'%') or
+	    	content1 like CONCAT('%',#{keyword},'%') or
+	    	content_profile like CONCAT('%',#{keyword},'%') or
+	    	content_label like CONCAT('%',#{keyword},'%') or
+	    	note like CONCAT('%',#{keyword},'%') or
+	    	content_keyword like CONCAT('%',#{keyword},'%')
+	    )
+    </if>
+    order by id desc
+	limit #{start},#{rows}
+  </select>
+  <select id="getSelective" parameterType="com.globalexpress.web.entity.DerivedContentPage" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from derived_content_page
+    where owner_id = #{ownerId,jdbcType=BIGINT}
+    and id=#{id,jdbcType=BIGINT}
+    and is_show = 1
+  </select>
+  <select id="listByIdList" resultMap="BaseResultMap">
+	select
+	<include refid="Base_Column_List" />
+	from derived_content_page
+	where
+		owner_id = #{param1,jdbcType=BIGINT}
+	and id in
+		  	<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+				#{item}  
+			</foreach>
+	and is_show = 1
+	order by user_sequence, id desc
+  </select>
+</mapper>

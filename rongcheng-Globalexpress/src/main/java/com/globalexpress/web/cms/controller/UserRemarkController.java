@@ -1,0 +1,197 @@
+package com.globalexpress.web.cms.controller;
+import java.sql.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.globalexpress.web.entity.ItemInfo;
+import com.globalexpress.web.entity.UserInfo;
+import com.globalexpress.web.entity.UserRemark;
+import com.globalexpress.web.util.JsonResult;
+import com.globalexpress.web.cms.service.UserRemark.UserRemarkService;
+
+@Controller
+@RequestMapping("/admin")
+public class UserRemarkController {
+	private int rows=20;
+//	@Value("#{config['ownerId']}")
+//	private Long ownerId;
+	@Resource
+	private UserRemarkService remarkService;
+
+	@RequestMapping("/book.do")
+	public String tobook(){
+		return "admin/book/book";
+	}
+	@RequestMapping("/bookMore.do")
+	public String bookMore(){
+		return "admin/book/bookMore";
+	}
+	@RequestMapping("/review.do")
+	public String toreview(){
+		return "admin/review/review";
+	}
+	@RequestMapping("/reviewAdd.do")
+	public String reviewAdd(){
+		return "admin/review/reviewAdd";
+	}
+	@RequestMapping("/reviewReturn.do")
+	public String reviewReturn(){
+		return "admin/review/reviewReturn";
+	}
+	//根据页码检索商品信息(留言管理)
+	@RequestMapping("/loadList_book.do")
+	@ResponseBody
+	public JsonResult loadBook(String page, HttpSession session) {
+		return loadBooks(session,page);
+	}
+	//根据页码检索(留言管理)
+	public JsonResult loadBooks(HttpSession session,String page) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		int max_page = (int) Math.ceil(new Double(remarkService.findUserRemarkCount(ownerId))/rows);
+		if(max_page == 0){
+			return new JsonResult();
+		}
+		List<UserRemark> UserRemark=remarkService.findUserRemarkByPage(new Integer(page)*rows-rows,rows,ownerId);
+		JsonResult jr = new JsonResult(UserRemark);
+		jr.setMessage(max_page+"");
+		System.out.println(jr);
+		return jr;
+	}
+	//根据页码检索商品信息(评论管理)
+		@RequestMapping("/loadList_book1.do")
+		@ResponseBody
+		public JsonResult loadBook1(String page, HttpSession session) {
+			return loadBooks1(session,page);
+		}
+	//根据页码检索(评论管理)
+	public JsonResult loadBooks1(HttpSession session,String page) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		int max_page = (int) Math.ceil(new Double(remarkService.findUserRemarkCount1(ownerId))/rows);
+		if(max_page == 0){
+			return new JsonResult();
+		}
+		List<UserRemark> UserRemark=remarkService.findUserRemarkByPage1(new Integer(page)*rows-rows,rows,ownerId);
+		JsonResult jr = new JsonResult(UserRemark);
+		jr.setMessage(max_page+"");
+		return jr;
+	}
+	//删除单条
+	@RequestMapping("/delUserRemark.do")
+	@ResponseBody
+	public JsonResult delUserRemark(Long id, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		remarkService.delUserRemark(id,ownerId);
+		return new JsonResult();
+	}
+	//批量删除
+	@RequestMapping("/delUserRemarkList.do")
+	@ResponseBody
+	public JsonResult delUserRemarkList(Long[] id1, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		System.out.println(id1[0]);
+		remarkService.delUserRemarkList(id1, ownerId);
+		return new JsonResult();
+	}
+	//通过id查询对象
+	@RequestMapping("/findByUserRemarkId.do")
+	@ResponseBody
+	public JsonResult findByUserRemarkId(Long id, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		UserRemark n=remarkService.findByUserRemarkId(id,ownerId);
+		return new JsonResult(n);
+	}
+	//修改内容
+	@RequestMapping("/modifyUserRemark.do")
+	@ResponseBody
+	public JsonResult modifyUserRemark(Long id, String adminReply, String note, Boolean show, Integer userSequence,HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+		Date tamp = new Date(System.currentTimeMillis());
+		remarkService.modifyUserRemark(id,ownerId, adminReply, note, show, userSequence,operatorId,tamp);
+		return new JsonResult();
+	}
+	
+	@RequestMapping("/findByItemInfoId.do")
+	@ResponseBody
+	public JsonResult findByItemInfoId(Long id, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		ItemInfo n=remarkService.findByItemInfoId(id, ownerId);
+		return new JsonResult(n);
+	}
+	//添加评论
+	@RequestMapping("/addUserRemark.do")
+	@ResponseBody
+	public JsonResult addUserRemark(HttpSession session,String userAccount,Long userId, String userWord,
+	 Integer remarkType, Boolean show, String note, Long contentId){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+		Date tamp = new Date(System.currentTimeMillis());
+		int n=remarkService.addUserRemark(ownerId, tamp, operatorId,userAccount, userId, userWord, 
+				tamp, remarkType, show, note, new Byte("4"),contentId);
+		return new JsonResult(n);	
+	}
+	//模糊查询 
+	@RequestMapping("/findListByUserRemark.do")
+	@ResponseBody
+	public JsonResult findListByUserRemark(String keyword, HttpSession session) {
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		List<UserRemark> list=remarkService.findListByUserRemark(keyword, ownerId);
+		return new JsonResult(list);
+	}
+	//批量修改评论不显示
+	@ResponseBody
+	@RequestMapping("/modifyUserRemarks.do")//object
+	public Object modifyUserRemarks(Long[] id1,Boolean show, HttpSession session){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		remarkService.modifyUserRemarks(id1, ownerId, false);
+		return new JsonResult();	
+	}
+	//批量修改不予回复
+		@ResponseBody
+		@RequestMapping("/updateUserRemarks.do")//object
+		public Object updateUserRemarks(HttpSession session,Long[] id1,Boolean reply){
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+			Date tamp = new Date(System.currentTimeMillis());
+			remarkService.updateUserRemarks(id1, ownerId, false,operatorId,tamp);
+			return new JsonResult();	
+		}
+	//回复 
+	@ResponseBody
+	@RequestMapping("/modifyUserRemark1.do")
+	public JsonResult modifyUserRemark1(Long id, String adminReply,
+			HttpSession session,Boolean reply){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+		Date tamp = new Date(System.currentTimeMillis());
+		remarkService.modifyUserRemark1(id,ownerId, adminReply, tamp, operatorId, tamp,reply);
+		return new JsonResult();	
+	}
+	//历史记录查询客服账号
+	@ResponseBody
+	@RequestMapping("/findByUserRemarkAccount.do")
+	public JsonResult findByUserRemarkAccount(String accountNum,Long itemSku, HttpSession session){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		List<UserRemark> list= remarkService.findByUserRemarkAccount(accountNum, ownerId,itemSku);
+//		Byte userType = ((UserInfo)(session.getAttribute("user"))).getUserType();
+//		UserInfo ui=service.findByUserInfoId(operatorId, ownerId);
+//		Map map = new HashMap<String, Object>();
+//		map.put("list", list);
+//		map.put("accountNum", ui.getAccountNum());
+		return new JsonResult(list);	
+	}
+	//获取客服账号
+	@ResponseBody
+	@RequestMapping("/getByOperatorId.do")
+	public JsonResult getByOperatorId(Long id, HttpSession session){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+		List<UserInfo>list=remarkService.getByOperatorId(id, ownerId);
+		return new JsonResult(list);	
+	}
+}

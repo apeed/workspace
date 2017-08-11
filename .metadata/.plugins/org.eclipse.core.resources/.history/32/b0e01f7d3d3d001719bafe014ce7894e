@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rcb.dao.SettingsDao">
+	<select id="findSettingsById" parameterType="String" resultType="com.rcb.entity.Settings">
+	select 
+		s.id,
+		s.user_id,
+		title,
+		logo,
+		uri,
+		key_word,
+		contacts,
+		tel,
+		phone,
+		fax,
+		qq,
+		email,
+		site,
+		content
+ 	from settings s,user u
+	where s.user_id=u.id
+	
+	</select>
+	
+	 <insert id="addSettings" parameterType="com.rcb.entity.Settings">
+	insert into settings 
+	(
+		id,
+		title,
+		logo,
+		uri,
+		key_word,
+		contacts,
+		tel,
+		phone,
+		fax,
+		qq,
+		email,
+		site,
+		content
+	)
+	values
+	(
+		#{id},
+		#{title},
+		#{logo},
+		#{uri},
+		#{key_word},
+		#{contacts},
+		#{tel},
+		#{phone},
+		#{fax},
+		#{qq},
+		#{email},
+		#{site},
+		#{content}
+	)
+	</insert>
+	<update id="modifySettings" parameterType="com.rcb.entity.Settings">
+	update settings 
+		set 
+		title=#{title},
+		logo=#{logo},
+		uri=#{uri},
+		key_word=#{key_word},
+		contacts=#{contacts},
+		tel=#{tel},
+		phone=#{phone},
+		fax=#{fax},
+		qq=#{qq},
+		email=#{email},
+		site=#{site},
+		content=#{content}
+		where id=#{id}
+	</update>
+</mapper>
+
+
+
+
+
+

@@ -1,0 +1,126 @@
+package com.rongcheng_tech.cms.service.UserRemark;
+
+import java.sql.Date;
+import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import com.rongcheng_tech.cms.dao.UserRemarkDao;
+import com.rongcheng_tech.cms.entity.ItemInfo;
+import com.rongcheng_tech.cms.entity.UserInfo;
+import com.rongcheng_tech.cms.entity.UserRemark;
+@Service("userRemarkService")
+public class UserRemarkServiceImpl implements UserRemarkService {
+	
+	@Resource
+	private UserRemarkDao dao;//分页查询
+	public List<UserRemark> findUserRemarkByPage(int start, int rows,Long ownerId) {
+		List<UserRemark> d1=dao.findUserRemarkByPage(start, rows,ownerId);
+		return d1;
+	}
+	public List<UserRemark> findUserRemarkByPage1(int start, int rows, Long ownerId) {
+		List<UserRemark> d1=dao.findUserRemarkByPage1(start, rows,ownerId);
+		return d1;
+	}
+	//查询总条数
+	public String findUserRemarkCount(Long ownerId) {
+		String s=dao.findUserRemarkCount(ownerId);
+		return s;
+	}
+	//通过id查找对象
+	public UserRemark findByUserRemarkId(Long id,Long ownerId) {
+		UserRemark s=dao.findByUserRemarkId(id, ownerId);
+		return s;
+	}
+	//删除单条
+	public void delUserRemark(Long id,Long ownerId) {
+		dao.delUserRemark(id, ownerId);
+	}
+	//批量删除
+	public void delUserRemarkList(Long[] id,Long ownerId) {
+		for(int i=0;i<id.length;i++){
+		dao.delUserRemark(id[i], ownerId);
+		}
+	}
+	///修改方法
+	public void modifyUserRemark(Long id, Long ownerId,String adminReply, String note, Boolean show, Integer userSequence,Long operatorId,Date gmtModified) {
+		UserRemark ur=dao.findByUserRemarkId(id,ownerId);
+		ur.setAdminReply(adminReply);
+		ur.setNote(note);
+		ur.setShow(show);
+		ur.setUserSequence(userSequence);
+		ur.setOperatorId(operatorId);
+		ur.setGmtModified(gmtModified);
+		dao.modifyUserRemark(ur);
+	}
+	
+	public ItemInfo findByItemInfoId(Long id, Long ownerId) {
+		ItemInfo  n=dao.findByItemInfoId(id, ownerId);
+		return n;
+	}
+	//增加方法
+	public int addUserRemark(Long ownerId, Date gmtCreate, String userAccount,
+			Long userId, String userWord, Date userWordTime,
+			Integer userSequence, Integer remarkType, Boolean show, String note, Byte contentType,Long contentId) {
+		UserRemark ur = new UserRemark();
+		ur.setOwnerId(ownerId);
+		ur.setGmtCreate(gmtCreate);
+		ur.setUserAccount(userAccount);
+		ur.setUserId(userId);
+		ur.setUserWord(userWord);
+		ur.setUserWordTime(userWordTime);
+		ur.setUserSequence(userSequence);
+		ur.setRemarkType(remarkType);
+		ur.setShow(show);
+		ur.setNote(note);
+		ur.setContentType(contentType);
+		ur.setContentId(contentId);
+		int n=dao.addUserRemark(ur);
+		return n;
+	}
+	//模糊查询
+	public List<UserRemark> findListByUserRemark(String keyword, Long ownerId) {
+		 List<UserRemark> list=dao.findListByUserRemark(keyword, ownerId);
+		 return list;
+	}
+	//修改方法
+	public void modifyUserRemarks(Long[] id, Long ownerId, Boolean show) {
+		for(int i=0;i<id.length;i++){
+			/*UserRemark ur=new UserRemark();
+			ur.setOwnerId(ownerId);
+			ur.setShow(show);
+			ur.setId(id[i]);*/
+			UserRemark ur=dao.findByUserRemarkId(id[i], ownerId);
+			ur.setShow(show);
+			dao.modifyUserRemark(ur);
+		}
+		
+	}
+
+	public void modifyUserRemark1(Long id, Long ownerId, String adminReply, Date replyTime,
+			Long operatorId, Date gmtModified,Boolean reply) {
+		UserRemark ur=dao.findByUserRemarkId(id,ownerId);
+		ur.setAdminReply(adminReply);
+		ur.setReplyTime(replyTime);
+		ur.setOperatorId(operatorId);
+		ur.setGmtModified(gmtModified);
+		ur.setReply(reply);
+		dao.modifyUserRemark(ur);
+	}
+	//查询历史回复
+	public List<UserRemark> findByUserRemarkAccount(String accountNum, Long ownerId,Long itemSku) {
+		List<UserRemark> list=dao.findByUserRemarkAccount(accountNum, ownerId,itemSku);
+		return list;
+	}
+	public void updateUserRemarks(Long[] id, Long ownerId, Boolean reply) {
+		for(int i=0;i<id.length;i++){
+			UserRemark ur=dao.findByUserRemarkId(id[i], ownerId);
+			ur.setReply(reply);
+			dao.modifyUserRemark(ur);
+		}
+	}
+	public List<UserInfo> getByOperatorId(Long id, Long ownerId) {
+		List<UserInfo> list=dao.getByOperatorId(id, ownerId);
+		return list;
+	}
+	
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.globalexpress.web.foreground.dao.ForegroundCargoTrackingDao" >
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.CargoTracking" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="platform_id" property="platformId" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="carrier_id" property="carrierId" jdbcType="VARCHAR" />
+    <result column="carrier_url" property="carrierUrl" jdbcType="VARCHAR" />
+    <result column="tracking_num" property="trackingNum" jdbcType="CHAR" />
+    <result column="happen_time" property="happenTime" jdbcType="TIMESTAMP" />
+    <result column="current_address" property="currentAddress" jdbcType="VARCHAR" />
+    <result column="terminal_id" property="terminalId" jdbcType="VARCHAR" />
+    <result column="staff_id" property="staffId" jdbcType="VARCHAR" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="operator_tel" property="operatorTel" jdbcType="BIGINT" />
+    <result column="cargo_status" property="cargoStatus" jdbcType="VARCHAR" />
+    <result column="facility_id" property="facilityId" jdbcType="VARCHAR" />
+    <result column="is_complete" property="complete" jdbcType="BIT" />
+    <result column="next_address" property="nextAddress" jdbcType="VARCHAR" />
+    <result column="next_terminal" property="nextTerminal" jdbcType="VARCHAR" />
+    <result column="transfer_carrier_id" property="transferCarrierId" jdbcType="VARCHAR" />
+    <result column="transfer_carrier_url" property="transferCarrierUrl" jdbcType="VARCHAR" />
+    <result column="transfer_tracking_num" property="transferTrackingNum" jdbcType="BIGINT" />
+    <result column="user_tracking_info" property="userTrackingInfo" jdbcType="VARCHAR" />
+    <result column="is_show" property="show" jdbcType="BIT" />
+    <result column="reserved1" property="reserved1" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="BIGINT" />
+    <result column="is_authorization" property="authorization" jdbcType="BIT" />
+    <result column="is_apply" property="apply" jdbcType="BIT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_id, platform_id, shop_id, carrier_id, carrier_url, tracking_num, happen_time, 
+    current_address, terminal_id, staff_id, operator_id, operator_tel, cargo_status, 
+    facility_id, is_complete, next_address, next_terminal, transfer_carrier_id, transfer_carrier_url, 
+    transfer_tracking_num, user_tracking_info, is_show, reserved1, note, owner_id, is_authorization, 
+    is_apply, gmt_create, gmt_modified
+  </sql>
+  <select id="getByTrackingNum" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from
+    	cargo_tracking
+    where
+    	owner_id = #{param2,jdbcType=BIGINT}
+    and
+    	tracking_num = #{param1,jdbcType=BIGINT}
+  </select>
+</mapper>

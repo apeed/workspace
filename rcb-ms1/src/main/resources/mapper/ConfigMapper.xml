@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.ConfigDao">
+	<select id="listConfig" resultType="com.rongcheng.rcb.entity.Config">
+		select 
+			id,
+			param_name as paramName,
+			param_value1 as paramValue1,
+			param_value2 as paramValue2,
+			param_value3 as paramValue3,
+			remark
+	 	from
+	 		config
+	 	order by
+	 		id
+	</select>
+	<update id="modifyConfig" parameterType="java.lang.String">
+		update
+			config  
+		set
+			param_value1 = #{1},
+			param_value2 = #{2},
+			param_value3 = #{3}
+		where
+			param_name = #{0}
+	</update>
+</mapper>
+
+
+
+
+
+

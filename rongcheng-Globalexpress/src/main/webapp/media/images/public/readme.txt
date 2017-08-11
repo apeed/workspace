@@ -1,0 +1,1 @@
+放置前后台页面共享的图片，网站logo、ico图标、loading.gif加载动画等

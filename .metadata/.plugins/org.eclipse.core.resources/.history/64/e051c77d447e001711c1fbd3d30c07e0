@@ -1,0 +1,25 @@
+import org.junit.Before;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.globalexpress.web.cms.dao.OrderInfoDao;
+import com.globalexpress.web.cms.dao.UserInfoDAO_JXB;
+import com.globalexpress.web.cms.dao.UserRemarkDao;
+
+
+public class Test {
+	private UserRemarkDao dao;
+
+	@Before
+	public void init() {
+		String[] conf = { "config/springmvc.xml"};
+		ApplicationContext context = new ClassPathXmlApplicationContext(conf);
+		dao = context.getBean("userRemarkDao", UserRemarkDao.class);
+	}
+
+	@org.junit.Test
+	public void test1() {
+		String s=dao.findItemInfoCount(new Long("1"));
+		System.out.println(s);
+	}
+}

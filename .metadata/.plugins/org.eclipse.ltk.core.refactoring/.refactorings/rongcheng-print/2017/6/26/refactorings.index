@@ -1,0 +1,37 @@
+1498547119909	Delete element
+1498547169474	Rename type 'Region'
+1498547775164	Rename type 'RegionDao'
+1498547854356	Rename package 'com.rongcheng.print.service.Region'
+1498547865942	Rename type 'RegionService'
+1498547871759	Rename type 'RegionServiceImpl'
+1498548062520	Rename resource 'RegionMapper.xml'
+1498558234620	Rename type 'RegionController'
+1498613799850	Rename package 'test.Region'
+1498613809111	Rename type 'TestRegionService'
+1498613818031	Rename type 'TestRegionDao'
+1498633893991	Delete element
+1498634513995	Delete element
+1498634521814	Rename resource 'ExpressPartition.html'
+1498634852597	Delete elements
+1498634860054	Delete elements
+1498634866359	Delete element
+1498634894982	Delete element
+1498634925083	Delete element
+1498638094073	Delete element
+1498638095861	Delete element
+1498643796013	Copy compilation unit
+1498784448284	Delete element
+1498784458374	Rename resource 'index.html'
+1498788662036	Delete element
+1498788741258	Delete elements
+1498788750152	Delete elements
+1498788754395	Delete element
+1498790063754	Delete element
+1498790399602	Rename package 'com.rongcheng.print.dao'
+1498790425279	Rename package 'com.rongcheng.print.dao.PrintTemplateDao'
+1498791002234	Copy compilation units
+1498791036910	Rename type 'TestUserInfoDao'
+1498791045689	Rename type 'TestUserInfoService'
+1498792258080	Rename package 'com.rongcheng.print.service.d'
+1498806476122	Delete element
+1498806486398	Delete element

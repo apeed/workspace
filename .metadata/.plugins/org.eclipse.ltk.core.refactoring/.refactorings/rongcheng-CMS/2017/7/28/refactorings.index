@@ -1,0 +1,60 @@
+1499654912879	Delete elements
+1499655227191	Rename package 'com.rongcheng_tech.cms.service.a'
+1499655500670	Delete element
+1499655506402	Rename type 'ShopInfoController'
+1499656164811	Delete element
+1499656233616	Rename resource 'notice.html'
+1499656333824	Move folders
+1499657870339	Delete element
+1499658047730	Rename compilation unit 'TestUserService.java'
+1499660574237	Delete element
+1499662534968	Rename resource 'noticePublic.html'
+1499676931780	Rename resource 'noticeAdd.html'
+1499744496010	Rename resource 'book.html'
+1499744560366	Copy file
+1499745483383	Rename package 'com.rongcheng_tech.cms.service.b'
+1499745507098	Copy compilation unit
+1499745519013	Rename type 'StatementNoticeService'
+1499745553266	Copy file
+1499745583367	Copy compilation unit
+1499746104153	Move compilation unit
+1499746106934	Move compilation unit
+1499746145111	Rename package 'test.UserRemak'
+1499746151553	Copy compilation unit
+1499746170292	Rename type 'TestStatementNoticeDao'
+1499746186208	Copy compilation unit
+1499746210378	Rename type 'TestStatementNoticeService'
+1499746717033	Copy compilation unit
+1499758325247	Rename resource 'bookMore.html'
+1499998556804	Rename resource 'clientele.html'
+1499998656250	Rename resource 'clienteleAdd.html'
+1499998688572	Rename resource 'clientelePublic.html'
+1499998858843	Rename resource 'addresserPublic.html'
+1499998882163	Rename resource 'addresserAdd.html'
+1499998909639	Rename resource 'addresser.html'
+1499999161009	Copy compilation unit
+1499999219590	Copy compilation unit
+1499999227408	Copy compilation unit
+1500000337050	Copy file
+1500000382845	Rename type 'aaaDao'
+1500002743823	Copy package
+1500002749338	Delete element
+1500002768227	Copy package
+1500002797492	Rename type 'TestStatementNoticeDao'
+1500002804889	Rename type 'TestStatementNoticeService'
+1500010136548	Rename package 'com.rongcheng_tech.cms.service.d'
+1500010172946	Copy compilation units
+1500010190104	Rename type 'StatementNoticeService'
+1500010195192	Rename type 'StatementNoticeServiceImpl'
+1500011183663	Delete element
+1500011934111	Rename type 'aaaaController'
+1500014909960	Delete element
+1500014921055	Delete element
+1500014934293	Delete element
+1500026530433	Delete element
+1500086811832	Delete elements
+1500087206144	Delete element
+1500087238759	Delete element
+1500096609200	Rename resource 'review.html'
+1500096617449	Rename resource 'reviewAdd.html'
+1500096622952	Rename resource 'reviewReturn.html'

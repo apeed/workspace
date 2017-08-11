@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/main/resources/config/jdbc.properties=UTF-8
+encoding//src/main/resources/config/sysconfig.properties=UTF-8
+encoding//src/main/webapp/WEB-INF/admin/config/config-site.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/admin/config/config-users.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/admin/content/content.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/admin/index.jsp=UTF-8

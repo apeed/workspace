@@ -1,0 +1,588 @@
+
+<head><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}.ng-hide-add-active,.ng-hide-remove{display:block!important;}</style>
+    <title>账号设置 - LeanCloud</title>
+<meta charset="utf-8">
+
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<meta property="wb:webmaster" content="37313201c815b0d6">
+<meta property="qc:admins" content="13231277661673347546375">
+
+<meta name="description" content="LeanCloud 为应用开发提供一站式解决方案，包括：数据存储、用户管理、消息推送、应用统计、社交分享、实时聊天等服务，让开发者彻底抛弃后端负担，专注于提升用户体验，最大限度提升产品发布、迭代周期，在市场上占领先机。">
+<meta name="keywords" content="baas, mbaas, backend, avoscloud, mobile, develop, storage, push notification, analytics, social, online chat, adnetwork, 后端服务, 应用开发, 移动互联网, 数据存储, 用户管理, 消息推送, 应用统计, 社交分享, 实时聊天, 广告网络">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta property="og:url" content="https://leancloud.cn">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeanCloud">
+<meta property="og:title" content="Build better apps, faster.">
+<meta property="og:description" content="LeanCloud 为应用开发者提供稳定可依赖的后端云服务，包括存储、账号管理、社交分享、推送等以及相关的技术支持和服务">
+<meta property="og:image" content="https://leancloud.cn/images/static/logo.svg">
+<meta property="og:image:type" content="image/svg">
+<meta property="og:image" content="https://leancloud.cn/images/static/logo.png">
+<meta property="og:image:type" content="image/png">
+
+<link href="https://blog.leancloud.cn/feed/" rel="alternate" title="LeanCloud 官方博客" type="application/rss+xml">
+
+<script async="" src="//www.google-analytics.com/analytics.js"></script><script type="text/javascript" async="" src="https://dn-growing.qbox.me/vds.js"></script><script type="text/javascript">
+var _vds = _vds || [];
+window._vds = _vds;
+(function(){
+  _vds.push(['setAccountId', 'a268202b003f2516']);
+  (function() {
+    var vds = document.createElement('script');
+    vds.type='text/javascript';
+    vds.async = true;
+    vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(vds, s);
+  })();
+})();
+</script>
+
+
+    
+
+    <link rel="stylesheet" href="styles/525d1278.app.css">
+    <!--[if lt IE 10]>
+    <link rel="stylesheet" href="styles/appie.css">
+    <![endif]-->
+    
+    
+    
+    <script src="scripts/lib/3e8d8930.all.js"></script><style type="text/css">  .JColResizer{table-layout:fixed;} .JColResizer > tbody > tr > td, .JColResizer > tbody > tr > th{overflow:hidden;padding-left:0!important; padding-right:0!important;}  .JCLRgrips{ height:0px; position:relative;} .JCLRgrip{margin-left:-5px; position:absolute; z-index:5; } .JCLRgrip .JColResizer{position:absolute;background-color:red;filter:alpha(opacity=1);opacity:0;width:10px;height:100%;cursor: e-resize;top:0px} .JCLRLastGrip{position:absolute; width:1px; } .JCLRgripDrag{ border-left:1px dotted black;	} .JCLRFlex{width:auto!important;} .JCLRgrip.JCLRdisabledGrip .JColResizer{cursor:default; display:none;}</style>
+    
+
+    
+    
+
+
+
+
+<script>
+  Raven
+    .config('https://d9874d0c33594906abe4f69eea94222d@sentry.avoscloud.com/12')
+    .addPlugin(Raven.Plugins.Angular)
+    .install();
+</script>
+
+<script src="scripts/514e2f3d.dashboard.js"></script>
+
+
+<script src="scripts/7240c227.av.js"></script>
+
+
+
+
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+    ga('create', 'UA-42629236-1', 'auto');
+    // ga('send', 'pageview');
+    ga('send', 'pageview', {
+     'page': location.pathname
+    });
+</script>
+
+
+
+
+</head>
+<body ng-app="settingMod" class="dashboard-init appnav-narrow dashboard- dashboard- ng-scope modal-with-am-fade modal-open" ng-controller="RootCtrl">
+  
+    
+  
+
+  <div ng-controller="AppCtrl" class="lc-bd userpage ng-scope">
+      
+        
+<header class="main-header">
+<nav class="dashboard-subnav navbar-static-top" role="navigation">
+  <div class="">
+    <div class="clearfix" id="app-options">
+      <ul class="nav navbar-app-select pull-left">
+        <li ng-class="{active:currentHtmlPage=='applist.html'}">
+          <a href="/applist.html" class="nav-logo font-logo userpage">L<span class="logo-all">eanCloud</span></a>
+        </li>
+        
+        <li class="dropdown dropdown-toggle-app-name">
+
+          <a class="dropdown-toggle app-name ng-hide" role="button" data-toggle="dropdown" ng-show="app.app_id" title="">
+            <div class="name ng-binding"></div>
+            <span class="caret"></span>
+          </a>
+          <a href="applist.html#/apps" data-toggle="dropdown" ng-hide="app.app_id" class="">
+            <!-- <i class="glyphicon glyphicon-th-list"></i> -->
+            <div class="name">应用</div>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="applist.html#/apps">所有应用</a></li>
+            <li><a href="applist.html#/newapp">创建新应用</a></li>
+            <li class="divider ng-hide" ng-show="apps.all"></li>
+            <li style="padding: 5px 15px" ng-show="apps.all.length>5" class="ng-hide">
+              <input type="text" class="form-control input-sm ng-pristine ng-valid" ng-model="appNameFilter">
+            </li>
+            <!-- ngRepeat: app in apps.all | filter:{app_name:appNameFilter} -->
+          </ul>
+        </li>
+        
+      </ul>
+
+
+
+      <ul class="nav navbar-user-actions pull-right">
+
+        <li ng-class="{active:currentHtmlPage=='help.html'}">
+          <a class="nav-key-6 dropdown-toggle" title="帮助" data-toggle="dropdown">
+            <!-- <i class="icon icon-dashbd-icon icon-question"></i> -->
+            <span class="dashboard-subnav-text">帮助</span>
+          </a>
+          <ul class="dropdown-menu">
+            
+            <li><a href="/docs/start.html">快速入门</a></li>
+            
+            <li><a href="//leancloud.cn/help.html">联系我们</a></li>
+            <li role="presentation" class="divider"></li>
+            <li><a href="/docs">文档</a></li>
+            <li><a href="/docs/sdk_down.html">SDK 下载</a></li>
+            <li><a href="//status.leancloud.cn/">健康状态</a></li>
+            <li role="presentation" class="divider"></li>
+            <li><a href="https://leancloud.cn/dashboard/apionline/index.html">在线 API 工具</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#modal-shortcuts">快捷键</a></li>
+          </ul>
+        </li>
+
+        
+        <li ng-show="user.session_token" class="dropdown">
+          <a id="news-notification" role="button" ng-click="readNotification()">
+            <!-- <i class="icon icon-dashbd-icon icon-inbox-empty" ng-show="!hasnewnotify"></i> -->
+            <!-- <i class="icon icon-dashbd-icon icon-inbox-files-bold has-news" ng-show="!hasnewnotify"></i> -->
+            <span class="dashboard-subnav-text">通知</span>
+          </a>
+        </li>
+
+        <li class="dropdown">
+          <a role="button" class="dropdown-toggle" data-toggle="dropdown">
+
+            <span class="user-name-text" ng-show="serverNode === 'cn'">
+            国内节点
+            <span class="caret"></span>
+            </span>
+            <span class="user-name-text ng-hide" ng-show="serverNode === 'us'">
+            美国节点
+            <span class="caret"></span>
+            </span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="https://us.leancloud.cn/1/oauth2/goto/avoscloud">美国节点</a></li>
+            <li><a href="//leancloud.cn/applist.html">国内节点</a></li>
+
+          </ul>
+        </li>
+        
+        <li class="dropdown" ng-show="user.username">
+          <a role="button" class="dropdown-toggle user-name" data-toggle="dropdown">
+            <span class="user-gravatar">
+              <img gravatar-src="user.email.toLowerCase()" gravatar-size="64" src="https://cdn.v2ex.com/gravatar/65c1f5a848c170c6767fcc731dae4b04?size=64&amp;default=https%3A//leancloud.cn/images/static/default-avatar.png">
+            </span>
+            <span class="user-name-text ng-binding">
+              二零壹七
+              <span class="caret"></span>
+            </span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="settings.html">账号设置</a></li>
+            <!-- <li><a href="applist.html">控制台</a></li> -->
+            <li><a href="settings.html#/setting/team">团队管理</a></li>
+            <li><a href="bill.html#/bill/general">财务</a></li>
+            <!-- <li><a href="https://a.leancloud.cn">推荐奖励</a></li> -->
+            <li ng-show="user.username" style="" class=""><a ng-click="signout()">登出</a></li>
+          </ul>
+        </li>
+        <li ng-hide="user.username" class="ng-hide">
+          <a href="login.html#/signin">登录</a>
+        </li>
+        <li ng-hide="user.username" class="ng-hide">
+          <a href="login.html#/signup">注册</a>
+        </li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div>
+
+  <!-- 简单的用户建议和反馈收集 -->
+  <!-- <feedback></feedback> -->
+</nav>
+</header>
+<!-- Global notification -->
+<div id="global-notify"></div>
+
+<script type="text/x-jquery-tmpl" id="notify-item-tmpl">
+  <div  class="msg-tip-wrapper ${type}">
+    <div class="msg-tip">{{html msg}}</div>
+    <div class="msg-tip-close close">&times;</div>
+    <div class="msg-tip-deco"></div>
+  </div>
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-shortcuts" tabindex="-1" role="dialog" aria-labelledby="modal-shortcuts-label" aria-hidden="true">
+  <div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <h4 class="modal-title" id="modal-shortcuts-label">键盘快捷键</h4>
+    </div>
+    <div class="modal-body">
+    <div id="shortcut-lists" class="shortcut-lists">
+      <h5 class="no-margin-top">全局</h5>
+      <ul class="shortcut-list">
+      <li><span>G</span><span>S</span> 存储</li>
+      <li><span>G</span><span>E</span> 消息</li>
+      <li><span>G</span><span>A</span> 分析</li>
+      <li><span>G</span><span>D</span> 组件</li>
+      <li><span>G</span><span>C</span> 设置</li>
+      </ul>
+      <ul class="shortcut-list">
+      <li><span>`</span> 或&nbsp;&nbsp;<span>G</span><span>H</span> 控制台首页</li>
+      <li><span>A</span> 应用列表</li>
+      <!-- <li><span>6</span> 帮助菜单</li> -->
+      <!-- <li><span>/</span> 搜素</li> -->
+      <li><span>?</span> 显示此提示</li>
+      </ul>
+
+      <h5 class="">控制台首页</h5>
+      <ul class="shortcut-list">
+      <li><span>S</span> 或&nbsp;&nbsp;<span>/</span> 搜索应用</li>
+      </ul>
+
+      <h5 class="">存储</h5>
+      <ul class="shortcut-list">
+      <li><span>tab</span> 或 <b>方向键</b> 切换单元格</li>
+      <li><span>E</span> 编辑选中的单元格</li>
+      </ul>
+      <ul class="shortcut-list">
+      <li><span>enter</span> 触发单元格点击</li>
+      </ul>
+    </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+        
+      
+
+      <div class="lc-container1">
+        <div id="page-container">
+          
+
+
+
+          <div id="body-container">
+            
+
+
+            
+
+<div ng-controller="SettingCtrl" class="ng-scope">
+  <div>
+
+    
+
+    <div class="lc-container">
+      <div class="lc-aside">
+
+        <div class="sidebar hidden-print affix-top">
+          <ul class="nav sidenav sub-nav">
+            <li ng-class="getClass('/setting/info')" class="active"><a href="#/setting/info">开发者信息</a></li>
+            <li ng-class="getClass('/setting/mail')"><a href="#/setting/mail">邮箱</a></li>
+            <li ng-class="getClass('/setting/password')"><a href="#/setting/password">密码</a></li>
+            <!-- ngIf: serverNode === 'cn' --><li ng-if="serverNode === 'cn'" ng-class="getClass('/setting/realname')" class="ng-scope"><a href="#/setting/realname">实名认证</a></li><!-- end ngIf: serverNode === 'cn' -->
+            <li ng-class="getClass('/setting/domainrecord')"><a href="#/setting/domainrecord">域名备案</a></li>
+            <li ng-class="getClass('/setting/domainbind')"><a href="#/setting/domainbind">域名绑定</a></li>
+            <li ng-class="getClass('/setting/alert')"><a href="#/setting/alert">告警设置</a></li>
+            <li ng-class="getClass('/setting/team')"><a href="#/setting/team">团队管理</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="lc-main">
+       <!-- ngView:  --><div ng-view="" class="ng-scope"><form name="user_detail_form" class="user-info-section ng-scope ng-pristine ng-valid" ng-controller="SettingUserDetailCtrl">
+  <div class="form-group">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="user-info-tier">
+          <div class="clearfix">
+            <a href="http://gravatar.com/" class="avatar-settings pull-left ng-scope" target="_blank" title="修改头像（将转向至 Gravatar）" bs-tooltip="" data-placement="top" data-container="body">
+              <span class="user-gravatar">
+                <img gravatar-src="user.email.toLowerCase()" gravatar-size="300" src="https://cdn.v2ex.com/gravatar/65c1f5a848c170c6767fcc731dae4b04?size=300&amp;default=https%3A//leancloud.cn/images/static/default-avatar.png">
+              </span>
+            </a>
+          </div>
+          <p class="large ng-binding">二零壹七</p>
+
+
+          <div ng-controller="BillGeneralCtrl" class="ng-scope">
+            <hr>
+
+            <div ng-show="!billGeneral.current_support_service" class="">
+              尚未购买技术支持服务 - <a href="#/bill/charge/ticket">点击购买</a>
+            </div>
+
+            <div ng-show="billGeneral.current_support_service.item_type == 2" class="ng-hide">
+              <p><span class="billing-support-class pro has-tooltip ng-scope" data-title="感谢您选择 LeanCloud 的专业级技术支持服务" data-container="body" bs-tooltip="">Pro Support</span></p>
+              <p>您已购买专业级技术支持 <span class="support-expire-date ng-binding">有效期至 2017 年 6 月 13 日</span></p>
+            </div>
+
+            <div ng-show="billGeneral.current_support_service.item_type == 3" class="ng-hide">
+              <p><span class="billing-support-class enterprise has-tooltip ng-scope" data-title="感谢您选择 LeanCloud 的企业级技术支持服务" data-container="body" bs-tooltip="">Enterprise Support</span></p>
+              <p>您已购买企业级技术支持 <span class="text-muted ng-binding">·  团队成员具有相关权限</span></p>
+              <p><span class="support-expire-date ng-binding">有效期至 2017 年 6 月 13 日</span></p>
+            </div>
+          </div>
+        </div>
+        <!-- .user-info-tier -->
+      </div>
+      <!-- .col-sm-6 -->
+      <div class="col-sm-6">
+        <h4>
+          详细信息
+          <button type="submit" class="btn btn-xs btn-default ng-scope" ng-disabled="serverNode==='us'" bs-modal="" data-container="body" data-template="views/modal/setting-info-modal.html">编辑</button>
+        </h4>
+
+        <div class="user-info-tier">
+          <p class="has-type ng-hide" ng-show="userDetail.client_type == 0">
+            <i class="icon icon-user"></i> 个人账号
+          </p>
+          <p class="has-type ng-hide" ng-show="userDetail.client_type == 1">
+            <i class="icon icon-team"></i> 公司账号
+          </p>
+
+          <p ng-show="user.phone" class="ng-binding">
+            <i class="icon icon-phone"></i> 18322336420
+            <span ng-show="user.flags.indexOf('client-phone-verified')>-1" class="ng-hide">
+              <span class="email-verification-status label label-success">已验证</span>
+
+            </span>
+
+            <span ng-show="user.flags.indexOf('client-phone-verified')<0" class="">
+              <span class="email-verification-status label label-warning">未验证</span>
+              <button class="btn btn-xs btn-default" ng-disabled="serverNode==='us'" ng-show="user.phone" ng-click="showModal($event,'views/site/phone-verify-modal.html')">验证</button>
+            </span>
+             <button class="btn btn-xs btn-default" ng-disabled="serverNode==='us'" ng-show="user.phone" ng-click="showModal($event,'views/site/phone-set-modal.html')">修改</button>
+          </p>
+          <p ng-show="!user.phone" class="ng-hide">
+            <i class="icon icon-phone"></i> 暂无电话
+            <button class="btn btn-xs btn-default" ng-disabled="serverNode==='us'" ng-click="showModal($event,'views/site/phone-set-modal.html')">填写</button>
+          </p>
+
+          <p class="ng-binding">
+            <i class="icon icon-building ng-hide" ng-show="userDetail.company"></i>
+            
+          </p>
+          <p class="ng-binding">
+            <i class="icon icon-contact-card ng-hide" ng-show="userDetail.invoice_title"></i>
+            
+          </p>
+          <p class="ng-binding">
+            <i class="icon icon-map-location ng-hide" ng-show="userDetail.address"></i>
+            
+          </p>
+          <p class="ng-binding">
+            <i class="icon icon-globe-alt-2 ng-hide" ng-show="userDetail.company_site"></i>
+            
+          </p>
+          <!-- <p>
+            <i class="icon icon-phone" ng-show="userDetail.phone"></i>
+            {{userDetail.phone}}
+          </p> -->
+          <p class="ng-binding">
+            <span ng-show="userDetail.oicq" class="ng-hide">QQ </span>
+            </p>
+        </div>
+        <!-- .user-info-tier -->
+      </div>
+      <!-- .col-sm-6 -->
+    </div>
+    <!-- .row -->
+
+  </div>
+
+</form>
+<p class="callout callout-info ng-scope ng-hide" ng-show="serverNode==='us'">
+  美国节点不支持编辑用户基本信息，手机号，邮箱。如果需要，需要转到 <a href="https://leancloud.cn">国内节点</a>
+</p>
+</div>
+      </div>
+    </div>
+    <!-- .row end -->
+  </div>
+</div>
+
+          </div>
+        </div>
+      </div>
+   </div>
+
+    
+
+
+
+
+
+
+
+<script>
+$(document).ready(function() {
+  $(".bstooltip").tooltip({
+    viewport: {
+      selector: 'body',
+      padding: 10
+    },
+    container: "body"
+  });
+
+  // qcloud sidebar toggler
+  // $('#qcloud-nav-1').prepend('<a class="btn-fold-menu" data-event="toggle_sidebar"></a>');
+
+  // $('.btn-fold-menu').click(function() {
+  //   $('#qcloud-nav-1').toggleClass('off-canvas');
+  // });
+  $('.feature-nav-1 > a').click(function(){
+    var currentUL = $(this).parent().find('ul.nav');
+    currentUL = currentUL.length > 1 ?currentUL[0]: currentUL;
+    currentUL = $(currentUL);
+    currentUL.toggle();
+
+    $('.feature-nav-1 > ul').each(function(k,v){
+      if(!currentUL.is(v)){
+        $(v).hide();
+      }
+    });
+  });
+
+});
+
+</script>
+
+
+
+
+<div class="modal-backdrop am-fade"></div><div class="modal fade ng-scope top am-fade" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">编辑用户信息</h4>
+      </div>
+      <div class="modal-help">
+        <h4>为什么要填写个人信息？</h4>
+        <ul>
+          <li>为了更好的服务开发者，建议您完善开发者信息，填写真实姓名、电话号码</li>
+          <li>在关键时刻（服务宕机等意外情况），我们可以及时与您取得联系，获得更好的服务</li>
+          <li>我们承诺，不将您的个人信息以任何形式，出售给第三方</li>
+          <li>我们不会给您发送垃圾邮件</li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <form name="user_detail_form" class="ng-pristine ng-invalid ng-invalid-required">
+
+          <div class="form-group">
+
+            <label class="control-label">开发者类型 <b class="has-required ng-scope" title="必填" bs-tooltip="" data-placement="top">Required</b> <b class="has-required ng-scope" title="仅统计用，此选项不会对功能产生任何影响" bs-tooltip="" data-placement="top">Help?</b></label>
+
+            <div class="custom-form-inline">
+              <div class="radio custom-control">
+                <label>
+                  <input type="radio" ng-model="userDetail.client_type" name="client_type" required="" value="0" class="ng-pristine ng-invalid ng-invalid-required">
+                  <span class="control-indicator"></span>
+                  个人
+                </label>
+              </div>
+
+              <div class="radio custom-control">
+                <label>
+                  <input type="radio" ng-model="userDetail.client_type" name="client_type" required="" value="1" class="ng-pristine ng-invalid ng-invalid-required">
+                  <span class="control-indicator"></span>
+                  公司
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="form-settings-profile-name" class="control-label">开发者姓名 <b class="has-required ng-scope" title="必填" bs-tooltip="" data-placement="top">Required</b></label>
+                <input id="form-settings-profile-name" class="form-control ng-pristine ng-valid ng-valid-required" type="text" ng-model="userDetail.client_name" required="">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="form-settings-profile-phone" class="control-label">备用手机号 <b class="has-required ng-scope" title="必填" bs-tooltip="" data-placement="top">Required</b> <b class="has-required ng-scope" title="告警用，支持最多三个手机号，用半角逗号分开" bs-tooltip="" data-placement="top">Help?</b></label>
+                <input id="form-settings-profile-phone" class="form-control ng-pristine ng-valid ng-valid-required" type="text" ng-model="userDetail.phone" required="">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="form-settings-profile-company" class="control-label">公司名称</label>
+                <input id="form-settings-profile-company" class="form-control ng-pristine ng-valid" type="text" ng-model="userDetail.company">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="form-settings-profile-addr" class="control-label">地址</label>
+                <input id="form-settings-profile-addr" class="form-control ng-pristine ng-valid" type="text" ng-model="userDetail.address">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+          <div class="col-sm-6">
+              <div class="form-group">
+                <label for="form-settings-profile-invoice-company" class="control-label">发票抬头  <b class="has-required ng-scope" title="开具发票时使用，个人开发者请填写开发者姓名" bs-tooltip="" data-placement="top">Help?</b></label>
+                <input id="form-settings-profile-invoice-company" class="form-control ng-pristine ng-valid" type="text" ng-model="userDetail.invoice_title">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="form-settings-profile-website" class="control-label">网站</label>
+                <input id="form-settings-profile-website" class="form-control ng-pristine ng-valid" type="text" ng-model="userDetail.company_site">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="form-settings-profile-qq" class="control-label">QQ</label>
+                <input id="form-settings-profile-qq" class="form-control ng-pristine ng-valid" type="text" ng-model="userDetail.oicq">
+              </div>
+            </div>
+          </div>
+
+          <!-- <button type="submit" class="btn btn-default" ng-click="updateUserDetail()" ng-disabled="!user_detail_form.$valid" translate="ACTION_SAVE"></button> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal" ng-click="$hide()">关闭</button>
+        <button type="button" class="btn btn-primary" ng-click="updateUserDetail();$hide()">保存</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal --></body>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="CleanDialogSettings">
+		<item value="500" key="DIALOG_WIDTH"/>
+		<item value="true" key="TOGGLE_SELECTED"/>
+		<item value="390" key="DIALOG_HEIGHT"/>
+		<item value="260" key="DIALOG_Y_ORIGIN"/>
+		<item value="710" key="DIALOG_X_ORIGIN"/>
+	</section>
+	<section name="ExternalProjectImportWizard">
+		<item value="false" key="WizardProjectsImportPage.STORE_NESTED_PROJECTS"/>
+		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
+		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
+		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="E:\workspace\rongcheng-Globalexpress"/>
+			<item value="E:\workspace\app"/>
+			<item value="E:\rongcheng-Globalexpress"/>
+			<item value="E:\workspace\Globalexpress"/>
+			<item value="E:\workspace\rongcheng-CMS"/>
+			<item value="E:\workspace\smallbug"/>
+			<item value="C:\Users\Administrator\Desktop\rcb-ms2"/>
+			<item value="C:\Users\Administrator\Desktop\ChatHome-1.0"/>
+			<item value="C:\Users\Administrator\Desktop\Shizhong"/>
+			<item value="C:\Users\Administrator\Desktop\WarehouseManagementSystem"/>
+			<item value="C:\Users\Administrator\Desktop\jt20-2"/>
+			<item value="E:\rcbms"/>
+			<item value="E:\workspace\rcb-ms"/>
+			<item value="C:\Users\Administrator\Desktop\rcb-ms"/>
+			<item value="E:\workspace\rcbms"/>
+			<item value="F:\rcb-ms"/>
+			<item value="C:\Users\Administrator\Desktop\text"/>
+			<item value="C:\Users\Administrator\Desktop\netctoss"/>
+			<item value="F:\netctoss"/>
+			<item value="E:\workspace\rcb-ms-me"/>
+		</list>
+		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
+			<item value=""/>
+		</list>
+	</section>
+	<section name="ResourceNavigator">
+		<item value="Aggregate for window 1494931275350" key="ResourceWorkingSetFilter.STORE_WORKING_SET"/>
+		<item value="1" key="ResourceViewer.STORE_SORT_TYPE"/>
+	</section>
+	<section name="NewWizardAction">
+		<item value="org.eclipse.m2e.core.wizards.Maven2ProjectWizard" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
+		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.eclipse.ui.Basic"/>
+			<item value="org.eclipse.m2e"/>
+		</list>
+	</section>
+	<section name="BasicNewProjectResourceWizard">
+	</section>
+</section>

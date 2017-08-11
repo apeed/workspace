@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.globalexpress.web.cms.dao.BlockChannelDAO">
+	
+	<!-- /**
+     * 查询 栏目通道管理表 条数
+     * 
+     * <p>根据父类ID查找栏目所有内容的条数，是否授权暂时不用。
+     * 
+     * @param parentId 父类ID
+     * @param ownerId 主账号ID
+     * @param authorization 是否授权
+     * @return 条数
+     * @author 赵滨
+     */ -->
+    <select id="countBlockChannelByParentId" resultType="int" >
+        select 
+            count(id) 
+        from 
+            block_channel
+        where
+            parent_id = #{0}
+        and
+            owner_id = #{1}
+    </select>
+	
+	<!-- /**
+     * 查询 栏目通道管理表
+     * 
+     * <p>查找对象集合，是否授权暂时不用。
+     * 
+     * @param params 是否授权, 主账户ID, 栏目类型[]
+     * @return List<BlockChannel> 栏目通道管理表 集合
+     * @author 赵滨
+     */ -->
+    <select id="listBlockChannelByRecordType" 
+            resultType="com.globalexpress.web.entity.BlockChannel">
+        select  
+            id,
+    
+		    block_title as blockTitle,
+		    
+		    block_subtitle as blockSubtitle,
+		    
+		    en_title as enTitle,
+		    
+		    interface_name as interfaceName,
+		    
+		    block_profile as blockProfile,
+		    
+		    block_label as blockLabel,
+		    
+		    block_keyword as blockKeyword,
+		    
+		    icon_url as iconUrl,
+		    
+		    icon_direct_link as iconDirectLink,
+		    
+		    click,
+		    
+		    parent_id as parentId,
+		    
+		    record_type as recordType,
+		    
+		    user_sequence as userSequence,
+		    
+		    is_show as 'show',
+		    
+		    reserved1,
+		    
+		    note,
+		    
+		    owner_id as ownerId,
+		    
+		    operator_id as operatorId,
+		    
+		    is_authorization as authorization,
+		    
+		    is_apply as apply,
+		    
+		    gmt_create as gmtCreate,
+		    
+		    gmt_modified as gmtModified
+        from 
+            block_channel
+        <trim prefix="WHERE" prefixOverrides="AND"> 
+            <!-- <if test="authorized != null">is_authorized = #{authorized} and </if>  -->
+            <if test="ownerId != null">owner_id = #{ownerId}</if> 
+            <if test="recordType!=null and recordType.length!=0">and record_type IN
+                <foreach collection="recordType" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="true"> order by user_sequence asc </if> 
+        </trim> 
+    </select>
+	
+	<!-- /**
+     * 查询 栏目通道管理表
+     * 
+     * <p>根据模糊查询对象集合，是否授权暂时不用。
+     * 
+     * @param params 是否授权, 主账户ID, 栏目类型[], 查询关键内容
+     * @returnList<BlockChannel> 栏目通道管理表 集合
+     * @author 赵滨
+     */ -->
+    <select id="listBlockChannelByRecordTypeLike" 
+            resultType="com.globalexpress.web.entity.BlockChannel">
+        select  
+            id,
+    
+            block_title as blockTitle,
+            
+            block_subtitle as blockSubtitle,
+            
+            en_title as enTitle,
+            
+            interface_name as interfaceName,
+            
+            block_profile as blockProfile,
+            
+            block_label as blockLabel,
+            
+            block_keyword as blockKeyword,
+            
+            icon_url as iconUrl,
+            
+            icon_direct_link as iconDirectLink,
+            
+            click,
+            
+            parent_id as parentId,
+            
+            record_type as recordType,
+            
+            user_sequence as userSequence,
+            
+            is_show as 'show',
+            
+            reserved1,
+            
+            note,
+            
+            owner_id as ownerId,
+            
+            operator_id as operatorId,
+            
+            is_authorization as authorization,
+            
+            is_apply as apply,
+            
+            gmt_create as gmtCreate,
+            
+            gmt_modified as gmtModified
+        from 
+            block_channel
+        <trim prefix="WHERE" prefixOverrides="AND"> 
+            <!-- <if test="authorized != null">is_authorized = #{authorized} and </if>  -->
+            <if test="ownerId != null">owner_id = #{ownerId}</if> 
+            <if test="recordType!=null and recordType.length!=0">and record_type IN
+                <foreach collection="recordType" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="keywords != null">and
+                    (block_title like concat('%',#{keywords},'%')
+                or
+                    block_subtitle like concat('%',#{keywords},'%')
+                or
+                    block_profile like concat('%',#{keywords},'%')
+                or
+                    block_label like concat('%',#{keywords},'%'))
+                order by 
+                    user_sequence asc 
+            </if> 
+        </trim> 
+        
+    </select>
+            
+    <!-- /**
+     * 保存 栏目通道管理表
+     * 
+     * <p>传入栏目对象，MyBatis使用对象保存栏目表。
+     * 
+     * @param BlockChannel 栏目对象
+     * @return row 存储的行数
+     * @author 赵滨
+     */ -->
+    <insert id="saveBlockChannel"
+            parameterType="com.globalexpress.web.entity.BlockChannel">
+        insert into 
+            block_channel
+        (  
+            id,
+            
+			block_title,
+			
+			block_subtitle,
+			
+			en_title,
+			
+			interface_name,
+			
+			block_profile,
+			
+			block_label,
+			
+			block_keyword,
+			
+			icon_url,
+			
+			icon_direct_link,
+			
+			click,
+			
+			parent_id,
+			
+			record_type,
+			
+			user_sequence,
+			
+			is_show,
+			
+			reserved1,
+			
+			note,
+			
+			owner_id,
+			
+			operator_id,
+			
+			is_authorization,
+			
+			is_apply,
+			
+			gmt_create,
+			
+			gmt_modified
+        )           
+        values 
+        (
+            #{id},
+
+			#{blockTitle},
+			
+			#{blockSubtitle},
+			
+			#{enTitle},
+			
+			#{interfaceName},
+			
+			#{blockProfile},
+			
+			#{blockLabel},
+			
+			#{blockKeyword},
+			
+			#{iconUrl},
+			
+			#{iconDirectLink},
+			
+			#{click},
+			
+			#{parentId},
+			
+			#{recordType},
+			
+			#{userSequence},
+			
+			#{show},
+			
+			#{reserved1},
+			
+			#{note},
+			
+			#{ownerId},
+			
+			#{operatorId},
+			
+			#{authorization},
+			
+			#{apply},
+			
+			#{gmtCreate},
+			
+			#{gmtModified}
+        )
+    </insert>
+    
+    <!-- /**
+     * 移除 栏目通道管理表
+     * 
+     * <p>根据ID删除指定栏目，是否授权暂时不用。
+     * 
+     * @param blockChannelId 栏目ID
+     * @param ownerId 主账号ID
+     * @param authorization 是否授权
+     * @return row 删除的行数
+     * @author 赵滨
+     */ -->
+    <delete id="removeBlockChannelById">
+        delete from 
+            block_channel 
+        where 
+            id=#{0}
+        and
+            owner_id=#{1} 
+    </delete>
+    
+    <!-- /**
+     * 查询 栏目通道管理表 序号
+     * 
+     * <p>根据父类ID查找最大序号，是否授权暂时不用
+     * 
+     * @param parentId 父类ID
+     * @param ownerId 主账号ID
+     * @param authorization 是否授权
+     * @return userSequence 序号
+     * @author 赵滨
+     */ -->
+    <select id="getBlockChannelMaxUserSequenceByParentId" resultType="int" >
+        select 
+            ifnull(max(user_sequence),0)
+        from 
+            block_channel
+        <trim prefix="WHERE" prefixOverrides="AND"> 
+            <!-- <if test="authorized != null">is_authorized = #{authorized} and </if>  -->
+            <if test="ownerId != null">owner_id = #{ownerId}</if> 
+            <if test="parentId != null">and parent_id = #{parentId}</if> 
+            <if test="recordType!=null and recordType.length!=0">and record_type IN
+                <foreach collection="recordType" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </trim> 
+    </select>
+    
+    <!-- /**
+     * 查询 栏目通道管理表
+     * 
+     * <p>根据栏目ID查找单条栏目，是否授权暂时不用
+     * 
+     * @param blockChannelId 栏目ID
+     * @param ownerId 主账号ID
+     * @param authorization 是否授权
+     * @return
+     */ -->
+    <select id="getBlockChannelById" 
+            resultType="com.globalexpress.web.entity.BlockChannel">
+        select  
+            id,
+    
+            block_title as blockTitle,
+            
+            block_subtitle as blockSubtitle,
+            
+            en_title as enTitle,
+            
+            interface_name as interfaceName,
+            
+            block_profile as blockProfile,
+            
+            block_label as blockLabel,
+            
+            block_keyword as blockKeyword,
+            
+            icon_url as iconUrl,
+            
+            icon_direct_link as iconDirectLink,
+            
+            click,
+            
+            parent_id as parentId,
+            
+            record_type as recordType,
+            
+            user_sequence as userSequence,
+            
+            is_show as 'show',
+            
+            reserved1,
+            
+            note,
+            
+            owner_id as ownerId,
+            
+            operator_id as operatorId,
+            
+            is_authorization as authorization,
+            
+            is_apply as apply,
+            
+            gmt_create as gmtCreate,
+            
+            gmt_modified as gmtModified
+        from 
+            block_channel
+        where
+            id=#{0}
+        and
+            owner_id = #{1}
+    </select>
+    
+    <!-- /**
+     * 修改 栏目通道管理表
+     * 
+     * <p>传入栏目对象修改栏目内容
+     * 
+     * @param blockChannel 栏目
+     * @return row 行数
+     * @author 赵滨
+     */ -->
+    <update id="modifyBlockChannel" 
+            parameterType="com.globalexpress.web.entity.BlockChannel">
+        update 
+            block_channel
+        set
+		    block_title=#{blockTitle},
+		    
+		    block_subtitle=#{blockSubtitle},
+		    
+		    en_title=#{enTitle},
+		    
+		    interface_name=#{interfaceName},
+		    
+		    block_profile=#{blockProfile},
+		    
+		    block_label=#{blockLabel},
+		    
+		    block_keyword=#{blockKeyword},
+		    
+		    icon_url=#{iconUrl},
+		    
+		    icon_direct_link=#{iconDirectLink},
+		    
+		    click=#{click},
+		    
+		    parent_id=#{parentId},
+		    
+		    record_type=#{recordType},
+		    
+		    user_sequence=#{userSequence},
+		    
+		    is_show=#{show},
+		    
+		    reserved1=#{reserved1},
+		    
+		    note=#{note},
+		    
+		    <!-- owner_id=#{ownerId}, -->
+		    
+		    operator_id=#{operatorId},
+		    
+		    is_authorization=#{authorization},
+		    
+		    is_apply=#{apply},
+		    
+		    <!-- gmt_create=#{gmtCreate}, -->
+		    
+		    gmt_modified=#{gmtModified}
+        where 
+            owner_id=#{ownerId} 
+        and 
+            id=#{id}
+    </update>
+    
+    
+    <!-- /**
+     * 查询 栏目通道管理表 集合
+     * 
+     * <p>根据父类ID查找栏目集合，是否授权暂时不用。
+     * 
+     * @param parentId 父类ID
+     * @param ownerId 主账号ID
+     * @param authorization 是否授权
+     * @return List<BlockChannel> 栏目集合
+     * @author 赵滨
+     */ -->
+    <!-- <select id="listBlockChannelByParentId" 
+            resultType="com.globalexpress.web.entity.BlockChannel">
+        select  
+            id,
+    
+            block_title as blockTitle,
+            
+            block_subtitle as blockSubtitle,
+            
+            en_title as enTitle,
+            
+            interface_name as interfaceName,
+            
+            block_profile as blockProfile,
+            
+            block_label as blockLabel,
+            
+            block_keyword as blockKeyword,
+            
+            icon_url as iconUrl,
+            
+            icon_direct_link as iconDirectLink,
+            
+            click,
+            
+            parent_id as parentId,
+            
+            record_type as recordType,
+            
+            user_sequence as userSequence,
+            
+            is_show as 'show',
+            
+            reserved1,
+            
+            note,
+            
+            owner_id as ownerId,
+            
+            operator_id as operatorId,
+            
+            is_authorization as authorization,
+            
+            is_apply as apply,
+            
+            gmt_create as gmtCreate,
+            
+            gmt_modified as gmtModified
+        from 
+            block_channel
+        where
+            parent_id=#{0}
+        and
+            owner_id = #{1}
+    </select> -->
+    
+    
+    
+</mapper>
+
+
+
+
+
+
+
+
+

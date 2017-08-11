@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.globalexpress.web.foreground.dao.ForegroundBlockChannelDao" >
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.BlockChannel" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="block_title" property="blockTitle" jdbcType="VARCHAR" />
+    <result column="block_subtitle" property="blockSubtitle" jdbcType="VARCHAR" />
+    <result column="en_title" property="enTitle" jdbcType="VARCHAR" />
+    <result column="interface_name" property="interfaceName" jdbcType="VARCHAR" />
+    <result column="block_profile" property="blockProfile" jdbcType="VARCHAR" />
+    <result column="block_label" property="blockLabel" jdbcType="VARCHAR" />
+    <result column="block_keyword" property="blockKeyword" jdbcType="VARCHAR" />
+    <result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />
+    <result column="icon_direct_link" property="iconDirectLink" jdbcType="VARCHAR" />
+    <result column="click" property="click" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="record_type" property="recordType" jdbcType="BIT" />
+    <result column="user_sequence" property="userSequence" jdbcType="INTEGER" />
+    <result column="is_show" property="show" jdbcType="BIT" />
+    <result column="reserved1" property="reserved1" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="BIGINT" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="is_authorization" property="authorization" jdbcType="BIT" />
+    <result column="is_apply" property="apply" jdbcType="BIT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, block_title, block_subtitle, en_title, interface_name, block_profile, block_label, 
+    block_keyword, icon_url, icon_direct_link, click, parent_id, record_type, user_sequence, 
+    is_show, reserved1, note, owner_id, operator_id, is_authorization, is_apply, gmt_create, 
+    gmt_modified
+  </sql>
+  <select id="listSelective" resultMap="BaseResultMap" parameterType="java.util.ArrayList" >
+    select 
+    <include refid="Base_Column_List" />
+    from block_channel
+    where 
+  			owner_id = #{ownerId,jdbcType=BIGINT}
+  			and is_show = 1
+  		<if test="id != null" >
+	   		and id = #{id,jdbcType=BIGINT}
+	    </if>
+	  		<if test="blockTitle != null" >
+	        and block_title = #{blockTitle,jdbcType=VARCHAR}
+	    </if>
+	    <if test="blockSubtitle != null" >
+	        and block_subtitle = #{blockSubtitle,jdbcType=VARCHAR}
+	    </if>
+	    <if test="enTitle != null" >
+	        and en_title = #{enTitle,jdbcType=VARCHAR}
+	    </if>
+	    <if test="interfaceName != null" >
+	        and interface_name = #{interfaceName,jdbcType=VARCHAR}
+	    </if>
+	    <if test="blockProfile != null" >
+	        and block_profile = #{blockProfile,jdbcType=VARCHAR}
+	    </if>
+	    <if test="blockLabel != null" >
+	        and block_label = #{blockLabel,jdbcType=VARCHAR}
+	    </if>
+	    <if test="blockKeyword != null" >
+	        and block_keyword = #{blockKeyword,jdbcType=VARCHAR}
+	    </if>
+	    <if test="iconUrl != null" >
+	        and icon_url = #{iconUrl,jdbcType=VARCHAR}
+	    </if>
+	    <if test="iconDirectLink != null" >
+	        and icon_direct_link = #{iconDirectLink,jdbcType=VARCHAR}
+	    </if>
+	    <if test="click != null" >
+	        and click = #{click,jdbcType=INTEGER}
+	    </if>
+	    <if test="parentId != null" >
+	        and parent_id = #{parentId,jdbcType=BIGINT}
+	    </if>
+	    <if test="recordType != null" >
+	        and record_type = #{recordType,jdbcType=BIT}
+	    </if>
+	    <if test="userSequence != null" >
+	        and user_sequence = #{userSequence,jdbcType=INTEGER}
+	    </if>
+	    <if test="reserved1 != null" >
+	        and reserved1 = #{reserved1,jdbcType=VARCHAR}
+	    </if>
+	    <if test="note != null" >
+	        and note = #{note,jdbcType=VARCHAR}
+	    </if>
+	    <if test="operatorId != null" >
+	        and operator_id = #{operatorId,jdbcType=BIGINT}
+	    </if>
+	    <if test="authorization != null" >
+	        and is_authorization = #{authorization,jdbcType=BIT}
+	    </if>
+	    <if test="apply != null" >
+	        and is_apply = #{apply,jdbcType=BIT}
+	    </if>
+	    <if test="gmtCreate != null" >
+	        and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="gmtModified != null" >
+	        and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+	    </if>
+    order by parent_id, user_sequence, id desc
+  </select>
+  <select id="listByIdList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from block_channel
+    where 
+   		owner_id = #{param1,jdbcType=BIGINT} and
+   		is_show = 1 and
+   		id in
+   			<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+            	#{item}  
+     		</foreach>
+    order by gmt_create desc
+  </select>
+</mapper>

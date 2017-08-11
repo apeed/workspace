@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.LeaveMessageDAO">
+
+	<insert id="saveLeaveMessage" parameterType="com.rongcheng.rcb.entity.LeaveMessage">
+		insert into leave_message (
+			name,
+			tel,
+			email,
+			content)
+		values 
+			(#{name},#{tel},#{email},#{content})
+	</insert>
+	
+	<delete id="delLeaveMessageById" parameterType="String" >
+	 delete  from leave_message where id=#{id}
+	 </delete>
+	 
+	 <delete id="delLeaveMessagesById" parameterType="String" >
+	 delete  from leave_message where id in 
+	 								<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+				                    	#{item}  
+               						</foreach>
+	 </delete>
+	 
+	 <select id="findLeaveMessageByPage" parameterType="int" resultType="com.rongcheng.rcb.entity.LeaveMessage">
+	select 
+		id, 
+	NAME, 
+	tel, 
+	email, 
+	create_time creatTime,
+	content,
+	reply, 
+	reply_time replyTime, 
+	is_display display, 
+	seq, 
+	remark
+	 	from leave_message  
+		order by create_time desc
+		limit #{0},#{1}
+	</select>
+	 <select id="getLeaveMessageById" parameterType="int" resultType="com.rongcheng.rcb.entity.LeaveMessage">
+	select 
+		id, 
+	NAME, 
+	tel, 
+	email, 
+	create_time creatTime, 
+	content,
+	reply, 
+	reply_time replyTime, 
+	is_display display, 
+	seq, 
+	remark
+	 	from leave_message  
+	where id=#{id}
+	</select>
+	<select id="findLeaveMessageCount" resultType="String">select count(id) from leave_message</select>
+	<update id="updateLeaveMessage" parameterType="com.rongcheng.rcb.entity.LeaveMessage">
+		update
+			leave_message
+		set
+			reply=#{reply},
+			is_display=#{display},
+			seq=#{seq},
+			remark=#{remark}
+		where
+			id=#{id}
+	</update>
+</mapper>

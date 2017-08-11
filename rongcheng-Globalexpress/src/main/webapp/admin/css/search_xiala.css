@@ -1,0 +1,23 @@
+.search_xiala_box{
+	width:50%;
+	/*border: 1px solid #ddd;*/
+	background: #fff;
+	border-radius: 3px;
+	box-shadow: 0 4px 10px 2px #ccc;
+	position:absolute;
+	left:0;
+	top:100%;
+	z-index:999;
+	padding-left: 0;
+	
+ 	display: none; 
+}
+.search_xiala_box li{
+	height:30px;
+	line-height: 30px;
+	border-bottom: 1px solid #ddd;
+	padding:0 20px;
+}
+.search_xiala_box li:last-child{
+	border-bottom: 0;
+}

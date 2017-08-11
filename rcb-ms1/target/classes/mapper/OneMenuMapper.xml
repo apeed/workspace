@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.OneMenuDAO">
+	<select id="getTitleById" parameterType="int" resultType="java.lang.String">
+		SELECT
+			title
+		FROM 
+			one_menu
+		where
+			id=#{id} and is_display=1
+	</select>
+	<select id="listOneMenuByFrontRow" parameterType="int" resultType="com.rongcheng.rcb.entity.OneMenu">
+		SELECT 	
+			id, 
+			title, 
+			iconUrl, 
+			link, 
+			profile, 
+			keyword, 
+			display, 
+			seq, 
+			remark
+		FROM (
+			SELECT 	
+				id, 
+				title, 
+				icon_url	iconUrl, 
+				link, 
+				profile, 
+				keyword, 
+				is_display	display, 
+				seq, 
+				remark
+			FROM 
+				one_menu
+			order by
+				seq
+			LIMIT 0, #{num}) o
+		WHERE display=1
+	</select>
+	<select id="getOneMenuById" parameterType="int" resultType="com.rongcheng.rcb.entity.OneMenu">
+		SELECT 	
+			id, 
+			title, 
+			icon_url	iconUrl, 
+			link, 
+			profile, 
+			keyword, 
+			is_display	display, 
+			seq, 
+			remark
+		FROM 
+			one_menu
+		where
+			id=#{id};
+	</select>
+	
+	<!-- ////zb////////////// -->
+	<select id="listOneMenuAll" 
+			  resultType="Map">
+			  
+		select  
+			id,
+			title,
+			icon_url,
+			link,
+			profile,
+			keyword,
+			is_display,
+			seq,
+			remark
+		from 
+			one_menu 
+		order by
+				seq
+	</select>
+	
+	<insert id="insertOneMenu" 
+			parameterType="com.rongcheng.rcb.entity.OneMenu">
+			  
+		insert into one_menu 
+		(  
+			title,
+			icon_url,
+			link,
+			profile,
+			keyword,
+			is_display,
+			seq,
+			remark 
+		)			
+		values 
+		(
+			#{title},
+			#{iconUrl},
+			#{link},
+			#{profile},
+			#{keyword},
+			#{display},
+			#{seq},
+			#{remark}
+		) 
+		
+	</insert>
+	
+	<!-- <select id="getOneMenuById" 
+			parameterType="Integer"
+			resultType="com.rongcheng.rcb.entity.OneMenu">
+			  
+		select  
+			id,
+			title,
+			icon_url as iconUrl,
+			link,
+			profile,
+			keyword,
+			is_display as display,
+			seq,
+			remark 			
+		from 
+			one_menu 
+		where id=#{id}
+		
+	</select> -->
+	
+	<update id="updateOneMenu" 
+			parameterType="com.rongcheng.rcb.entity.OneMenu">
+		   
+		update one_menu set
+			title=#{title},
+			icon_url=#{iconUrl},
+			link=#{link},
+			profile=#{profile},
+			keyword=#{keyword},
+			is_display=#{display},
+			seq=#{seq},
+			remark=#{remark}
+		where id=#{id}
+		
+	</update>
+	
+	
+	<delete id="deleteOneMenuById"
+			parameterType="Integer">
+		delete from one_menu
+		where id=#{id}
+	</delete>
+	<!-- ////zb////////////// -->
+	
+</mapper>

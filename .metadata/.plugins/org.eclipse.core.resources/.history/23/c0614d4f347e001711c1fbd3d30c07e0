@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.globalexpress.web.cms.dao.ItemInfoDAO" >
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.ItemInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="item_sku" property="itemSku" jdbcType="BIGINT" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="item_short_name" property="itemShortName" jdbcType="VARCHAR" />
+    <result column="item_en_title" property="itemEnTitle" jdbcType="VARCHAR" />
+    <result column="interface_name" property="interfaceName" jdbcType="VARCHAR" />
+    <result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />
+    <result column="icon_direct_link" property="iconDirectLink" jdbcType="VARCHAR" />
+    <result column="item_profile" property="itemProfile" jdbcType="VARCHAR" />
+    <result column="item_image1" property="itemImage1" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="item_brand" property="itemBrand" jdbcType="VARCHAR" />
+    <result column="item_series" property="itemSeries" jdbcType="VARCHAR" />
+    <result column="item_color" property="itemColor" jdbcType="VARCHAR" />
+    <result column="item_size" property="itemSize" jdbcType="VARCHAR" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="BIT" />
+    <result column="normal_price" property="normalPrice" jdbcType="DECIMAL" />
+    <result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+    <result column="item_location" property="itemLocation" jdbcType="VARCHAR" />
+    <result column="stock_quantity" property="stockQuantity" jdbcType="DECIMAL" />
+    <result column="promotion_price" property="promotionPrice" jdbcType="DECIMAL" />
+    <result column="sale_quantity" property="saleQuantity" jdbcType="DECIMAL" />
+    <result column="label_id" property="labelId" jdbcType="VARCHAR" />
+    <result column="item_keyword" property="itemKeyword" jdbcType="VARCHAR" />
+    <result column="is_show" property="show" jdbcType="BIT" />
+    <result column="user_sequence" property="userSequence" jdbcType="INTEGER" />
+    <result column="reserved1" property="reserved1" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="owner_id" property="ownerId" jdbcType="BIGINT" />
+    <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+    <result column="is_authorized" property="authorized" jdbcType="BIT" />
+    <result column="is_apply" property="apply" jdbcType="BIT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.globalexpress.web.entity.ItemInfo" extends="BaseResultMap" >
+    <result column="item_detail" property="itemDetail" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_id, item_sku, item_name, item_short_name, item_en_title, interface_name, 
+    icon_url, icon_direct_link, item_profile, item_image1, category_id, item_brand, item_series, 
+    item_color, item_size, bar_code, item_type, normal_price, cost_price, item_location, 
+    stock_quantity, promotion_price, sale_quantity, label_id, item_keyword, is_show, 
+    user_sequence, reserved1, note, owner_id, operator_id, is_authorized, is_apply, gmt_create, 
+    gmt_modified
+  </sql>
+  <sql id="Blob_Column_List" >
+    item_detail
+  </sql>
+  <select id="countByOwnerIdAndKeyword" resultType="int">
+    select 
+    	count(*)
+    from item_info
+    where owner_id = #{0,jdbcType=BIGINT}
+    <if test="param2!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where block_id = #{1 } and owner_id = #{0} and content_type = 4)
+    </if>
+    <if test="param3!=null">
+	    and (
+	    	item_sku like CONCAT('%',#{2},'%') or
+	    	item_name like CONCAT('%',#{2},'%') or
+	    	item_short_name like CONCAT('%',#{2},'%') or
+	    	item_brand like CONCAT('%',#{2},'%') or
+	    	item_series like CONCAT('%',#{2},'%') or
+	    	item_color like CONCAT('%',#{2},'%') or
+	    	item_size like CONCAT('%',#{2},'%') or
+	    	bar_code like CONCAT('%',#{2},'%') or
+	    	item_profile like CONCAT('%',#{2},'%') or
+	    	item_detail like CONCAT('%',#{2},'%') or
+	    	item_location like CONCAT('%',#{2},'%') or
+	    	label_id like CONCAT('%',#{2},'%') or
+	    	note like CONCAT('%',#{2},'%')
+	    )
+    </if>
+  </select>
+  <select id="listByOwnerIdAndKeyword" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item_info
+    where owner_id = #{ownerId,jdbcType=BIGINT}
+    <if test="blockChannelId!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where block_id = #{blockChannelId } and owner_id = #{ownerId} and content_type = 4)
+    </if>
+    <if test="keyword!=null">
+	    and (
+	    	item_sku like CONCAT('%',#{keyword},'%') or
+	    	item_name like CONCAT('%',#{keyword},'%') or
+	    	item_short_name like CONCAT('%',#{keyword},'%') or
+	    	item_brand like CONCAT('%',#{keyword},'%') or
+	    	item_series like CONCAT('%',#{keyword},'%') or
+	    	item_color like CONCAT('%',#{keyword},'%') or
+	    	item_size like CONCAT('%',#{keyword},'%') or
+	    	bar_code like CONCAT('%',#{keyword},'%') or
+	    	item_profile like CONCAT('%',#{keyword},'%') or
+	    	item_detail like CONCAT('%',#{keyword},'%') or
+	    	item_location like CONCAT('%',#{keyword},'%') or
+	    	label_id like CONCAT('%',#{keyword},'%') or
+	    	note like CONCAT('%',#{keyword},'%')
+	    )
+    </if>
+    order by id desc
+    limit #{start},#{rows}
+  </select>
+  <select id="getSelective" resultMap="ResultMapWithBLOBs" parameterType="com.globalexpress.web.entity.ItemInfo" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item_info
+    where  owner_id = #{ownerId,jdbcType=BIGINT}
+    and id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByOwnerIdAndIdArray">
+    delete from item_info
+    where owner_id = #{param1,jdbcType=BIGINT} and id in
+    												<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+								                    	#{item}  
+				               						</foreach>
+  </delete>
+  <insert id="insertSelective" parameterType="com.globalexpress.web.entity.ItemInfo" >
+    insert into item_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="itemSku != null" >
+        item_sku,
+      </if>
+      <if test="itemName != null" >
+        item_name,
+      </if>
+      <if test="itemShortName != null" >
+        item_short_name,
+      </if>
+      <if test="itemEnTitle != null" >
+        item_en_title,
+      </if>
+      <if test="interfaceName != null" >
+        interface_name,
+      </if>
+      <if test="iconUrl != null" >
+        icon_url,
+      </if>
+      <if test="iconDirectLink != null" >
+        icon_direct_link,
+      </if>
+      <if test="itemProfile != null" >
+        item_profile,
+      </if>
+      <if test="itemImage1 != null" >
+        item_image1,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="itemBrand != null" >
+        item_brand,
+      </if>
+      <if test="itemSeries != null" >
+        item_series,
+      </if>
+      <if test="itemColor != null" >
+        item_color,
+      </if>
+      <if test="itemSize != null" >
+        item_size,
+      </if>
+      <if test="barCode != null" >
+        bar_code,
+      </if>
+      <if test="itemType != null" >
+        item_type,
+      </if>
+      <if test="normalPrice != null" >
+        normal_price,
+      </if>
+      <if test="costPrice != null" >
+        cost_price,
+      </if>
+      <if test="itemLocation != null" >
+        item_location,
+      </if>
+      <if test="stockQuantity != null" >
+        stock_quantity,
+      </if>
+      <if test="promotionPrice != null" >
+        promotion_price,
+      </if>
+      <if test="saleQuantity != null" >
+        sale_quantity,
+      </if>
+      <if test="labelId != null" >
+        label_id,
+      </if>
+      <if test="itemKeyword != null" >
+        item_keyword,
+      </if>
+      <if test="show != null" >
+        is_show,
+      </if>
+        user_sequence,
+      <if test="reserved1 != null" >
+        reserved1,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="ownerId != null" >
+        owner_id,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="authorized != null" >
+        is_authorized,
+      </if>
+      <if test="apply != null" >
+        is_apply,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="itemDetail != null" >
+        item_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="itemSku != null" >
+        #{itemSku,jdbcType=BIGINT},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemShortName != null" >
+        #{itemShortName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemEnTitle != null" >
+        #{itemEnTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null" >
+        #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null" >
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="iconDirectLink != null" >
+        #{iconDirectLink,jdbcType=VARCHAR},
+      </if>
+      <if test="itemProfile != null" >
+        #{itemProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="itemImage1 != null" >
+        #{itemImage1,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemBrand != null" >
+        #{itemBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="itemSeries != null" >
+        #{itemSeries,jdbcType=VARCHAR},
+      </if>
+      <if test="itemColor != null" >
+        #{itemColor,jdbcType=VARCHAR},
+      </if>
+      <if test="itemSize != null" >
+        #{itemSize,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null" >
+        #{itemType,jdbcType=BIT},
+      </if>
+      <if test="normalPrice != null" >
+        #{normalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null" >
+        #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="itemLocation != null" >
+        #{itemLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="stockQuantity != null" >
+        #{stockQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionPrice != null" >
+        #{promotionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="saleQuantity != null" >
+        #{saleQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="labelId != null" >
+        #{labelId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemKeyword != null" >
+        #{itemKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="show != null" >
+        #{show,jdbcType=BIT},
+      </if>
+      	(SELECT
+			MAX(IFNULL(user_sequence,0))+1
+		FROM
+			item_info i
+		WHERE owner_id=#{ownerId,jdbcType=BIGINT}),
+      <if test="reserved1 != null" >
+        #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null" >
+        #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="authorized != null" >
+        #{authorized,jdbcType=BIT},
+      </if>
+      <if test="apply != null" >
+        #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemDetail != null" >
+        #{itemDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateSelective" parameterType="com.globalexpress.web.entity.ItemInfo" >
+    update item_info
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="itemSku != null" >
+        item_sku = #{itemSku,jdbcType=BIGINT},
+      </if>
+      <if test="itemName != null" >
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemShortName != null" >
+        item_short_name = #{itemShortName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemEnTitle != null" >
+        item_en_title = #{itemEnTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null" >
+        interface_name = #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null" >
+        icon_url = #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="iconDirectLink != null" >
+        icon_direct_link = #{iconDirectLink,jdbcType=VARCHAR},
+      </if>
+      <if test="itemProfile != null" >
+        item_profile = #{itemProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="itemImage1 != null" >
+        item_image1 = #{itemImage1,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemBrand != null" >
+        item_brand = #{itemBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="itemSeries != null" >
+        item_series = #{itemSeries,jdbcType=VARCHAR},
+      </if>
+      <if test="itemColor != null" >
+        item_color = #{itemColor,jdbcType=VARCHAR},
+      </if>
+      <if test="itemSize != null" >
+        item_size = #{itemSize,jdbcType=VARCHAR},
+      </if>
+      <if test="barCode != null" >
+        bar_code = #{barCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null" >
+        item_type = #{itemType,jdbcType=BIT},
+      </if>
+      <if test="normalPrice != null" >
+        normal_price = #{normalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null" >
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="itemLocation != null" >
+        item_location = #{itemLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="stockQuantity != null" >
+        stock_quantity = #{stockQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionPrice != null" >
+        promotion_price = #{promotionPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="saleQuantity != null" >
+        sale_quantity = #{saleQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="labelId != null" >
+        label_id = #{labelId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemKeyword != null" >
+        item_keyword = #{itemKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="show != null" >
+        is_show = #{show,jdbcType=BIT},
+      </if>
+      <if test="userSequence != null" >
+        user_sequence = #{userSequence,jdbcType=INTEGER},
+      </if>
+      <if test="reserved1 != null" >
+        reserved1 = #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="authorized != null" >
+        is_authorized = #{authorized,jdbcType=BIT},
+      </if>
+      <if test="apply != null" >
+        is_apply = #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="itemDetail != null" >
+        item_detail = #{itemDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+    	and owner_id = #{ownerId,jdbcType=BIGINT}
+  </update>
+  <select id="getItemSku" resultType="Map">
+	  SELECT id,item_sku as itemSku 
+	  FROM item_info 
+	  where owner_id=#{1}
+		  	and CONCAT(IFNULL(item_sku,''),
+		  	IFNULL(item_sku,'')) 
+			like CONCAT('%',#{0},'%')
+  </select>
+</mapper>

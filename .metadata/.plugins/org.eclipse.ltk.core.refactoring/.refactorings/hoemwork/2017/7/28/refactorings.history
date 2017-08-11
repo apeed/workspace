@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 3 elements to &apos;js&apos;&#x0D;&#x0A;- Original project: &apos;hoemwork&apos;&#x0D;&#x0A;- Destination element: &apos;js&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     addresserPublic.js&#x0D;&#x0A;     addresserAdd.js&#x0D;&#x0A;     addresser.js" description="Copy files" element1="homewoerk/src/main/webapp/js/addresserPublic.js" element2="homewoerk/src/main/webapp/js/addresserAdd.js" element3="homewoerk/src/main/webapp/js/addresser.js" files="3" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1500085541179" target="/rongcheng-CMS/src/main/webapp/js" units="0" version="1.0"/>
+</session>

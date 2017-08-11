@@ -1,0 +1,257 @@
+package com.globalexpress.web.cms.controller;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.globalexpress.web.cms.service.OrderInfo.OrderInfoService;
+import com.globalexpress.web.entity.ItemInfo;
+import com.globalexpress.web.entity.OrderInfo;
+import com.globalexpress.web.entity.OrderItemLink;
+import com.globalexpress.web.entity.UserInfo;
+import com.globalexpress.web.util.JsonResult;
+@Controller
+@RequestMapping("/admin")
+public class OrderInfoController {
+	private int rows=20;
+//	@Value("#{config['ownerId']}")
+//	private Long ownerId;
+	@Resource
+	private OrderInfoService service;
+	
+	@RequestMapping("/indent.do")
+	public String toIndent(){
+		return "admin/indent/indent";
+	}
+	@RequestMapping("/indentAdd.do")
+	public String indentAdd(){
+		return "admin/indent/indentAdd";
+	}
+	@RequestMapping("/indentPublic.do")
+	public String indentPublic(){
+		return "admin/indent/indentPublic";
+	}
+	//根据页码检索商品信息
+		@RequestMapping("/loadList_indent.do")
+		@ResponseBody
+		public JsonResult loadOrderInfo(HttpSession session,String page) {
+			return loadOrderInfos(session,page);
+		}
+		//根据页码检索
+		public JsonResult loadOrderInfos(HttpSession session,String page) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			int max_page = (int) Math.ceil(new Double(service.findOrderInfoCount(ownerId))/rows);
+			if(max_page == 0){
+				return new JsonResult();
+			}
+			List<OrderInfo> OrderInfo=service.findOrderInfoByPage(new Integer(page)*rows-rows,rows,ownerId);
+			JsonResult jr = new JsonResult(OrderInfo);
+			jr.setMessage(max_page+"");
+			return jr;
+		}
+		//添加内容
+		@RequestMapping("/add_orderInfo.do")
+		@ResponseBody
+		public JsonResult addOrderInfo(HttpSession session,Long orderNum, String consignorId,
+				String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel, String carrierId,
+				Long trackingNum, Integer packageWeight, Integer totalShippingFee,String orderKeyword,Integer supportValue, String note,Byte orderType){
+			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			Date tamp = new Date(System.currentTimeMillis());
+			int n=service.addOrderInfo(ownerId, tamp, operatorId, orderNum, consignorId, consigneeId, consigneeTel, consigneeAddress, orderLabel, carrierId, trackingNum, packageWeight, totalShippingFee,orderKeyword,supportValue,note,orderType);
+		return new JsonResult(n);
+		}
+		//修改内容
+		@RequestMapping("/modify_orderInfo.do")
+		@ResponseBody
+		public JsonResult updateOrderInfo(HttpSession session,Long id, Long operatorId,
+				String consignorId, String consigneeId, Long consigneeTel, String consigneeAddress, String orderLabel,
+				String carrierId, Long trackingNum, Integer packageWeight, Integer totalShippingFee, String note,String orderKeyword,Integer supportValue){
+			Long operatorId1 = ((UserInfo)(session.getAttribute("user"))).getId();
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			System.out.println(ownerId);
+			Date tamp = new Date(System.currentTimeMillis());
+			int n=service.updateOrderInfo(id,ownerId,operatorId1, tamp, consignorId, consigneeId, consigneeTel, consigneeAddress, orderLabel, carrierId, trackingNum, packageWeight, totalShippingFee, note,orderKeyword,supportValue);
+		return new JsonResult(n);
+		}
+		//加载修改内容
+		@RequestMapping("/load_modify_orderInfo.do")
+		@ResponseBody
+		public JsonResult  findByOrderInfoId(HttpSession session,Long id){
+		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			OrderInfo oi=service.findByOrderInfoId(id, ownerId);
+			return new JsonResult(oi);
+		}
+		//删除单条
+		@RequestMapping("/delOrderInfo.do")
+		@ResponseBody
+		public JsonResult  delOrderInfo(HttpSession session,Long id) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			service.delOrderInfo(id, ownerId);
+			return new JsonResult();
+		}
+		//删除商品关联表
+		@RequestMapping("/delOrderItemLink.do")
+		@ResponseBody
+		public JsonResult  delOrderItemLink(HttpSession session,Long orderItemId) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			int n=service.delOrderItemLink(orderItemId, ownerId);
+			return new JsonResult(n);
+		}
+		//批量删除
+		@RequestMapping("/delOrderInfoList.do")
+		@ResponseBody
+		public JsonResult  delOrderInfoList(HttpSession session,Long[] id1) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			service.delOrderInfoList(id1, ownerId);
+			return new JsonResult();
+		}
+		//模糊查询订单
+		@RequestMapping("/findListByOrderInfo.do")
+		@ResponseBody
+		public JsonResult findListByOrderInfo(HttpSession session,String keyword) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			List<OrderInfo> list=service.findListByOrderInfo(keyword, ownerId);
+			return new JsonResult(list);
+		}
+		/*//模糊查询订单二
+		@RequestMapping("/findListByOrderInfo.do")
+		@ResponseBody
+		public JsonResult findListByOrderInfo(HttpSession session,String keyword) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			List<OrderInfo> list=service.findListByOrderInfo(keyword, ownerId);
+			List<OrderInfo> list1=service.findListByOrderInfo1(keyword, ownerId);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("list", list);
+			map.put("list1", list1);
+			return new JsonResult(map);
+		}*/
+		
+		/**
+		 * 商品类目
+		 */
+		//根据页码检索商品信息
+		@RequestMapping("/loadList_itemInfo.do")
+		@ResponseBody
+		public JsonResult loadItemInfo(String page,HttpSession session) {
+			return loadItemInfos(page,session);
+		}
+		//根据页码检索
+		public JsonResult loadItemInfos(String page,HttpSession session) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			System.out.println(ownerId);
+			int max_page = (int) Math.ceil(new Double(service.findItemInfoCount(ownerId))/rows);
+			if(max_page == 0){
+				return new JsonResult();
+			}
+			List<ItemInfo> ItemInfo=service.findItemInfoByPage(new Integer(page)*rows-rows,rows,ownerId);
+			JsonResult jr = new JsonResult(ItemInfo);
+			jr.setMessage(max_page+"");
+			return jr;
+		}
+		/*//根据页码检索商品信息(修改页面)
+		@RequestMapping("/loadList_itemInfo1.do")
+		@ResponseBody
+		public JsonResult loadItemInfo1(String page,HttpSession session) {
+			return loadItemInfos1(page,session);
+		}
+		//根据页码检索
+		public JsonResult loadItemInfos1(String page,HttpSession session) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			int max_page = (int) Math.ceil(new Double(service.findItemInfoCount(ownerId))/rows);
+			if(max_page == 0){
+				return new JsonResult();
+			}
+			List<ItemInfo> ItemInfo=service.findItemInfoByPage1(new Integer(page)*rows-rows,rows,ownerId);
+			JsonResult jr = new JsonResult(ItemInfo);
+			jr.setMessage(max_page+"");
+			return jr;
+		}*/
+		//模糊查询商品
+		@RequestMapping("/findListByItemInfo.do")
+		@ResponseBody
+		public JsonResult findListByItemInfo(HttpSession session,String keyword) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			List<ItemInfo> list=service.findListByItemInfo(keyword, ownerId);
+			return new JsonResult(list);
+		}
+		//查找发件人
+		@RequestMapping("/load_consignorId.do")
+		@ResponseBody
+		public JsonResult findUserInfoList(HttpSession session){
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			List<UserInfo> list=service.findUserInfoList(ownerId);
+			return new JsonResult(list);
+		}
+		//批量添加订单商品
+		@RequestMapping("/addOrderItemLink.do")
+		@ResponseBody
+		public JsonResult  addOrderItemLink(HttpSession session, Long orderId, Long[] id1,Integer[] id2) {
+			System.out.println(id2);
+			System.out.println("进来了");
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+			Date tamp = new Date(System.currentTimeMillis());
+			Byte authorized = new Byte("1");
+			service.addOrderItemLink(ownerId, tamp, operatorId, orderId, id1, authorized,id2);
+			return new JsonResult();
+		}
+		 //根据订单状态查询
+		@RequestMapping("/findListByOrderType.do")
+		@ResponseBody
+		public JsonResult findListByOrderType(HttpSession session,Byte orderType) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			List<OrderInfo> list=service.findListByOrderType(ownerId, orderType);
+			return new JsonResult(list);
+		}
+		//修改备注
+		@RequestMapping("/updateOrderInfo.do")
+		@ResponseBody
+		public JsonResult updateOrderInfo(HttpSession session,Long id,String note) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+			Date tamp = new Date(System.currentTimeMillis());
+			int n=service.updateOrderInfo(id, ownerId, operatorId, tamp, note);
+			return new JsonResult(n);
+		}
+		//修改发货
+		@RequestMapping("/updateOrderInfo1.do")
+		@ResponseBody
+		public JsonResult updateOrderInfo(HttpSession session,Long id,String carrierId,Long trackingNum) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+			Date tamp = new Date(System.currentTimeMillis());
+			int n=service.updateOrderInfo(id, ownerId, operatorId, tamp, carrierId, trackingNum);
+			return new JsonResult(n);
+		}
+		//修改退款
+		@RequestMapping("/updateOrderInfo2.do")
+		@ResponseBody
+		public JsonResult updateOrderInfo(HttpSession session,Long id) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
+			Date tamp = new Date(System.currentTimeMillis());
+			int n=service.updateOrderInfo(id, ownerId, operatorId, tamp, new Byte("1"), tamp,new Byte("6"));
+			return new JsonResult(n);
+		}
+		//通过订单编号查询
+		@RequestMapping("/findOrderItemIds.do")
+		@ResponseBody
+		public JsonResult findOrderItemIds(HttpSession session,Long orderId) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			List<OrderItemLink> list=service.findOrderItemIds(orderId, ownerId);
+			return new JsonResult(list);
+		}
+		//通过id查找对象信息
+		@RequestMapping("/findItemInfoId.do")
+		@ResponseBody
+		public JsonResult findByItemInfoId(HttpSession session,Long id) {
+			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
+			ItemInfo itemInfo=service.findByItemInfoId(id, ownerId);
+			return new JsonResult(itemInfo);
+		}
+}

@@ -1,0 +1,12 @@
+package boss;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class editController {
+@RequestMapping("/editor.do")
+public String editor(){
+	return "edit";
+}
+}

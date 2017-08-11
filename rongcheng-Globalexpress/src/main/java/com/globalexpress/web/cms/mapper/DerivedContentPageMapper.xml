@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globalexpress.web.cms.dao.DerivedContentPageDAO">
+  <resultMap id="BaseResultMap" type="com.globalexpress.web.entity.DerivedContentPage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="content_title" jdbcType="VARCHAR" property="contentTitle" />
+    <result column="content_subtitle" jdbcType="VARCHAR" property="contentSubtitle" />
+    <result column="content_en_title" jdbcType="VARCHAR" property="contentEnTitle" />
+    <result column="interface_name" jdbcType="VARCHAR" property="interfaceName" />
+    <result column="content_profile" jdbcType="VARCHAR" property="contentProfile" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="click" jdbcType="INTEGER" property="click" />
+    <result column="content_label" jdbcType="VARCHAR" property="contentLabel" />
+    <result column="content_keyword" jdbcType="VARCHAR" property="contentKeyword" />
+    <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+    <result column="icon_direct_link" jdbcType="VARCHAR" property="iconDirectLink" />
+    <result column="user_sequence" jdbcType="INTEGER" property="userSequence" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="is_show" jdbcType="BIT" property="show" />
+    <result column="reserved1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="owner_id" jdbcType="BIGINT" property="ownerId" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="is_authorization" jdbcType="BIT" property="authorization" />
+    <result column="is_apply" jdbcType="BIT" property="apply" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.globalexpress.web.entity.DerivedContentPage">
+    <result column="content1" jdbcType="LONGVARCHAR" property="content1" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, content_title, content_subtitle, content_en_title, interface_name, content_profile, 
+    author, click, content_label, content_keyword, icon_url, icon_direct_link, user_sequence, 
+    parent_id, is_show, reserved1, note, owner_id, operator_id, is_authorization, is_apply, 
+    gmt_create, gmt_modified
+  </sql>
+  <sql id="Base_Column_List_With_Blob_Column">
+    id, content_title, content_subtitle, content_en_title, interface_name, content_profile, 
+    author, click, content_label, content_keyword, icon_url, icon_direct_link, user_sequence, 
+    parent_id, is_show, reserved1, note, owner_id, operator_id, is_authorization, is_apply, 
+    gmt_create, gmt_modified, content1
+  </sql>
+  <select id="countByBlockIdAndKeyword" resultType="int">
+    select 
+    	count(*)
+    from derived_content_page
+    where owner_id = #{0,jdbcType=BIGINT}
+    <if test="param2!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where owner_id = #{0} and block_id = #{1 } and content_type = 1)
+    </if>
+    <if test="param3!=null">
+	    and (
+	    	content_title like CONCAT('%',#{2},'%') or
+	    	content_subtitle like CONCAT('%',#{2},'%') or
+	    	author like CONCAT('%',#{2},'%') or
+	    	content1 like CONCAT('%',#{2},'%') or
+	    	content_profile like CONCAT('%',#{2},'%') or
+	    	content_label like CONCAT('%',#{2},'%') or
+	    	note like CONCAT('%',#{2},'%') or
+	    	content_keyword like CONCAT('%',#{2},'%')
+	    )
+    </if>
+  </select>
+  <select id="limitByBlockIdAndKeyword" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from derived_content_page
+    where owner_id = #{ownerId,jdbcType=BIGINT}
+    <if test="blockChannelId!=null">
+	    and
+	    	id in
+	    		(select content_id from block_content_link where block_id = #{blockChannelId } and owner_id = #{ownerId} and content_type = 1)
+    </if>
+    <if test="keyword!=null">
+	    and (
+	    	content_title like CONCAT('%',#{keyword},'%') or
+	    	content_subtitle like CONCAT('%',#{keyword},'%') or
+	    	author like CONCAT('%',#{keyword},'%') or
+	    	content1 like CONCAT('%',#{keyword},'%') or
+	    	content_profile like CONCAT('%',#{keyword},'%') or
+	    	content_label like CONCAT('%',#{keyword},'%') or
+	    	note like CONCAT('%',#{keyword},'%') or
+	    	content_keyword like CONCAT('%',#{keyword},'%')
+	    )
+    </if>
+    order by id desc
+	limit #{start},#{rows}
+  </select>
+  <select id="getSelective" parameterType="com.globalexpress.web.entity.DerivedContentPage" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List_With_Blob_Column" />
+    from derived_content_page
+    where owner_id = #{ownerId,jdbcType=BIGINT}
+    and id=#{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByOwnerIdAndIdArray">
+    delete from derived_content_page
+    where owner_id = #{param1,jdbcType=BIGINT} and id in
+    												<foreach item="item" index="index" collection="param2" open="(" separator="," close=")">  
+								                    	#{item}  
+				               						</foreach>
+  </delete>
+  <insert id="insertSelective" parameterType="com.globalexpress.web.entity.DerivedContentPage">
+    insert into derived_content_page
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="contentTitle != null">
+        content_title,
+      </if>
+      <if test="contentSubtitle != null">
+        content_subtitle,
+      </if>
+      <if test="contentEnTitle != null">
+        content_en_title,
+      </if>
+      <if test="interfaceName != null">
+        interface_name,
+      </if>
+      <if test="contentProfile != null">
+        content_profile,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="click != null">
+        click,
+      </if>
+      <if test="contentLabel != null">
+        content_label,
+      </if>
+      <if test="contentKeyword != null">
+        content_keyword,
+      </if>
+      <if test="iconUrl != null">
+        icon_url,
+      </if>
+      <if test="iconDirectLink != null">
+        icon_direct_link,
+      </if>
+        user_sequence,
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="show != null">
+        is_show,
+      </if>
+      <if test="reserved1 != null">
+        reserved1,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="ownerId != null">
+        owner_id,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="authorization != null">
+        is_authorization,
+      </if>
+      <if test="apply != null">
+        is_apply,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="content1 != null">
+        content1,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="contentTitle != null">
+        #{contentTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="contentSubtitle != null">
+        #{contentSubtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="contentEnTitle != null">
+        #{contentEnTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null">
+        #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="contentProfile != null">
+        #{contentProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="click != null">
+        #{click,jdbcType=INTEGER},
+      </if>
+      <if test="contentLabel != null">
+        #{contentLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="contentKeyword != null">
+        #{contentKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null">
+        #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="iconDirectLink != null">
+        #{iconDirectLink,jdbcType=VARCHAR},
+      </if>
+      (SELECT
+			MAX(IFNULL(user_sequence,0))+1
+		FROM
+			derived_content_page d
+		WHERE owner_id=#{ownerId,jdbcType=BIGINT}),
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="show != null">
+        #{show,jdbcType=BIT},
+      </if>
+      <if test="reserved1 != null">
+        #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="authorization != null">
+        #{authorization,jdbcType=BIT},
+      </if>
+      <if test="apply != null">
+        #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content1 != null">
+        #{content1,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateSelective" parameterType="com.globalexpress.web.entity.DerivedContentPage">
+    update derived_content_page
+    <set>
+      <if test="contentTitle != null">
+        content_title = #{contentTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="contentSubtitle != null">
+        content_subtitle = #{contentSubtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="contentEnTitle != null">
+        content_en_title = #{contentEnTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="interfaceName != null">
+        interface_name = #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="contentProfile != null">
+        content_profile = #{contentProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="click != null">
+        click = #{click,jdbcType=INTEGER},
+      </if>
+      <if test="contentLabel != null">
+        content_label = #{contentLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="contentKeyword != null">
+        content_keyword = #{contentKeyword,jdbcType=VARCHAR},
+      </if>
+      <if test="iconUrl != null">
+        icon_url = #{iconUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="iconDirectLink != null">
+        icon_direct_link = #{iconDirectLink,jdbcType=VARCHAR},
+      </if>
+      <if test="userSequence != null">
+        user_sequence = #{userSequence,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="show != null">
+        is_show = #{show,jdbcType=BIT},
+      </if>
+      <if test="reserved1 != null">
+        reserved1 = #{reserved1,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="authorization != null">
+        is_authorization = #{authorization,jdbcType=BIT},
+      </if>
+      <if test="apply != null">
+        is_apply = #{apply,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content1 != null">
+        content1 = #{content1,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+    and owner_id = #{ownerId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

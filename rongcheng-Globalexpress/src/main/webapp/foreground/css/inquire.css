@@ -1,0 +1,167 @@
+/*主体*/
+.main {
+  width: 100%;
+  min-width: 1000px;
+  min-height: 620px;
+  background: #338BC1;
+  padding-bottom: 50px;
+  position: relative;
+}
+.main h1 {
+  text-align: center;
+  padding-top: 125px;
+  height: 190px;
+  font-size: 46px;
+  text-shadow: 1px -1px 1px #251F1F;
+  font-family: microsoft yahei;
+  color: #fff;
+  font-weight: bold;
+}
+.main .search_input {
+  width: 620px;
+  height: 40px;
+  border: 2px solid #2753b9;
+  margin: 30px auto;
+  position: relative;
+  overflow: hidden;
+}
+.main .search_input input {
+  padding-left: 40px;
+  background: #fff url("../images/search.png") no-repeat;
+  width: 520px;
+  height: 100%;
+  border: 0;
+  outline-style: none;
+  font-size: 14px;
+}
+.main .search_input .search_button {
+  width: 96px;
+  height: 36px;
+  background: #2753b9;
+  text-align: center;
+  line-height: 36px;
+  font-size: 18px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+.main .search_input .search_button:hover {
+  background: #083499;
+}
+.main .search_input .search_alert {
+  position: absolute;
+  top: -100%;
+  right: 96px;
+  background: #FDF6E2;
+  width: 246px;
+  height: 36px;
+  transition: top 1s ease-in;
+  -moz-transition: top 1s ease-in;
+  /* Firefox 4 */
+  -webkit-transition: top 1s ease-in;
+  /* Safari 和 Chrome */
+  -o-transition: top 1s ease;
+  /* Opera */
+  color: #083499;
+  font-weight: bold;
+  text-align: center;
+  line-height: 36px;
+  font-size: 16px;
+}
+.main .content {
+  width: 1000px;
+  min-width: 1000px;
+  min-height: 500px;
+  background: #fff;
+  margin: 0 auto;
+  border-top: 1px solid #fff;
+  text-align: center;
+  padding: 20px 20px 50px 20px;
+}
+/*.main .content img {
+  margin: 10px auto;
+}
+.main .content h5 {
+  padding-top: 20px;
+  text-align: center;
+  font-size: 15px;
+}
+.main .content table {
+  width: 858px;
+  margin: 20px auto 0;
+  color: #c2c2c2;
+  border-collapse: collapse;
+  border-color: #dfdfdf;
+}
+.main .content table tr {
+  height: 40px;
+}
+.main .content table tr:last-child td {
+  color: #083499;
+}
+.main .content>p {
+  color: #f00;
+  font-size: 12px;
+}*/
+.main .content h5{
+  font-size: 16px;
+  font-weight: bold;
+}
+.main .content .text_div{
+  width: 80%;
+  margin: 20px auto;
+}
+.main .content .text_div>li{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  font-size: 14px;
+}
+.main .content .text_div>li:first-child{
+  border-top: 1px solid #ddd;
+}
+.main .content .text_div>li>.left_text{
+  float: left;
+  width: 50%;
+  height: 100%;
+  border-right: 1px solid #ddd;
+}
+.main .content .text_div>li>.right_text{
+  float: left;
+  width: 50%;
+  height: 100%;
+}
+.main .content .div_box{
+  width: 80%;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+}
+.main .content .div_box p{
+  line-height: 40px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  text-align: left;
+  padding: 0 20px;
+}
+.main .content .div_color p:last-child{
+  color: #f00;
+  border-bottom: 0;
+}
+.main .jiaz {
+  width: 1000px;
+  min-width: 1000px;
+  height: 300px;
+  background: #fff;
+  padding-bottom: 50px;
+  margin: auto;
+  line-height: 300px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}

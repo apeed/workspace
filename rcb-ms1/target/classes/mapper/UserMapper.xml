@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng.rcb.dao.UserDao">
+	<select id="findByName" 
+			  parameterType="String"
+			  resultType="com.rongcheng.rcb.entity.User">
+		select 
+			id,
+			name,
+			tel,
+			email,
+			account,
+			password			
+		from
+			user
+		where account=#{account}
+		
+	</select>
+	  <update id="modifyUser" parameterType="com.rongcheng.rcb.entity.User">
+		update user 
+			set 
+				name=#{name},
+				password=#{password},
+				tel=#{tel},
+				email=#{email},
+				is_enable=#{enable},
+				remark=#{remark}
+		where 
+			id=#{id}
+	</update>  	
+	 <select id="findById" 
+			  parameterType="int"
+			  resultType="com.rongcheng.rcb.entity.User">
+		select 
+			id,
+			name,
+			account,
+			password,
+			is_enable as enable,
+			is_root_admin as rootAdmin,
+			tel,
+			email,
+			remark			
+		from
+			user
+		where id=#{id}
+		
+	</select> 
+	
+	<insert id="addUser" parameterType="com.rongcheng.rcb.entity.User">
+	insert into 
+	user 
+	(
+	name,
+	account,
+	password,
+	tel,
+	email,
+	remark,
+	is_enable
+	)
+	values
+	(
+		#{name},
+		#{account},
+		#{password},
+		#{tel},
+		#{email},
+		#{remark},
+		#{enable}
+	)
+	</insert> 
+	
+	<select id="findUserAll" resultType="com.rongcheng.rcb.entity.User">
+	select
+		id,
+		name,
+		account,
+		password,
+		tel,
+		email,
+		remark,
+		is_enable enable
+	from
+	 	user  
+	</select>
+	 <delete id="delUserById" parameterType="int">
+	 delete  from user where id=#{id}
+	 </delete>
+	 <update id="modifyAdministrator" parameterType="com.rongcheng.rcb.entity.User">
+	 update user set
+		name=#{name},
+		account=#{account},
+		password=#{password},
+		tel=#{tel},
+		email=#{email},
+		remark=#{remark},
+		is_enable=#{enable}
+		where 
+		id=#{id}	
+	 </update> 
+	 
+	 
+	 <!-- /////////////////////////// -->
+	 <select id="getUserByAccount" resultType="com.rongcheng.rcb.entity.User">
+		select
+			id,
+			name,
+			account,
+			password,
+			is_enable 		as enable,
+			is_root_admin	as rootAdmin,
+			tel,
+			email,
+			remark
+		from user
+		where
+			account=#{account}
+	</select>
+	 <!-- /////////////////////////// -->
+</mapper>
+
+
+
+
+
+
+
+
+

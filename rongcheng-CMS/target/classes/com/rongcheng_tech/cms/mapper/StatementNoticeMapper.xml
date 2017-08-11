@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.rongcheng_tech.cms.dao.StatementNoticeDao">
+ 	
+ 	  <select id="findStatementNoticeByPage" resultType="com.rongcheng_tech.cms.entity.StatementNotice">
+	select 
+			id,
+			statement,
+			notice,
+			reserved1,
+			note,
+			owner_id as ownerId,
+			operator_id as operatorId,
+			is_apply as isApply,
+			gmt_create as gmtCreate,
+			gmt_modified as gmtModified,
+			statement_title as statementTitle,
+			reserved1
+		from
+			statement_notice
+			where owner_id=#{2}
+		limit #{0},#{1}
+	</select>
+	<select id="findStatementNoticeCount" resultType="String">select count(id) from statement_notice where owner_id=#{ownerId}</select>		
+	 
+	<select id="findListByReserved1" resultType="com.rongcheng_tech.cms.entity.StatementNotice">
+	select 
+			id,
+			reserved1,
+			owner_id as ownerId,
+			operator_id as operatorId,
+			gmt_modified as gmtModified
+		from
+			statement_notice
+			where id!=#{0} and owner_id=#{1} 
+	</select>
+	  <select id="findByStatementNoticeId" 
+			  resultType="com.rongcheng_tech.cms.entity.StatementNotice">
+		select 
+			id,
+			statement,
+			notice,
+			reserved1,
+			note,
+			owner_id as ownerId,
+			operator_id as operatorId,
+			is_apply as isApply,
+			gmt_create as gmtCreate,
+			gmt_modified as gmtModified,
+			statement_title as statementTitle,
+			reserved1
+		from
+			statement_notice
+		where id=#{0} and owner_id=#{1}
+	</select>  
+	
+	 <update id="modifyStatementNotice" parameterType="com.rongcheng_tech.cms.entity.StatementNotice">
+		update statement_notice 
+			set 
+				statement_title=#{statementTitle},
+				statement=#{statement},
+				notice=#{notice},
+				note=#{note},
+				operator_id=#{operatorId},
+				gmt_modified=#{gmtModified}
+			where id=#{id} and owner_id=#{ownerId}
+	</update>  
+	<update id="modifyStatementNotice1" parameterType="com.rongcheng_tech.cms.entity.StatementNotice">
+		update statement_notice 
+			set 
+				operator_id=#{operatorId},
+				gmt_modified=#{gmtModified},
+				reserved1=#{reserved1}
+			where id=#{id} and owner_id=#{ownerId}
+	</update>  
+	<insert id="addStatementNotice" parameterType="com.rongcheng_tech.cms.entity.StatementNotice">
+	insert into statement_notice 
+	(
+		owner_id,
+		gmt_create,
+		statement_title,
+		statement,
+		notice,
+		note,
+		operator_id
+	)
+	values
+	(
+		#{ownerId},
+		#{gmtCreate},
+		#{statementTitle},
+		#{statement},
+		#{notice},
+		#{note},
+		#{operatorId}
+	)
+	
+	</insert>
+	<delete id="delStatementNotice" >
+	 	delete  from statement_notice where id=#{0} and owner_id=#{1}
+	</delete>
+	<select id="findListByStatementNotice" 
+			  resultType="Map">
+		<!-- select 
+			id,
+			statement,
+			notice,
+			reserved1,
+			note,
+			owner_id as ownerId,
+			operator_id as operatorId,
+			is_apply as isApply,
+			gmt_create as gmtCreate,
+			gmt_modified as gmtModified,
+			statement_title as statementTitle
+			from
+			statement_notice
+		where owner_id=#{1} and CONCAT(statement_title,statement,notice,note) like CONCAT('%',#{0},'%') -->
+		<!-- where owner_id=#{param2} and CONCAT(statement_title,statement,notice,note) like '%${param1}%' -->
+	select 
+			id,
+			statement,
+			notice,
+			reserved1,
+			note,
+			owner_id as ownerId,
+			operator_id as operatorId,
+			is_apply as isApply,
+			gmt_create as gmtCreate,
+			gmt_modified as gmtModified,
+			statement_title as statementTitle
+			from
+			statement_notice
+		where owner_id=#{1} and CONCAT(IFNULL(statement_title,''),IFNULL(statement,''),IFNULL(notice,''),IFNULL(note,'')) 
+		like CONCAT('%',#{0},'%')
+	</select> 
+</mapper>
+
+
+
+
+
+
+
+

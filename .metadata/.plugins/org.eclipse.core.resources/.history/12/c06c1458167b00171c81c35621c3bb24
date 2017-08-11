@@ -1,0 +1,6 @@
+<div class="form-group">  
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">计划结束时间  </label>  
+                         <div class="col-md-6 col-sm-6 col-xs-12">  
+                          <input id="scheduledEndTime" name="scheduledEndTime" class="date-picker form-control col-md-7 col-xs-12" type="text">  
+                        </div>  
+                      </div>  

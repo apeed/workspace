@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.globalexpress.web.cms.dao.VipUserDAO">
+	
+	<!-- /**
+     * 保存 用户访客信息表
+     * 
+     * <p>传入用户访客信息对象，MyBatis使用对象保存栏目表。
+     * 
+     * @param vipUser 用户访客信息对象
+     * @return row 存储的行数
+     * @author 赵滨
+     */ -->
+    <insert id="saveVipUser"
+            parameterType="com.globalexpress.web.entity.VipUser">
+        insert into 
+            vip_user
+        (  
+            id,
+            
+			vip_code,
+			
+			vip_type,
+            
+			vip_ip,
+            
+			vip_link,
+            
+			contact_name,
+            
+			contact_mobile,
+            
+			contact_tel,
+            
+			contact_email,
+            
+			contact_address,
+            
+			contact_qq,
+            
+			contact_wechat,
+            
+			contact_record,
+            
+			is_solved,
+            
+			parent_vip,
+            
+			user_sequence,
+            
+			is_show,
+            
+			reserved1,
+            
+			note,
+            
+			owner_id,
+            
+			operator_id,
+            
+			is_apply,
+            
+			gmt_create,
+            
+			gmt_modified
+            
+        )
+        values 
+        (
+            #{id},
+            
+            #{vipCode},
+            
+            #{vipType},
+            
+            #{vipIp},
+            
+            #{vipLink},
+            
+            #{contactName},
+            
+            #{contactMobile},
+            
+            #{contactTel},
+            
+            #{contactEmail},
+            
+            #{contactAddress},
+            
+            #{contactQq},
+            
+            #{contactWechat},
+            
+            #{contactRecord},
+            
+            #{solved},
+            
+            #{parentVip},
+            
+            #{userSequence},
+            
+            #{show},
+            
+            #{reserved1},
+            
+            #{note},
+            
+            #{ownerId},
+            
+            #{operatorId},
+            
+            #{apply},
+            
+            #{gmtCreate},
+            
+            #{gmtModified}
+        )
+    </insert>
+</mapper>
+
+
+
+
+
+
+
+

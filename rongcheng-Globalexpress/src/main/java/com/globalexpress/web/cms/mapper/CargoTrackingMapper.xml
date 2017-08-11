@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.globalexpress.web.cms.dao.CargoTrackingDao">
+ 	<select id="findCargoTrackingByPage" resultType="com.globalexpress.web.entity.CargoTracking">
+	select 
+		id,
+		owner_id as ownerId,
+		order_id as orderId,
+		carrier_id as carrierId,
+		tracking_num as trackingNum,
+		is_complete as complete,
+		transfer_carrier_id as transferCarrierId,
+		transfer_tracking_num as transferTrackingNum,
+		user_tracking_info as userTrackingInfo,
+		platform_id as platformId,
+		shop_id as shopId
+		from cargo_tracking
+	where owner_id=#{2}
+	order by gmt_create DESC
+	limit #{0},#{1}
+	</select>
+	 <select id="findCargoTrackingCount" resultType="String">select count(id) from cargo_tracking where owner_id=#{ownerId}</select>		
+	 <insert id="addCargoTracking" parameterType="com.globalexpress.web.entity.CargoTracking">
+	insert into cargo_tracking 
+	(
+		owner_id,
+		gmt_create,
+		operator_id,
+		platform_id,
+		shop_id,
+		staff_id,
+		order_id,
+		carrier_id,
+		carrier_url,
+		tracking_num,
+		happen_time,
+		current_address,
+		terminal_id,
+		operator_tel,
+		cargo_status,
+		facility_id,
+		is_complete,
+		next_address,
+		next_terminal,
+		transfer_carrier_id,
+		transfer_carrier_url,
+		transfer_tracking_num,
+		user_tracking_info,
+		is_show,
+		note
+	)
+	values
+	(
+		#{ownerId},
+		#{gmtCreate},
+		#{operatorId},
+		#{platformId},
+		#{shopId},
+		#{staffId},
+		#{orderId},
+		#{carrierId},
+		#{carrierUrl},
+		#{trackingNum},
+		#{happenTime},
+		#{currentAddress},
+		#{terminalId},
+		#{operatorTel},
+		#{cargoStatus},
+		#{facilityId},
+		#{complete},
+		#{nextAddress},
+		#{nextTerminal},
+		#{transferCarrierId},
+		#{transferCarrierUrl},
+		#{transferTrackingNum},
+		#{userTrackingInfo},
+		#{show},
+		#{note}
+	)
+	</insert>
+	<update id="modifyCargoTracking" parameterType="com.globalexpress.web.entity.CargoTracking">
+		update cargo_tracking 
+			set 
+				operator_id = #{operatorId},
+				staff_id = #{staffId},
+				gmt_modified = #{gmtModified},
+				carrier_id = #{carrierId},
+				carrier_url = #{carrierUrl},
+				tracking_num = #{trackingNum},
+				happen_time = #{happenTime},
+				current_address = #{currentAddress},
+				terminal_id = #{terminalId},
+				operator_tel = #{operatorTel},
+				cargo_status = #{cargoStatus},
+				facility_id = #{facilityId},
+				is_complete = #{complete},
+				next_address = #{nextAddress},
+				next_terminal = #{nextTerminal},
+				transfer_carrier_id = #{transferCarrierId},
+				transfer_carrier_url = #{transferCarrierUrl},
+				transfer_tracking_num = #{transferTrackingNum},
+				user_tracking_info = #{userTrackingInfo},
+				is_show = #{show},
+				note = #{note}
+			where id=#{id} and owner_id=#{ownerId}
+	</update> 
+	<select id="findListByCargoTracking" 
+			  resultType="Map">
+		select 
+		id,
+		owner_id as ownerId,
+		order_id as orderId,
+		carrier_id as carrierId,
+		tracking_num as trackingNum,
+		is_complete as complete,
+		transfer_carrier_id as transferCarrierId,
+		transfer_tracking_num as transferTrackingNum,
+		platform_id as platformId,
+		shop_id as shopId 
+		from
+		cargo_tracking
+		where owner_id=#{1} 
+		and CONCAT(IFNULL(id,''),
+		IFNULL(order_id,''),
+		IFNULL(carrier_id,''),
+		IFNULL(tracking_num,''),
+		IFNULL(note,''))
+		like CONCAT('%',#{0},'%')
+	</select> 
+	<select id="findByCargoTrackingId" 
+			  parameterType="java.lang.Long"
+			  resultType="com.globalexpress.web.entity.CargoTracking">
+		select 
+			id,
+			owner_id as ownerId,
+			order_id as orderId,
+			carrier_id as carrierId,
+			carrier_url as carrierUrl,
+			tracking_num as trackingNum,
+			happen_time as happenTime,
+			current_address as currentAddress,
+			terminal_id as terminalId,
+			operator_id as operatorId,
+			staff_id as staffId,
+			operator_tel as operatorTel,
+			cargo_status as cargoStatus,
+			facility_id as facilityId,
+			is_complete as complete,
+			next_address as nextAddress,
+			next_terminal as nextTerminal,
+			transfer_carrier_id as transferCarrierId,
+			transfer_carrier_url as transferCarrierUrl,
+			transfer_tracking_num as transferTrackingNum,
+			user_tracking_info as userTrackingInfo,
+			is_show as 'show',
+			note,
+			platform_id as platformId,
+			shop_id as shopId 
+		from
+			cargo_tracking
+		where id=#{0} and owner_id=#{1}
+	</select>  
+</mapper>
+
+
+
+
+
+
+
+
+
+

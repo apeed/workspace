@@ -1,0 +1,1459 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.globalexpress.web.cms.dao.VisitorDAO">
+	
+	<!-- /**
+     * 保存 访客行为表
+     * 
+     * <p>传入访客行为对象，MyBatis使用对象保存栏目表。
+     * 
+     * @param VisitorBehavior 访客行为对象
+     * @return row 存储的行数
+     * @author 赵滨
+     */ -->
+    <insert id="saveVisitorBehavior"
+            parameterType="com.globalexpress.web.entity.VisitorBehavior">
+        insert into 
+            visitor_behavior
+        (  
+            id,
+            
+            visitor_id,
+            
+            arrival_time,
+            
+            parent_id,
+            
+            source_type,
+            
+            source_channel,
+            
+            source_keyword,
+            
+            page_visited,
+            
+            page_loading_duration,
+            
+            page_stay_duration,
+            
+            keyword_searched,
+            
+            behavior_type,
+            
+            button_clicked,
+            
+            is_ordered,
+            
+            departure_time,
+            
+            leavefor_link,
+            
+            is_show,
+            
+            reserved1,
+            
+            note,
+            
+            owner_id,
+            
+            operator_id,
+            
+            is_authorization,
+            
+            is_apply,
+            
+            gmt_create,
+            
+            gmt_modified
+        )
+        values 
+        (
+            #{id},
+            
+            #{visitorId},
+            
+            #{arrivalTime},
+            
+            #{parentId},
+            
+            #{sourceType},
+            
+            #{sourceChannel},
+            
+            #{sourceKeyword},
+            
+            #{pageVisited},
+            
+            #{pageLoadingDuration},
+            
+            #{pageStayDuration},
+            
+            #{keywordSearched},
+            
+            #{behaviorType},
+            
+            #{buttonClicked},
+            
+            #{ordered},
+            
+            #{departureTime},
+            
+            #{leaveforLink},
+            
+            #{show},
+            
+            #{reserved1},
+            
+            #{note},
+            
+            #{ownerId},
+            
+            #{operatorId},
+            
+            #{authorization},
+            
+            #{apply},
+            
+            #{gmtCreate},
+            
+            #{gmtModified}
+        )
+    </insert>
+    
+    <!-- /**
+     * 保存 访客信息表
+     * 
+     * <p>传入访客信息对象，MyBatis使用对象保存栏目表。
+     * 
+     * @param VisitorInfo 访客信息对象
+     * @return row 存储的行数
+     * @author 赵滨
+     */ -->
+    <insert id="saveVisitorInfo"
+            parameterType="com.globalexpress.web.entity.VisitorInfo">
+        insert into 
+            visitor_info
+        (  
+            id,
+            
+			visitor_account,
+			
+			visitor_ip,
+			
+            visitor_host,
+            
+			visitor_location,
+            
+			telecom_type,
+            
+			visitor_mac_address,
+            
+            os_id,
+            
+            os_version,
+            
+            os_bit,
+            
+            browser_id,
+            
+            browser_version,
+            
+			visitor_type,
+            
+			visitor_gender,
+            
+			visitor_age,
+            
+			visitor_level,
+            
+			visitor_class_id,
+            
+			visitor_label,
+            
+			is_show,
+            
+			reserved1,
+            
+			note,
+            
+			owner_id,
+            
+			operator_id,
+            
+			is_authorization,
+            
+			is_apply,
+            
+			gmt_create,
+            
+			gmt_modified
+        )           
+        values 
+        (
+		    #{id},
+		    
+		    #{visitorAccount},
+		    
+		    #{visitorIp},
+		    
+		    #{visitorHost},
+		    
+		    #{visitorLocation},
+		    
+		    #{telecomType},
+		    
+		    #{visitorMacAddress},
+		    
+		    #{osId},
+		    
+		    #{osVersion},
+		    
+		    #{osBit},
+		    
+		    #{browserId},
+		    
+		    #{browserVersion},
+		    
+		    #{visitorType},
+		    
+		    #{visitorGender},
+		    
+		    #{visitorAge},
+		    
+		    #{visitorLevel},
+		    
+		    #{visitorClassId},
+		    
+		    #{visitorLabel},
+		    
+		    #{show},
+		    
+		    #{reserved1},
+		    
+		    #{note},
+		    
+		    #{ownerId},
+		    
+		    #{operatorId},
+		    
+		    #{authorization},
+		    
+		    #{apply},
+		    
+		    #{gmtCreate},
+		    
+		    #{gmtModified}
+        )
+    </insert>
+    
+    <!-- /**
+     * 获取 访客信息表 集合
+     * 
+     * <p>根据页数获取访客
+     * 
+     * @param start 开始位置
+     * @param rows 查询行数
+     * @param ownerId 主账号ID
+     * @return  List<VisitorInfo> 访客信息表 集合
+     * @author 赵滨
+     */ -->
+    <select id="listVisitorInfoByPage" resultType="java.util.HashMap">
+        select 
+
+            <!-- 访客帐号 -->
+            v1.visitor_account as visitorAccount,
+            
+            <!-- ip -->
+            v1.visitor_ip as visitorIp,
+            
+            <!-- 地区 -->
+            v1.visitor_location as visitorLocation,
+
+            <!-- 新老客户 -->
+            v1.visitor_type as visitorType,
+
+            <!-- 入站来源 -->
+            v2.parent_id as parentId,
+
+            <!-- 入站时间 -->
+            v1.gmt_create as gmtCreate,
+
+            <!-- 被访页面 -->
+			(select page_visited from visitor_behavior where gmt_create=(
+			
+			     select  max(v3.gmt_create) from visitor_behavior as v3
+			 
+			     where v1.id=v3.visitor_id)) as visitedPage,
+
+            <!-- 当前状态,0为离开，1为在线 -->
+            isnull(v2.departure_time) as currentState
+           
+            
+            from 
+            
+                visitor_info as v1, visitor_behavior as v2 
+
+            where 
+                
+                v1.id=v2.visitor_id 
+    
+            and 
+
+                v1.owner_id=#{2}
+                
+            and 
+
+                v2.owner_id=#{2}
+
+            and
+
+                v2.source_type=1
+                
+            and
+            
+                to_days(v1.gmt_create) = to_days(now())
+                
+            and
+            
+                to_days(v2.gmt_create) = to_days(now())
+        
+            group by 
+                
+                v1.id, v2.parent_id
+
+            limit 
+            
+                #{0}, #{1}
+    </select>
+    
+    <!-- /**
+     * 获取 访客信息表 条数
+     * @param ownerId 主账号ID
+     * @return maxPage 最大条数
+     * @author 赵滨
+     */
+    int (Long ownerId); -->
+    <select id="countVisitorInfo" resultType="int">
+        select 
+            count(id)
+        from 
+            visitor_info 
+        where 
+            owner_id=#{0}
+        and
+            to_days(gmt_create) = to_days(now())
+    </select>
+    
+    <!-- /**
+     * 获取 总体概览
+     * 
+     * <p>根据时间和终端获取总体概览
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return map 总体概览
+     * @author 赵滨
+     */ -->
+    <select id="getVisitorAllMessageByTimeTerminal" resultType="java.util.HashMap">  
+        select 
+            <!-- visitor_info id -->
+            v1.id as id1, 
+            
+            <!-- visitor_behavior id -->
+            v2.id as id2, 
+            
+            <!-- 访客数 -->  
+            count(distinct v1.id) as visitorNumber, 
+
+            <!-- 浏览量 -->
+            count(v2.id) as pageViews, 
+            
+            <!-- 人均浏览量 -->
+            ifnull(count(v2.id)/count(distinct v1.id), 0) as perPersonPageViews,
+            
+            <!-- 人均停留时长 -->
+            ifnull(sum(v2.page_stay_duration)/count(distinct v1.id), 0) as perPersonStayDuration
+
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+        
+    </select>
+    
+    
+   
+     
+     <!-- /**
+     * 获取 来源地区流量分析
+     * 
+     * <p>根据时间和终端获取来源地区流量分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return map 来源地区流量分析
+     * @author 赵滨
+     */ -->
+    <select id="listVisitorLocationByTimeTerminal" resultType="java.util.HashMap">  
+        select 
+            <!-- visitor_info id -->
+            v1.id as id1, 
+            
+            <!-- visitor_behavior id -->
+            v2.id as id2, 
+            
+            <!-- 来源地区 -->
+            v1.visitor_location as visitorLocation, 
+            
+            <!-- 访客数 -->
+            count(distinct v1.id) as visitorNumber, 
+            
+            <!-- 访客数全国占比 -->
+            ifnull(count(distinct v1.id)/(select count(distinct v1.id) from 
+        
+	            visitor_info as v1, 
+	            
+	            visitor_behavior as v2 
+	            
+		        <where>
+		            <!-- 关联条件 -->
+		            (v1.id = v2.visitor_id)
+		            
+		            <!-- 判断主账号 -->
+		            and (v1.owner_id = #{5})
+		            and (v2.owner_id = #{5})
+		            
+		            <!-- 如果终端搜索存在 -->
+		            <if test="param2 != '' and param2 != null"> 
+		                and (v2.source_channel = #{1})
+		            </if> 
+		            
+		            <!-- 如果存在年数 -->
+		            <if test="param5 != '' and param5 != null"> 
+		                and (year(v1.gmt_create)=year(now()))
+		                and (year(v2.gmt_create)=year(now()))
+		            </if> 
+		            
+		            <!-- 如果存在天数 -->
+		            <if test="param1 != '' and param1 != null">     
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+		            </if> 
+		            
+		            <!-- 如果有开始和结束时间 -->
+		            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+		                and (v1.gmt_create between #{2} and #{3})
+		                and (v2.gmt_create between #{2} and #{3})
+		            </if>
+		        </where>), 0)  as visitorNumberNationalProportion,
+            
+            <!-- 浏览量 -->
+            count(v2.id) as pageViews, 
+            
+            <!-- 人均浏览量 -->
+            ifnull(count(v2.id)/count(distinct v1.id), 0) as perPersonPageViews, 
+            
+            <!-- 人均停留时长 -->
+            ifnull(sum(v2.page_stay_duration)/count(distinct v1.id), 0) as perPersonStayDuration,
+            
+            <!-- 新客户数 -->
+            (v1.visitor_type=1) as newVisitorNumber, 
+            
+            <!-- 新客户占比 -->
+            ifnull((v1.visitor_type=1)/count(distinct v1.id), 0) as newVisitorProportion
+            
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+        group by 
+        
+            v1.visitor_location
+            
+        limit 
+        
+            #{6},#{7}
+    </select>
+    
+    <!-- /**
+     * 获取 来源地区 最大条数
+     * 
+     * <p>根据时间和终端获取来源地区流量分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return maxPage 来源地区 最大条数
+     * @author 赵滨
+     */ -->
+    <select id="countVisitorLocation" resultType="int">  
+        select 
+            
+            <!-- 最大条数 -->
+            count(distinct v1.visitor_location)
+            
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+            
+    </select>
+    
+    <!-- /**
+     * 获取 星期几流量分析
+     * 
+     * <p>根据时间和终端获取星期几流量分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return list 星期几流量分析
+     * @author 赵滨
+     */ -->
+    <select id="listVisitorDayOfWeekByTimeTerminal" resultType="java.util.HashMap">  
+        select 
+            <!-- visitor_info id -->
+            v1.id as id1, 
+            
+            <!-- visitor_behavior id -->
+            v2.id as id2, 
+            
+            <!-- 星期几 -->
+            dayofweek(v1.gmt_create) as dayOfWeek, 
+            
+            <!-- 访客数 -->
+            count(distinct v1.id) as visitorNumber, 
+            
+            <!-- 星期数全部占比 -->
+            ifnull(count(distinct v1.id)/(select count(distinct v1.id) from 
+        
+	            visitor_info as v1, 
+	            
+	            visitor_behavior as v2 
+	            
+		        <where>
+		            <!-- 关联条件 -->
+		            (v1.id = v2.visitor_id)
+		            
+		            <!-- 判断主账号 -->
+		            and (v1.owner_id = #{5})
+		            and (v2.owner_id = #{5})
+		            
+		            <!-- 如果终端搜索存在 -->
+		            <if test="param2 != '' and param2 != null"> 
+		                and (v2.source_channel = #{1})
+		            </if> 
+		            
+		            <!-- 如果存在年数 -->
+		            <if test="param5 != '' and param5 != null"> 
+		                and (year(v1.gmt_create)=year(now()))
+		                and (year(v2.gmt_create)=year(now()))
+		            </if> 
+		            
+		            <!-- 如果存在天数 -->
+		            <if test="param1 != '' and param1 != null">     
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+		            </if> 
+		            
+		            <!-- 如果有开始和结束时间 -->
+		            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+		                and (v1.gmt_create between #{2} and #{3})
+		                and (v2.gmt_create between #{2} and #{3})
+		            </if>
+		        </where>), 0) as dayOfWeekAllProportion,
+            
+            <!-- 浏览量 -->
+            count(v2.id) as pageViews, 
+            
+            <!-- 人均浏览量 -->
+            ifnull(count(v2.id)/count(distinct v1.id), 0) as perPersonPageViews, 
+            
+            <!-- 人均停留时长 -->
+            ifnull(sum(v2.page_stay_duration)/count(distinct v1.id), 0) as perPersonStayDuration,
+            
+            <!-- 新客户数 -->
+            (v1.visitor_type=1) as newVisitorNumber, 
+            
+            <!-- 新客户占比 -->
+            ifnull((v1.visitor_type=1)/count(distinct v1.id), 0) as newVisitorProportion
+            
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+        group by 
+        
+            dayofweek(v1.gmt_create)
+    </select>
+    
+    <!-- /**
+     * 获取 页面名称页面分析
+     * 
+     * <p>根据时间和终端获取页面名称页面分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @param start 开始位置
+     * @param rows 查询行数
+     * @return list 页面名称页面分析
+     * @author 赵滨
+     */ -->
+    <select id="listVisitorWebPageByTimeTerminal" resultType="java.util.HashMap">  
+        select 
+
+            <!-- visitor_info id -->
+            v1.id as id1, 
+            
+            <!-- visitor_behavior id -->
+            v2.id as id2, 
+
+            <!-- 页面名称 -->
+            v2.page_visited as pageName,
+            
+            <!-- 访客数 -->
+            count(distinct v1.id) as visitorNumber,
+            
+            <!-- 浏览量 -->
+            count(v2.id) as pageViews, 
+            
+            <!-- 浏览量占比 -->
+            ifnull(count(v2.id)/(select count(v2.id) from 
+        
+	            visitor_info as v1, 
+	            
+	            visitor_behavior as v2 
+	            
+		        <where>
+		            <!-- 关联条件 -->
+		            (v1.id = v2.visitor_id)
+		            
+		            <!-- 判断主账号 -->
+		            and (v1.owner_id = #{5})
+		            and (v2.owner_id = #{5})
+		            
+		            <!-- 如果终端搜索存在 -->
+		            <if test="param2 != '' and param2 != null"> 
+		                and (v2.source_channel = #{1})
+		            </if> 
+		            
+		            <!-- 如果存在年数 -->
+		            <if test="param5 != '' and param5 != null"> 
+		                and (year(v1.gmt_create)=year(now()))
+		                and (year(v2.gmt_create)=year(now()))
+		            </if> 
+		            
+		            <!-- 如果存在天数 -->
+		            <if test="param1 != '' and param1 != null">     
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+		            </if> 
+		            
+		            <!-- 如果有开始和结束时间 -->
+		            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+		                and (v1.gmt_create between #{2} and #{3})
+		                and (v2.gmt_create between #{2} and #{3})
+		            </if>
+		        </where>), 0) as pageViewsProportion,
+                
+            <!-- 人均停留时长 -->
+            ifnull(sum(v2.page_stay_duration)/count(distinct v1.id), 0) as perPersonStayDuration
+
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+        
+        group by 
+        
+            v2.page_visited
+
+        limit 
+            
+            #{6},#{7}
+    </select>
+    
+    <!-- /**
+     * 获取 页面名称 最大条数
+     * 
+     * <p>根据时间和终端获取页面名称页面分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return maxPage 页面名称 最大条数
+     * @author 赵滨
+     */
+    int (String timeSearch, String terminalSearch, String startTime, String endTime, 
+            String yearSearch, Long ownerId); -->
+    <select id="countVisitorWebPage" resultType="int">
+        select 
+            
+            count(distinct v2.page_visited)
+            
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+
+    </select>
+            
+    <!-- /**
+     * 获取 访问栏目页面分析
+     * 
+     * <p>根据时间和终端获取访问栏目页面分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @param start 开始位置
+     * @param rows 查询行数
+     * @return list 访问栏目页面分析
+     * @author 赵滨
+     */ -->
+    <select id="listVisitorAccessColumnByTimeTerminal" resultType="java.util.HashMap">  
+        select 
+            <!-- visitor_info id -->
+            v1.id as id1, 
+            
+            <!-- visitor_behavior id -->
+            v2.id as id2, 
+            
+            <!-- 被访问栏目 -->
+            v2.button_clicked as accessColumn,
+            
+           
+            <!-- 访客数 -->
+            count(distinct v1.id) as visitorNumber,
+            
+			<!-- 访客位置 -->
+			v1.visitor_location as visitorLocation,
+			
+			<!-- 点击量 -->
+			count(v2.button_clicked) as clickedNumber,
+			
+			<!-- 人均点击量 -->
+			ifnull(count(v2.button_clicked)/count(distinct v1.id), 0) as perPersonclickedNumber
+			
+		from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+			
+			group by v2.button_clicked
+        
+        limit 
+            
+            #{6},#{7}
+    </select>
+    
+    <!-- /**
+     * 获取 访问栏目 最大条数
+     * 
+     * <p>根据时间和终端获取访问栏目页面分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return maxPage 访问栏目 最大条数
+     * @author 赵滨
+     */
+    int (String timeSearch, String terminalSearch, String startTime, String endTime, 
+            String yearSearch, Long ownerId); -->
+    <select id="countVisitorAccessColumn" resultType="int">
+        select 
+        
+            <!-- 最大条数 -->
+            count(distinct v2.button_clicked)
+            
+            
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+    </select>
+    
+    <!-- /**
+     * 获取 来源关键词分析
+     * 
+     * <p>根据时间和终端获取来源关键词分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @param start 开始位置
+     * @param rows 查询行数
+     * @return list 来源关键词分析
+     * @author 赵滨
+     */ -->
+    <select id="listVisitorExternalSourceKeywordByTimeTerminal" resultType="java.util.HashMap">
+        select 
+            <!-- visitor_info id -->
+            v1.id as id1, 
+            
+            <!-- visitor_behavior id -->
+            v2.id as id2, 
+            
+            <!-- 来源关键词 -->
+            v2.source_keyword as sourceKeyword,
+           
+            <!-- 关键词占比 -->
+            ifnull(count(v2.source_keyword)/(select count(v2.source_keyword)
+        
+                from 
+	        
+		            visitor_info as v1, 
+		            
+		            visitor_behavior as v2 
+	            
+		        <where>
+		            <!-- 关联条件 -->
+		            (v1.id = v2.visitor_id)
+		            
+		            <!-- 判断主账号 -->
+		            and (v1.owner_id = #{5})
+		            and (v2.owner_id = #{5})
+		            
+		            <!-- 判断站外 -->
+                    and v2.source_type = 1
+            
+		            <!-- 如果终端搜索存在 -->
+		            <if test="param2 != '' and param2 != null"> 
+		                and (v2.source_channel = #{1})
+		            </if> 
+		            
+		            <!-- 如果存在年数 -->
+		            <if test="param5 != '' and param5 != null"> 
+		                and (year(v1.gmt_create)=year(now()))
+		                and (year(v2.gmt_create)=year(now()))
+		            </if> 
+		            
+		            <!-- 如果存在天数 -->
+		            <if test="param1 != '' and param1 != null">     
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+		                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+		            </if> 
+		            
+		            <!-- 如果有开始和结束时间 -->
+		            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+		                and (v1.gmt_create between #{2} and #{3})
+		                and (v2.gmt_create between #{2} and #{3})
+		            </if>
+		        </where>), 0) as keywordProportion,
+        
+            <!-- 搜索访客数量 -->
+            count(distinct v1.id) as visitorNumber,
+            
+            <!-- 搜索点击量 -->
+            count(v2.id) as clickedNumber,
+            
+            <!-- 人均搜索点击量 -->
+            ifnull(count(v2.id)/count(distinct v1.id), 0) as perPersonClickedNumber
+		
+		from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 判断站外 -->
+            and v2.source_type = 1
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+		
+		group by 
+		
+            v2.source_keyword
+        
+        limit 
+            
+            #{6},#{7}
+    </select>
+    
+    <!-- /**
+     * 获取 来源关键词 最大条数
+     * 
+     * <p>根据时间和终端获取来源关键词分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return maxPage 来源关键词 最大条数
+     * @author 赵滨
+     */ -->
+    <select id="countVisitorExternalSourceKeyword" resultType="int">
+        select 
+            <!-- 最大条数 -->
+            count(distinct v2.source_keyword)
+            
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 判断站外 -->
+            and v2.source_type = 1
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+    </select>
+    
+    <!-- /**
+     * 获取 站内关键词分析
+     * 
+     * <p>根据时间和终端获取站内关键词分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @param start 开始位置
+     * @param rows 查询行数
+     * @return list 站内关键词分析
+     * @author 赵滨
+     */ -->
+    <select id="listVisitorInsideSourceKeywordByTimeTerminal" resultType="java.util.HashMap">
+        select 
+            <!-- visitor_info id -->
+            v1.id as id1, 
+            
+            <!-- visitor_behavior id -->
+            v2.id as id2, 
+            
+            <!-- 来源关键词 -->
+            v2.source_keyword as sourceKeyword,
+           
+            <!-- 关键词占比 -->
+            ifnull(count(v2.source_keyword)/(select count(v2.source_keyword)
+        
+                from 
+            
+                    visitor_info as v1, 
+                    
+                    visitor_behavior as v2 
+                
+                <where>
+                    <!-- 关联条件 -->
+                    (v1.id = v2.visitor_id)
+                    
+                    <!-- 判断主账号 -->
+                    and (v1.owner_id = #{5})
+                    and (v2.owner_id = #{5})
+                    
+                    <!-- 判断站外 -->
+                    and v2.source_type = 2
+            
+                    <!-- 如果终端搜索存在 -->
+                    <if test="param2 != '' and param2 != null"> 
+                        and (v2.source_channel = #{1})
+                    </if> 
+                    
+                    <!-- 如果存在年数 -->
+                    <if test="param5 != '' and param5 != null"> 
+                        and (year(v1.gmt_create)=year(now()))
+                        and (year(v2.gmt_create)=year(now()))
+                    </if> 
+                    
+                    <!-- 如果存在天数 -->
+                    <if test="param1 != '' and param1 != null">     
+                        and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                        and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+                    </if> 
+                    
+                    <!-- 如果有开始和结束时间 -->
+                    <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                        and (v1.gmt_create between #{2} and #{3})
+                        and (v2.gmt_create between #{2} and #{3})
+                    </if>
+                </where>), 0) as keywordProportion,
+        
+            <!-- 搜索访客数量 -->
+            count(distinct v1.id) as visitorNumber,
+            
+            <!-- 搜索点击量 -->
+            count(v2.id) as clickedNumber,
+            
+            <!-- 人均搜索点击量 -->
+            ifnull(count(v2.id)/count(distinct v1.id), 0) as perPersonClickedNumber
+        
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 判断站外 -->
+            and v2.source_type = 2
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+        
+        group by 
+        
+            v2.source_keyword
+        
+        limit 
+            
+            #{6},#{7}
+    </select>
+    
+    <!-- /**
+     * 获取 站内关键词 最大条数
+     * 
+     * <p>根据时间和终端获取站内关键词分析
+     * 
+     * @param timeSearch 时间搜索
+     * @param terminalSearch 终端搜索
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @param yearSearch 年搜索
+     * @param ownerId 主账号ID
+     * @return maxPage 站内关键词 最大条数
+     * @author 赵滨
+     */ -->
+    <select id="countVisitorInsideSourceKeyword" resultType="int">
+        select 
+        
+            <!-- 最大页数 -->
+            count(distinct v2.source_keyword)
+            
+        from 
+        
+            visitor_info as v1, 
+            
+            visitor_behavior as v2 
+            
+        <where>
+            <!-- 关联条件 -->
+            (v1.id = v2.visitor_id)
+            
+            <!-- 判断主账号 -->
+            and (v1.owner_id = #{5})
+            and (v2.owner_id = #{5})
+            
+            <!-- 判断站外 -->
+            and v2.source_type = 2
+            
+            <!-- 如果终端搜索存在 -->
+            <if test="param2 != '' and param2 != null"> 
+                and (v2.source_channel = #{1})
+            </if> 
+            
+            <!-- 如果存在年数 -->
+            <if test="param5 != '' and param5 != null"> 
+                and (year(v1.gmt_create)=year(now()))
+                and (year(v2.gmt_create)=year(now()))
+            </if> 
+            
+            <!-- 如果存在天数 -->
+            <if test="param1 != '' and param1 != null">     
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v1.gmt_create))
+                and (date_sub(curdate(), interval #{0} day) &lt;= date(v2.gmt_create))
+            </if> 
+            
+            <!-- 如果有开始和结束时间 -->
+            <if test="param3 != '' and param4 != '' and param3 != null and param4 != null">     
+                and (v1.gmt_create between #{2} and #{3})
+                and (v2.gmt_create between #{2} and #{3})
+            </if>
+        </where>
+    </select>
+</mapper>
+
+
+
+
+
+
+
+

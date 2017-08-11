@@ -1,0 +1,18 @@
+// 头部导航模块按钮变颜色
+var bread_li=document.querySelectorAll(".bread>li");
+var bread_li_a=document.querySelectorAll(".bread>li>a");
+var iframe=document.querySelector("iframe[name='right']");
+var arr1=['accredit.do','audit/order_add.html','audit/to_print.html','audit/to_print.html','audit/to_print.html','account_add_amend.do']
+for (var i = bread_li.length - 1; i >= 0; i--) {
+	bread_li[i].index=i;
+	bread_li[i].onclick=function(){
+		for (var j = bread_li.length - 1; j >= 0; j--) {
+			bread_li[j].style.background="";
+			bread_li_a[j].style.color="#333";
+		};
+		bread_li[this.index].style.background="#10719E";
+		bread_li_a[this.index].style.color="#fff";
+		iframe.src=arr1[this.index];
+	}
+};
+
