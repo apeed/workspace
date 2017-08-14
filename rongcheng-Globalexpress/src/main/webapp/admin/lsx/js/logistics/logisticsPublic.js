@@ -37,14 +37,23 @@ function modifyBtn(){
 	var logisticsPublic_show=$("input[name='qt']:checked").val();
 	var ok=true;
 	var re = /^(0|1)\d{10,11}$/;
-	if(logisticsPublic_operatorTel==""){
+	if(logisticsPublic_operatorTel!=""&&logisticsPublic_operatorTel!=null){
+		if(!re.test(logisticsPublic_operatorTel)){
+			ok=false;
+			$("#logisticsPublic_operatorTel_ts").html("请输入正确的格式!");
+		}else{
+			$("#logisticsPublic_operatorTel_ts").html("");
+		}	
+	}
+	var regEx = /^(\d{1,2}|[a-zA-Z]{1,2})\d+$/;
+	if(logisticsPublic_trackingNum==""){
 		ok=false;
-		$("#logisticsPublic_operatorTel_ts").html("操作人电话为空");
-	}else if(!re.test(logisticsPublic_operatorTel)){
+		$("#logisticsPublic_trackingNum_ts").html("物流单号为空");
+	}else if(!regEx.test(logisticsPublic_trackingNum)){
 		ok=false;
-		$("#logisticsPublic_operatorTel_ts").html("请输入正确的格式!");
+		$("#logisticsPublic_trackingNum_ts").html("物流单号必须为最多两个字母/数字开头+数字！");
 	}else{
-		$("#logisticsPublic_operatorTel_ts").html("");
+		$("#logisticsPublic_trackingNum_ts").html("");
 	}
 		if(ok){
 			$.ajax({
@@ -60,7 +69,7 @@ function modifyBtn(){
 					"currentAddress":logisticsPublic_currentAddress,
 					"terminalId":logisticsPublic_terminalId,
 					"staffId":logisticsPublic_staffId,
-					"operatorTel":logisticsPublic_operatorTel,
+					"staffTel":logisticsPublic_operatorTel,
 					"cargoStatus":logisticsPublic_cargoStatus,
 					"facilityId":logisticsPublic_facilityId,
 					"complete":logisticsPublic_complete,
@@ -101,7 +110,7 @@ function loadModify(){
 					var happenTime = CargoTracking.happenTime;
 					var currentAddress = CargoTracking.currentAddress;
 					var terminalId = CargoTracking.terminalId;
-					var operatorTel = CargoTracking.operatorTel;
+					var staffTel = CargoTracking.staffTel;
 					var staffId = CargoTracking.staffId;
 					var cargoStatus = CargoTracking.cargoStatus;
 					var facilityId = CargoTracking.facilityId;
@@ -141,7 +150,7 @@ function loadModify(){
 					var logisticsPublic_happenTime=$("#some_class_1").val(time);
 					var logisticsPublic_currentAddress=$("#logisticsPublic_currentAddress").val(currentAddress);
 					var logisticsPublic_terminalId=$("#logisticsPublic_terminalId").val(terminalId);
-					var logisticsPublic_operatorTel=$("#logisticsPublic_operatorTel").val(operatorTel);
+					var logisticsPublic_operatorTel=$("#logisticsPublic_operatorTel").val(staffTel);
 					var logisticsPublic_staffId=$("#logisticsPublic_staffId").val(staffId);
 					var logisticsPublic_cargoStatus=$("#logisticsPublic_cargoStatus").val(cargoStatus);
 					var logisticsPublic_facilityId=$("#logisticsPublic_facilityId").val(facilityId);

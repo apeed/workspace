@@ -30,7 +30,7 @@ public class CargoTracking implements Serializable{
 
     private Long operatorId;//操作人
 
-    private Long operatorTel;//当前（到达站点）物流操作人电话
+    private Long staffTel;//当前（到达站点）物流操作人电话
 
     private String cargoStatus;//物流状态
 
@@ -71,7 +71,7 @@ public class CargoTracking implements Serializable{
 	
 	public CargoTracking(Long id, Long orderId, String platformId, String shopId, String carrierId, String carrierUrl,
 			String trackingNum, Timestamp happenTime, String currentAddress, String terminalId, String staffId,
-			Long operatorId, Long operatorTel, String cargoStatus, String facilityId, Integer complete,
+			Long operatorId, Long staffTel, String cargoStatus, String facilityId, Integer complete,
 			String nextAddress, String nextTerminal, String transferCarrierId, String transferCarrierUrl,
 			Long transferTrackingNum, String userTrackingInfo, Integer show, String reserved1, String note,
 			Long ownerId, Integer authorization, Integer apply, Timestamp gmtCreate, Timestamp gmtModified) {
@@ -88,7 +88,7 @@ public class CargoTracking implements Serializable{
 		this.terminalId = terminalId;
 		this.staffId = staffId;
 		this.operatorId = operatorId;
-		this.operatorTel = operatorTel;
+		this.staffTel = staffTel;
 		this.cargoStatus = cargoStatus;
 		this.facilityId = facilityId;
 		this.complete = complete;
@@ -204,12 +204,12 @@ public class CargoTracking implements Serializable{
 		this.operatorId = operatorId;
 	}
 
-	public Long getOperatorTel() {
-		return operatorTel;
+	public Long getStaffTel() {
+		return staffTel;
 	}
 
-	public void setOperatorTel(Long operatorTel) {
-		this.operatorTel = operatorTel;
+	public void setStaffTel(Long staffTel) {
+		this.staffTel = staffTel;
 	}
 
 	public String getCargoStatus() {
@@ -353,7 +353,7 @@ public class CargoTracking implements Serializable{
 		return "CargoTracking [id=" + id + ", orderId=" + orderId + ", platformId=" + platformId + ", shopId=" + shopId
 				+ ", carrierId=" + carrierId + ", carrierUrl=" + carrierUrl + ", trackingNum=" + trackingNum
 				+ ", happenTime=" + happenTime + ", currentAddress=" + currentAddress + ", terminalId=" + terminalId
-				+ ", staffId=" + staffId + ", operatorId=" + operatorId + ", operatorTel=" + operatorTel
+				+ ", staffId=" + staffId + ", operatorId=" + operatorId + ", staffTel=" + staffTel
 				+ ", cargoStatus=" + cargoStatus + ", facilityId=" + facilityId + ", complete=" + complete
 				+ ", nextAddress=" + nextAddress + ", nextTerminal=" + nextTerminal + ", transferCarrierId="
 				+ transferCarrierId + ", transferCarrierUrl=" + transferCarrierUrl + ", transferTrackingNum="

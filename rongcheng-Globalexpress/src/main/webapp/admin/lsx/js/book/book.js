@@ -50,6 +50,7 @@ function loadBook(page) {
 	for(var i=0;i<list.length;i++){
 		var UserRemark = list[i];
 		var id = UserRemark.id;
+		var userSequence = UserRemark.userSequence;
 		var userName = UserRemark.userName;
 		var userTel = UserRemark.userTel;
 		var userWord = UserRemark.userWord;
@@ -59,10 +60,11 @@ function loadBook(page) {
 		var contentId = UserRemark.contentId;
 		var str="";
 		str+='<tr>';
-		str+='<td><input type="checkbox" name="id1" value="'+id+'" />'+id+'</td>';
+		str+='<td><input type="checkbox" name="id1" value="'+id+'" />'+userSequence+'</td>';
 		str+='<td>'+userName+'</td>';
 		str+='<td>'+userTel+'</td>';
 		str+='<td title="'+userWord+'"><p style="width:400px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;margin-bottom:0;">'+userWord+'</p></td>';
+		//此处有矛盾。content_id关联商品id
 		if(contentType==1){
 			str+='<td><a href="/show.do?id='+contentId+'&contentType=1">信息内容</a></td>';	
 		}

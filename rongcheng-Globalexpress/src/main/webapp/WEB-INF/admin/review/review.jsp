@@ -25,7 +25,7 @@
           <li>
             <input type="text" placeholder="可输入商品编号/客户账户/姓名/电话/邮箱/评论内容/备注信息" name="keywords" id="keywords" class="input" style="width:450px; line-height:17px;display:inline-block" />
             <a href="javascript:void(0)" class="button border-main icon-search" onclick="changesearch()" > 搜索</a></li>
-          <li> <a class="button border-main icon-plus-square-o modify_reviewList"> 评论不显示</a> </li>
+          <li> <a class="button border-main icon-plus-square-o modify_reviewList" href="javascript:0"> 评论不显示</a> </li>
           <li> <a class="button border-main noReply" href="javascript:;"> 不予回复</a> <li/>
         </ul>
       </div>

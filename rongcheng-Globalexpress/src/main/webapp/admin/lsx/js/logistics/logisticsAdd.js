@@ -72,7 +72,7 @@ function logisticsAddBtn(){
 		$("#logisticsAdd_trackingNum_ts").html("物流单号为空");
 	}else if(!regEx.test(logisticsAdd_trackingNum)){
 		ok=false;
-		$("#logisticsAdd_trackingNum_ts").html("物流单号必须为最多两个字母开头+数字！");
+		$("#logisticsAdd_trackingNum_ts").html("物流单号必须为最多两个字母/数字开头+数字！");
 	}else{
 		$("#logisticsAdd_trackingNum_ts").html("");
 	}
@@ -176,15 +176,19 @@ function logisticsAddBtn(){
 	}else{
 		$("#logisticsAdd_show_ts").html("");
 	}*/
-	if(logisticsAdd_operatorTel==""){
+	if(logisticsAdd_facilityId.length>5){
 		ok=false;
-		$("#logisticsAdd_operatorTel_ts").html("操作人电话为空");
-	}else if(!/^(0|1)\d{10,11}$/.test(logisticsAdd_operatorTel)){
-		ok=false;
-		$("#logisticsAdd_operatorTel_ts").html("请输入正确的格式!");
-	}else{
-		$("#logisticsAdd_operatorTel_ts").html("");
+		$("#logisticsAdd_facilityId_ts").html("运输工具编号长度超了");
 	}
+	if(logisticsAdd_operatorTel!=null&&logisticsAdd_operatorTel!=""){
+		if(!/^(0|1)\d{10,11}$/.test(logisticsAdd_operatorTel)){
+			ok=false;
+			$("#logisticsAdd_operatorTel_ts").html("请输入正确的格式!");
+		}else{
+			$("#logisticsAdd_operatorTel_ts").html("");
+		}
+	}
+	
 	if(ok){
 			$.ajax({
 				url : "/admin/add_cargoTracking.do",
@@ -200,7 +204,7 @@ function logisticsAddBtn(){
 					"happenTime":logisticsAdd_happenTime,
 					"currentAddress":logisticsAdd_currentAddress,
 					"terminalId":logisticsAdd_terminalId,
-					"operatorTel":logisticsAdd_operatorTel,
+					"staffTel":logisticsAdd_operatorTel,
 					"cargoStatus":logisticsAdd_cargoStatus,
 					"facilityId":logisticsAdd_facilityId,
 					"complete":logisticsAdd_complete,

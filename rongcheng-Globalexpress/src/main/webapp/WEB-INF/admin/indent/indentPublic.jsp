@@ -19,6 +19,7 @@
   <script charset="utf-8" src="/editor/lang/zh_CN.js"></script>
 <script src="/admin/js/jquery.js"></script>
 <script src="/admin/js/pintuer.js"></script>
+<script src="/admin/js/logistics.js"></script>
 <script src="/admin/lsx/js/cookie_util.js"></script> 
 <script src="/admin/lsx/js/indent/indentPublic.js"></script>
 </head>
@@ -107,7 +108,33 @@
             <label>物流公司名称：</label>
           </div>
           <div class="field">
-            <input type="text" class="input" id="indentPublic_carrierId" name="s_title" value="" />
+            <input type="text" class="input" id="indentPublic_carrierId" name="s_title" value=""/>
+            <div class="transfer_company">
+            <div class="transfer_btn" style="display:none;"></div>
+            <div class="transfer_list" style="display:none;">
+              <ul class="transfer_left">
+                <li>常用</li>
+                <li>A-C</li>
+                <li>C-F</li>
+                <li>F-H</li>
+                <li>H-J</li>
+                <li>J-M</li>
+                <li>N-S</li>
+                <li>S-T</li>
+                <li>U-Y</li>
+                <li>Y-Z</li>
+                <li>Z</li>
+              </ul>
+              <div class="transfer_right">
+                <ul id="often_use_express">
+                	<!-- loadOftenUseExpress() -->
+                </ul>
+                <ul id="all_express">
+                	<!-- loadAllExpress() -->
+                </ul>
+              </div>
+            </div>
+          </div>
             <div class="tips"></div> 
           </div>
         </div>

@@ -126,6 +126,7 @@ function reload(list) {
 	for(var i=0;i<list.length;i++){
 		var UserRemark = list[i];
 		var id = UserRemark.id;
+		var userSequence = UserRemark.userSequence;
 		var contentType = list[i].contentType;
 		var itemSku =UserRemark.itemSku;
 		var contentId = UserRemark.contentId;
@@ -154,7 +155,7 @@ function reload(list) {
 		var note = UserRemark.note;
 		var str="";
 		str+='<tr>';
-		str+='<td style="padding-left:20px;"><input type="checkbox" name="id1" value="'+id+'" />'+id+'</td>';
+		str+='<td style="padding-left:20px;"><input type="checkbox" name="id1" value="'+id+'" />'+userSequence+'</td>';
 		str+='<td>'+itemSku+'</td>';
 		str+='<td>'+accountNum+'</td>';
 		str+='<td><div style="width:200px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">'+userWord+'</div></td>';

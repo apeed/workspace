@@ -288,7 +288,7 @@ function changesearch(){
 function del(id,Obj) {
 	var $tr = $(Obj).parent();
 	var orderNum=$tr.data("orderNum");
-	console.log(orderNum);
+//	console.log(orderNum);
 	if(confirm("您确定要删除吗?")){
 		$.ajax({
 			url:"/admin/findOrderItemIds.do",

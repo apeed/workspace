@@ -61,8 +61,8 @@ public class CargoTrackingController {
 		//修改内容
 		@RequestMapping("/modify_cargoTracking.do")
 		@ResponseBody
-		public JsonResult modifyCargoTracking(Long id,HttpSession session,String staffId,String carrierId,String carrierUrl,String trackingNum,String happenTime,String currentAddress,String  terminalId,Long  operatorTel,String cargoStatus,String facilityId,Integer complete,String nextAddress,String nextTerminal,String transferCarrierId,String transferCarrierUrl,Long transferTrackingNum,String userTrackingInfo,Integer show,String note){
-//			System.out.println(id+","+operatorId+","+orderId+","+carrierId+","+carrierUrl+","+trackingNum+","+happenTime+","+currentAddress+","+terminalId+","+operatorTel+","+cargoStatus+","+facilityId+","+complete+","+nextAddress+","+nextTerminal+","+transferCarrierId+","+transferCarrierUrl+","+transferTrackingNum+","+userTrackingInfo+","+show+","+note);
+		public JsonResult modifyCargoTracking(Long id,HttpSession session,String staffId,String carrierId,String carrierUrl,String trackingNum,String happenTime,String currentAddress,String  terminalId,Long  staffTel,String cargoStatus,String facilityId,Integer complete,String nextAddress,String nextTerminal,String transferCarrierId,String transferCarrierUrl,Long transferTrackingNum,String userTrackingInfo,Integer show,String note){
+//			System.out.println(id+","+operatorId+","+orderId+","+carrierId+","+carrierUrl+","+trackingNum+","+happenTime+","+currentAddress+","+terminalId+","+staffTel+","+cargoStatus+","+facilityId+","+complete+","+nextAddress+","+nextTerminal+","+transferCarrierId+","+transferCarrierUrl+","+transferTrackingNum+","+userTrackingInfo+","+show+","+note);
 //			SimpleDateFormat dateFm = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); //格式化当前系统日期
 			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
 //			System.out.println(operatorId);
@@ -74,22 +74,22 @@ public class CargoTrackingController {
 			}
 			Timestamp tamp = new Timestamp(System.currentTimeMillis());
 			Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
-		int n=service.modifyCargoTracking(id, ownerId, operatorId, staffId,tamp, carrierId, carrierUrl, trackingNum, ts, currentAddress, terminalId, operatorTel, cargoStatus, facilityId, complete, nextAddress, nextTerminal, transferCarrierId, transferCarrierUrl, transferTrackingNum, userTrackingInfo, show, note);
+		int n=service.modifyCargoTracking(id, ownerId, operatorId, staffId,tamp, carrierId, carrierUrl, trackingNum, ts, currentAddress, terminalId, staffTel, cargoStatus, facilityId, complete, nextAddress, nextTerminal, transferCarrierId, transferCarrierUrl, transferTrackingNum, userTrackingInfo, show, note);
 		return new JsonResult(n);
 		}
 		//添加物流
 		@RequestMapping("/add_cargoTracking.do")
 		@ResponseBody
-		public JsonResult addCargoTracking(HttpSession session,String platformId,String shopId,String staffId,Long orderId,String carrierId,String carrierUrl,String trackingNum,String happenTime,String currentAddress,String  terminalId,Long  operatorTel,String cargoStatus,String facilityId,Integer complete,String nextAddress,String nextTerminal,String transferCarrierId,String transferCarrierUrl,Long transferTrackingNum,String userTrackingInfo,Integer show,String note){
+		public JsonResult addCargoTracking(HttpSession session,String platformId,String shopId,String staffId,Long orderId,String carrierId,String carrierUrl,String trackingNum,String happenTime,String currentAddress,String  terminalId,Long  staffTel,String cargoStatus,String facilityId,Integer complete,String nextAddress,String nextTerminal,String transferCarrierId,String transferCarrierUrl,Long transferTrackingNum,String userTrackingInfo,Integer show,String note){
 			Long operatorId = ((UserInfo)(session.getAttribute("user"))).getId();
-//			System.out.println(operatorId+""+orderId+carrierId+carrierUrl+trackingNum+happenTime+currentAddress+terminalId+operatorTel+cargoStatus+facilityId+complete+nextAddress+nextTerminal+transferCarrierId+transferCarrierUrl+transferTrackingNum+userTrackingInfo+show+note);
+//			System.out.println(operatorId+""+orderId+carrierId+carrierUrl+trackingNum+happenTime+currentAddress+terminalId+staffTel+cargoStatus+facilityId+complete+nextAddress+nextTerminal+transferCarrierId+transferCarrierUrl+transferTrackingNum+userTrackingInfo+show+note);
 		Timestamp ts = new Timestamp(System.currentTimeMillis());   
 		if(happenTime!=""){
 			ts = Timestamp.valueOf(happenTime+":00"); 
 		}
 		Timestamp tamp = new Timestamp(System.currentTimeMillis());
 		Long ownerId = ((UserInfo)(session.getAttribute("user"))).getOwnerId();
-		int n=service.addCargoTracking(ownerId, tamp, operatorId,platformId,shopId,staffId, orderId, carrierId, carrierUrl, trackingNum, ts, currentAddress, terminalId, operatorTel, cargoStatus, facilityId, complete, nextAddress, nextTerminal, transferCarrierId, transferCarrierUrl, transferTrackingNum, userTrackingInfo, show, note);
+		int n=service.addCargoTracking(ownerId, tamp, operatorId,platformId,shopId,staffId, orderId, carrierId, carrierUrl, trackingNum, ts, currentAddress, terminalId, staffTel, cargoStatus, facilityId, complete, nextAddress, nextTerminal, transferCarrierId, transferCarrierUrl, transferTrackingNum, userTrackingInfo, show, note);
 		return new JsonResult(n);
 		}
 		@RequestMapping("/findListByCargoTracking.do")//模糊查询

@@ -84,7 +84,7 @@
         </div>
         <div class="field">
           <input type="text" class="input" value=""  id="logisticsPublic_trackingNum" name="title"/>
-          <div class="tips"></div>
+          <div class="tips" id="logisticsPublic_trackingNum_ts" style="color:red"></div>
         </div>
       </div>
       <div class="form-group">

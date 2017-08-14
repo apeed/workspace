@@ -151,7 +151,7 @@
 		user_remark
 		where
 	    owner_id=#{2} and
-		content_type in (1,2,3)
+		content_type=0
 		order by user_sequence DESC
 		limit #{0},#{1}
 	</select>

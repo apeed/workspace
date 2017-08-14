@@ -32,7 +32,7 @@ public class CargoTrackingServiceImpl implements CargoTrackingService {
 	//添加内容，方法名建议(save前缀)
 	public int addCargoTracking(Long ownerId, Timestamp gmtCreate, Long operatorId,String platformId,String shopId,String staffId, Long orderId,
 			String carrierId, String carrierUrl, String trackingNum, Timestamp happenTime, String currentAddress,
-			String terminalId, Long operatorTel, String cargoStatus, String facilityId, Integer complete,
+			String terminalId, Long staffTel, String cargoStatus, String facilityId, Integer complete,
 			String nextAddress, String nextTerminal, String transferCarrierId, String transferCarrierUrl,
 			Long transferTrackingNum, String userTrackingInfo, Integer show, String note) {
 		CargoTracking ct = new CargoTracking();
@@ -49,7 +49,7 @@ public class CargoTrackingServiceImpl implements CargoTrackingService {
 		ct.setHappenTime(happenTime);
 		ct.setCurrentAddress(currentAddress);
 		ct.setTerminalId(terminalId);
-		ct.setOperatorTel(operatorTel);
+		ct.setStaffTel(staffTel);
 		ct.setCargoStatus(cargoStatus);
 		ct.setFacilityId(facilityId);
 		ct.setComplete(complete);
@@ -67,7 +67,7 @@ public class CargoTrackingServiceImpl implements CargoTrackingService {
 	//修改内容 
 	public int modifyCargoTracking(Long id, Long ownerId, Long operatorId,String staffId, Timestamp gmtModified,
 			String carrierId, String carrierUrl, String trackingNum, Timestamp happenTime,
-			String currentAddress, String terminalId, Long operatorTel, String cargoStatus, String facilityId,
+			String currentAddress, String terminalId, Long staffTel, String cargoStatus, String facilityId,
 			Integer complete, String nextAddress, String nextTerminal, String transferCarrierId,
 			String transferCarrierUrl, Long transferTrackingNum, String userTrackingInfo, Integer show,
 			String note) {
@@ -81,7 +81,7 @@ public class CargoTrackingServiceImpl implements CargoTrackingService {
 		ct.setHappenTime(happenTime);
 		ct.setCurrentAddress(currentAddress);
 		ct.setTerminalId(terminalId);
-		ct.setOperatorTel(operatorTel);
+		ct.setStaffTel(staffTel);
 		ct.setCargoStatus(cargoStatus);
 		ct.setFacilityId(facilityId);
 		ct.setComplete(complete);

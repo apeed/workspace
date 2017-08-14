@@ -36,7 +36,7 @@
           <li> <a class="button border-main icon-plus-square-o logisticsAdd_btn" href="logisticsAdd.do "> 添加物流信息</a> </li>
           <li>
             <input type="text" placeholder="可输入订单编号/物流公司/物流单号/物流记录/标签/备注信息" name="keywords" id="keywords" class="input" style="width:450px; line-height:17px;display:inline-block" />
-            <a class="button border-main icon-search" onclick="changesearch()" > 搜索</a></li>
+            <a class="button border-main icon-search" href="javascript:0" onclick="changesearch()" > 搜索</a></li>
         </ul>
       </div>
       <table class="table table-hover text-center" id="logistics_table">

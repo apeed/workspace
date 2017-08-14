@@ -109,7 +109,7 @@ function reload(list) {
 		str+='<td>'+complete+'</td>';
 		str+='<td>';
 		str+='<div class="wlxq_wk">';
-		str+='<a class="button border-main"><span class="icon-edit"></span> 物流详情</a>';
+		str+='<a class="button border-main" href="javascript:0"><span class="icon-edit"></span> 物流详情</a>';
 		if(userTrackingInfo!=null&&userTrackingInfo!=""){
 			str+='<div class="wlxq_nk">';
 			str+=userTrackingInfo;

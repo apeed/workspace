@@ -35,7 +35,10 @@ $(function(){
 	//选择发件人
 	$("#indentPublic_consignorId").change(function(){
 		consignorId = $("#indentPublic_consignorId").find("option:selected").val();
-		
+	});
+	//监听打勾事件
+	$(".itemInfo_table").on("click","input[name='id1']",function(){
+		 $(this).parent().parent().find(".id2").val(1);
 	});
 });
 function modifyItem() {
@@ -53,7 +56,7 @@ function modifyItem() {
 			if(result.state==0){
 				 list=result.data;
 				 for (var j = 0; j < id3.length; j++) {
-					 $(".id2").eq(j).val(1);
+//					 $(".id2").eq(j).val(1);
 					 for (var i = 0; i < list.length; i++) {
 							var orderItemId=list[i].orderItemId;
 							 var quantity=list[i].quantity;
@@ -278,7 +281,7 @@ function loadModify(){
 								var userName = UserInfo.userName;
 								var se = $("#indentPublic_consignorId").find("option");
 								 for (var i = 0; i < se.length; i++) {
-									 console.log(se[i].text);
+//									 console.log(se[i].text);
 									 if(se[i].text==userName){
 									 se[i].selected = true;  	
 									}

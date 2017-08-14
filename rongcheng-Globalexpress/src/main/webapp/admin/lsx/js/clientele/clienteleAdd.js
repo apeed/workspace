@@ -39,15 +39,15 @@ function addClienteleBtn(){
 	}else{
 		$("#clientele_repassword_ts").html("");
 	}
-	if(clientele_accountEmail==""){
-		ok=false;
-		$("#clientele_accountEmail_ts").html("账户邮箱为空");
-	}else if(!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(clientele_accountEmail)){
-		ok=false;
-		$("#clientele_accountEmail_ts").html("请输入正确账户邮箱格式！");
-	}else{
-		$("#clientele_accountEmail_ts").html("");
+	if(clientele_accountEmail!=""&&clientele_accountEmail!=null){
+		if(!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(clientele_accountEmail)){
+			ok=false;
+			$("#clientele_accountEmail_ts").html("请输入正确账户邮箱格式！");
+		}else{
+			$("#clientele_accountEmail_ts").html("");
+		}	
 	}
+	
 	/*if(clientele_userNickname==""){
 		ok=false;
 		$("#clientele_userNickname_ts").html("客户昵称为空");
@@ -62,26 +62,26 @@ function addClienteleBtn(){
 	}*/
 	var re = /^(0|1)\d{10,11}$/;
 //	var re = /^0\d{10,11}$/;
-	if(clientele_userTelephone==""){
-		ok=false;
-		$("#clientele_userTelephone_ts").html("客户电话为空");
-	}else if(!re.test(clientele_userTelephone)){
-		ok=false;
-		$("#clientele_userTelephone_ts").html("请输入0开头的 11或12位数字!");
-	}else{
-		$("#clientele_userTelephone_ts").html("");
+	if(clientele_userTelephone!=""&&clientele_userTelephone!=null){
+		if(!re.test(clientele_userTelephone)){
+			ok=false;
+			$("#clientele_userTelephone_ts").html("请输入0开头的 11或12位数字!");
+		}else{
+			$("#clientele_userTelephone_ts").html("");
+		}
 	}
+	
 //	 var re = /^1\d{10}$/;
 	var re = /^(0|1)\d{10,11}$/;
-	if(clientele_userMobile==""){
-		ok=false;
-		$("#clientele_userMobile_ts").html("客户手机为空");
-	}else if(!re.test(clientele_userMobile)){
-		ok=false;
-		$("#clientele_userMobile_ts").html("请输入正确的格式!");
-	}else{
-		$("#clientele_userMobile_ts").html("");
+	if(clientele_userMobile!=""&&clientele_userMobile!=null){
+		if(!re.test(clientele_userMobile)){
+			ok=false;
+			$("#clientele_userMobile_ts").html("请输入正确的格式!");
+		}else{
+			$("#clientele_userMobile_ts").html("");
+		}
 	}
+	
 	/*if(clientele_userAddress==""){
 		ok=false;
 		$("#clientele_userAddress_ts").html("客户地址为空");

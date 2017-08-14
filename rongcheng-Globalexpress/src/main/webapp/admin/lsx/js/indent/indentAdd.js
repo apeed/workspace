@@ -588,7 +588,7 @@ function getItemID() {
 }
 function addIndentBtn(){
 	var indentAdd_orderNum=$("#orderId").val();
-	console.log(consignorId);
+//	console.log(consignorId);
 	$.ajax({
 		url:"/admin/addOrderItemLink.do",
 		type:"post",
